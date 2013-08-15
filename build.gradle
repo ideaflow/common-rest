@@ -2,6 +2,7 @@ buildscript {
     dependencies { classpath 'com.bancvue:gradle-bancvue-base:1.0-SNAPSHOT' }
 }
 
+ext.customPublication=true
 apply plugin: 'bancvue'
 
 dependencies {
@@ -9,4 +10,24 @@ dependencies {
     compile "com.sun.jersey:jersey-client:1.17.1"
 
     testCompile 'junit:junit:4.11'
+    testCompile 'org.codehaus.groovy:groovy-all:2.1.2'
+}
+
+sourceSets.test.groovy.srcDirs 'src/mainTest/groovy'
+
+task testJar(type: Jar) {
+    from file('src/mainTest/groovy')
+}
+
+publishing {
+    publications {
+        CommonRest(MavenPublication) {
+            from components.java
+            pom.projectIdentity.artifactId = project.ext.artifactId
+
+            artifact testJar {
+                classifier "test"
+            }
+        }
+    }
 }
