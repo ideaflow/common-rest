@@ -1,0 +1,11 @@
+buildscript {
+    dependencies { classpath 'com.bancvue:gradle-dotcms-feature:1.0-SNAPSHOT' }
+}
+
+apply plugin: 'dotcms-feature'
+
+jar {
+    manifest {
+        from file("src/main/resources/META-INF/MANIFEST.MF")
+    }
+}
