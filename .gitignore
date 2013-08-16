@@ -10,5 +10,7 @@ build/
 
 # Eclipse files
 .settings
-.classpath
 .project
+.classpath
+.projectbuild
+bin
