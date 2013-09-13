@@ -3,8 +3,10 @@ package com.bancvue.rest.example
 import com.bancvue.rest.server.ResponseFactory
 import groovy.util.logging.Slf4j
 
+import javax.validation.Valid
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
+import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -39,15 +41,16 @@ class WidgetResource {
 		responseFactory.createGetResponse(id, widget)
 	}
 
-//	@POST
-//	public Response createWidget(@Valid Widget widget) {
-//		Widget existingWidget = widgets[widget.id]
-//		if (existingWidget) {
-//			return responseFactory.createAddFailedBecauseAlreadyExistsResponse(existingWidget)
-//		}
-//		responseFactory.createAddSuccessResponse(widget.id, widget)
-//	}
-//
+	@POST
+	public Response createWidget(@Valid Widget widget) {
+		Widget existingWidget = widgets[widget.id]
+		if (existingWidget) {
+			return responseFactory.createAddFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
+		}
+		evalWidget(widget)
+		responseFactory.createAddSuccessResponse(widget.id, widget)
+	}
+
 //	@PUT
 //	@Path("/{id}")
 //	public Response updateWidget(@PathParam("id") String widgetId) {

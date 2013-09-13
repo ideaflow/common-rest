@@ -41,46 +41,41 @@ public class ResponseFactory {
 				.build();
 	}
 
-//    Response createAddSuccessResponse(String pathToEntity) {
-//        // TODO: the commented out code comes straight out of the dropwizard example; however, in practice the
-//        // UriBuilder.fromResource(targetResource) is getting double-prepended when returned to the client, so
-//        // it looks like the path needs to be relative
-////        URI location = UriBuilder.fromResource(targetResource)
-////                .path(pathToEntity)
-////                .build()
-//
-//        URI location = UriBuilder.fromPath(pathToEntity).build()
-//        Response.created(location).build()
-//    }
-
     public Response createAddSuccessResponse(String pathToEntity, Object entity) {
-//        // TODO: the commented out code comes straight out of the dropwizard example; however, in practice the
-//        // UriBuilder.fromResource(targetResource) is getting double-prepended when returned to the client, so
-//        // it looks like the path needs to be relative
-////        URI location = UriBuilder.fromResource(targetResource)
-////                .path(pathToEntity)
-////                .build()
-
-        URI location = UriBuilder.fromPath(pathToEntity).build();
-        return Response.created(location)
+	    // TODO: we should be able to do use getTargetResourceLocation and do something like this...
+	    // URI location = getTargetResourceLocation(pathToEntity)
+	    // however, jersey seems to double-prepend the resource base when it returns the result to the client;
+	    // oddly enough, this only seems to happen with 201 (CREATED) responses
+	    URI location = UriBuilder.fromPath(pathToEntity).build();
+	    return Response.created(location)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .entity(entity)
                 .build();
     }
+
+	public Response createAddFailedBecauseAlreadyExistsResponse(String pathToEntity, Object existingEntity) {
+		// TODO: for some reason, jersey always converts response code 409 to text/html so I'm not sure how to return the existing entity
+		return Response.status(Response.Status.CONFLICT)
+				.location(getTargetResourceLocation(pathToEntity))
+//              .type(MediaType.APPLICATION_JSON_TYPE)
+//              .entity(existingEntity)
+				.build();
+	}
+
+	public Response createUpdateSuccessResponse(String pathToEntity) {
+		URI location = UriBuilder.fromPath(pathToEntity).build();
+		return Response.noContent()
+				.location(location)
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.build();
+	}
 
     public Response createUpdateSuccessResponse(String pathToEntity, Object entity) {
         URI location = UriBuilder.fromPath(pathToEntity).build();
-        return Response.created(location)
+        return Response.ok()
                 .type(MediaType.APPLICATION_JSON_TYPE)
+		        .location(location)
                 .entity(entity)
-                .build();
-    }
-
-    public Response createAddFailedBecauseAlreadyExistsResponse(Object existingEntity) {
-        // TODO: for some reason, jersey always converts response code 409 to text/html so I'm not sure how to return the existing entity
-        return Response.status(Response.Status.CONFLICT)
-//                .type(MediaType.APPLICATION_JSON_TYPE)
-//                .entity(existingEntity)
                 .build();
     }
 
