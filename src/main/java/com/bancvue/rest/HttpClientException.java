@@ -1,21 +1,36 @@
 package com.bancvue.rest;
 
-public class HttpClientException extends RuntimeException {
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+public class HttpClientException extends WebApplicationException {
 
     public static HttpClientException unexpected(int statusCode) {
-        return new HttpClientException("Unexpected status code=${statusCode}", statusCode);
+	    return unexpected(Response.status(statusCode).build());
     }
 
+	public static HttpClientException unexpected(Response response) {
+		return new HttpClientException("Unexpected status code=" + response.getStatus(), response);
+	}
 
-    private int statusCode;
+
+	public HttpClientException(String message, Response response) {
+		super(response);
+		try {
+			FieldUtils.writeField(this, "detailMessage", message, true);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 
     public HttpClientException(String message, int statusCode) {
-        super(message);
-        this.statusCode = statusCode;
+	    this(message, Response.status(statusCode).build());
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
+	public int getStatus() {
+		return getResponse().getStatus();
+	}
 
 }
