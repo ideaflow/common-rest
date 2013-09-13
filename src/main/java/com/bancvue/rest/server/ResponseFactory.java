@@ -13,6 +13,34 @@ public class ResponseFactory {
         this.targetResource = targetResource;
     }
 
+	private URI getTargetResourceLocation(String pathToEntity) {
+		return UriBuilder.fromResource(targetResource)
+				.path(pathToEntity)
+				.build();
+	}
+
+	public Response createGetResponse(String pathToEntity, Object entity) {
+		if (entity != null) {
+			return createGetSuccessResponse(pathToEntity, entity);
+		} else {
+			return createGetFailedResponse(pathToEntity);
+		}
+	}
+
+	public Response createGetFailedResponse(String pathToEntity) {
+		return Response.status(Response.Status.NOT_FOUND)
+				.location(getTargetResourceLocation(pathToEntity))
+				.build();
+	}
+
+	public Response createGetSuccessResponse(String pathToEntity, Object entity) {
+		return Response.ok()
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.location(getTargetResourceLocation(pathToEntity))
+				.entity(entity)
+				.build();
+	}
+
 //    Response createAddSuccessResponse(String pathToEntity) {
 //        // TODO: the commented out code comes straight out of the dropwizard example; however, in practice the
 //        // UriBuilder.fromResource(targetResource) is getting double-prepended when returned to the client, so
