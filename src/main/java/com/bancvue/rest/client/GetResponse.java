@@ -11,7 +11,7 @@ public class GetResponse {
         this.response = response;
     }
 
-    public <T> T acquireResponseAsType(Class<T> type) {
+	public <T> T acquireResponseAsType(Class<T> type) {
         try {
             return doAcquireResponseAsType(type);
         } finally {
@@ -27,15 +27,15 @@ public class GetResponse {
         }
     }
 
-    public <T> T getResourceAsType(Class<T> type) {
+    public <T> T getResponseAsType(Class<T> type) {
         try {
-            return doGetResourceAsType(type);
+            return doGetResponseAsType(type);
         } finally {
             response.close();
         }
     }
 
-    private <T> T doGetResourceAsType(Class<T> type) {
+    private <T> T doGetResponseAsType(Class<T> type) {
         if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) {
             return response.getEntity(type);
         } else if (response.getStatus() == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
