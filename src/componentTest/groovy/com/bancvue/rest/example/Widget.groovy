@@ -18,4 +18,7 @@ class Widget {
 	@JsonProperty
 	String codeToEval
 
+	void initApplicationError() {
+		codeToEval = "throw new RuntimeException('failure!')"
+	}
 }

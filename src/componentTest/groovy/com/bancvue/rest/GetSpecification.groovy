@@ -65,7 +65,7 @@ class GetSpecification extends Specification {
 
 	def "application error should return status code 500, client response should convert to http exception"() {
 		Widget expectedWidget = addWidget("wid")
-		expectedWidget.codeToEval = "throw new RuntimeException()"
+		expectedWidget.initApplicationError()
 
 		when:
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
