@@ -20,13 +20,12 @@ public class DeleteResponse {
     }
 
     private <T> T doAssertEntityDeletedAndGet(Class<T> type) {
-        if (response.getStatus() == ClientResponse.Status.NO_CONTENT.getStatusCode()) {
-            // TODO: should this be throwing an exception?
-            throw new HttpClientException("Entity does not exist", response.getStatus());
-        } else if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
-            throw HttpClientException.unexpected(response.getStatus());
+	    if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) {
+		    return response.getEntity(type);
+	    } else if (response.getStatus() == ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+		    return null;
         }
-        return response.getEntity(type);
+		throw HttpClientException.unexpected(response.getStatus());
     }
 
 }

@@ -5,6 +5,7 @@ import groovy.util.logging.Slf4j
 
 import javax.validation.Valid
 import javax.ws.rs.Consumes
+import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
@@ -44,6 +45,7 @@ class WidgetResource {
 	@POST
 	public Response createWidget(@Valid Widget widget) {
 		Widget existingWidget = widgets[widget.id]
+		evalWidget(existingWidget)
 		if (existingWidget) {
 			return responseFactory.createAddFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
 		}
@@ -53,19 +55,20 @@ class WidgetResource {
 
 //	@PUT
 //	@Path("/{id}")
-//	public Response updateWidget(@PathParam("id") String widgetId) {
+//	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
+//		evalWidget(update)
 //		responseFactory.createUpdateSuccessResponse()
 //	}
-//
-//	@DELETE
-//	@Path("/{id}")
-//	public Response deleteWidget(@PathParam("id") String widgetId ) {
-//		Widget deletedWidget = widgets[widgetId]
-//		if (deletedWidget == null) {
-//			throw HttpClientException.unexpected()
-//		}
-//
-//		responseFactory.createDeleteResponse(deletedWidget)
-//	}
+
+	@DELETE
+	@Path("/{id}")
+	public Response deleteWidget(@PathParam("id") String id) {
+		Widget deletedWidget = widgets.remove(id)
+		evalWidget(deletedWidget)
+		if (deletedWidget && deletedWidget.deletedItemNotIncludedInResultBody) {
+			return responseFactory.createDeleteSuccessResponse(id)
+		}
+		responseFactory.createDeleteResponse(id, deletedWidget)
+	}
 
 }

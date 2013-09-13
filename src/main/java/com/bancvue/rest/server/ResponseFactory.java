@@ -62,13 +62,13 @@ public class ResponseFactory {
 				.build();
 	}
 
-	public Response createUpdateSuccessResponse(String pathToEntity) {
-		URI location = UriBuilder.fromPath(pathToEntity).build();
-		return Response.noContent()
-				.location(location)
-				.type(MediaType.APPLICATION_JSON_TYPE)
-				.build();
-	}
+//	public Response createUpdateSuccessResponse(String pathToEntity) {
+//		URI location = UriBuilder.fromPath(pathToEntity).build();
+//		return Response.noContent()
+//				.location(location)
+//				.type(MediaType.APPLICATION_JSON_TYPE)
+//				.build();
+//	}
 
     public Response createUpdateSuccessResponse(String pathToEntity, Object entity) {
         URI location = UriBuilder.fromPath(pathToEntity).build();
@@ -79,16 +79,31 @@ public class ResponseFactory {
                 .build();
     }
 
-    public Response createDeleteResponse(Object deletedEntity) {
-        Response response;
-        if (deletedEntity != null) {
-            response = Response.ok(deletedEntity)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .build();
-        } else {
-            response = Response.noContent().build();
-        }
-        return response;
-    }
+	public Response createDeleteResponse(String pathToEntity, Object deletedEntity) {
+		if (deletedEntity != null) {
+			return createDeleteSuccessResponse(pathToEntity, deletedEntity);
+		} else {
+			return createDeleteFailedBecauseObjectNotFoundResponse(pathToEntity);
+		}
+	}
+
+	public Response createDeleteSuccessResponse(String pathToEntity) {
+		return Response.noContent()
+				.location(getTargetResourceLocation(pathToEntity))
+				.build();
+	}
+
+	public Response createDeleteSuccessResponse(String pathToEntity, Object deletedEntity) {
+		return Response.ok(deletedEntity)
+				.location(getTargetResourceLocation(pathToEntity))
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.build();
+	}
+
+	public Response createDeleteFailedBecauseObjectNotFoundResponse(String pathToEntity) {
+		return Response.status(Response.Status.NOT_FOUND)
+				.location(getTargetResourceLocation(pathToEntity))
+				.build();
+	}
 
 }
