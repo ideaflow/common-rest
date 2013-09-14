@@ -12,19 +12,11 @@ public class GetResponse {
     }
 
 	public <T> T acquireResponseAsType(Class<T> type) {
-        try {
-            return doAcquireResponseAsType(type);
-        } finally {
-            response.close();
-        }
-    }
-
-    public <T> T doAcquireResponseAsType(Class<T> type) {
-        if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) {
-            return response.getEntity(type);
-        } else {
-            throw HttpClientException.unexpected(response.getStatus());
-        }
+		T typedResponse = getResponseAsType(type);
+		if (typedResponse == null) {
+			throw new RuntimeException("No entity found for location=" + response.getLocation());
+		}
+		return typedResponse;
     }
 
     public <T> T getResponseAsType(Class<T> type) {
