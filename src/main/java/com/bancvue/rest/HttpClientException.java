@@ -1,7 +1,5 @@
 package com.bancvue.rest;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -16,13 +14,11 @@ public class HttpClientException extends WebApplicationException {
 	}
 
 
+	private String message;
+
 	public HttpClientException(String message, Response response) {
 		super(response);
-		try {
-			FieldUtils.writeField(this, "detailMessage", message, true);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		this.message = message;
 	}
 
     public HttpClientException(String message, int statusCode) {
@@ -31,6 +27,11 @@ public class HttpClientException extends WebApplicationException {
 
 	public int getStatus() {
 		return getResponse().getStatus();
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
 	}
 
 }
