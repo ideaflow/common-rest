@@ -6,38 +6,38 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
 class HttpClientExceptionStatusMatcher<T extends HttpClientException> extends
-        TypeSafeMatcher<T> {
+		TypeSafeMatcher<T> {
 
-    private final Matcher<Integer> fMatcher;
+	private final Matcher<Integer> fMatcher;
 
-    public HttpClientExceptionStatusMatcher(Matcher<Integer> matcher) {
-        fMatcher = matcher;
-    }
+	public HttpClientExceptionStatusMatcher(Matcher<Integer> matcher) {
+		fMatcher = matcher;
+	}
 
-    public void describeTo(Description description) {
-        description.appendText("exception with statusCode ");
-        description.appendDescriptionOf(fMatcher);
-    }
+	public void describeTo(Description description) {
+		description.appendText("exception with statusCode ");
+		description.appendDescriptionOf(fMatcher);
+	}
 
-    @Override
-    protected boolean matchesSafely(T item) {
-        return fMatcher.matches(item.getStatusCode())
-    }
+	@Override
+	protected boolean matchesSafely(T item) {
+		return fMatcher.matches(item.getStatusCode())
+	}
 
-    @Override
-    protected void describeMismatchSafely(T item, Description description) {
-        description.appendText("message ");
-        fMatcher.describeMismatch(item.getStatusCode(), description);
-    }
+	@Override
+	protected void describeMismatchSafely(T item, Description description) {
+		description.appendText("message ");
+		fMatcher.describeMismatch(item.getStatusCode(), description);
+	}
 
-    public static <T extends HttpClientException> Matcher<T> hasStatusCode(int statusCode) {
-        Matcher<Integer> matcher = CoreMatchers.equalTo(statusCode)
-        hasStatusCode(matcher)
-    }
+	public static <T extends HttpClientException> Matcher<T> hasStatusCode(int statusCode) {
+		Matcher<Integer> matcher = CoreMatchers.equalTo(statusCode)
+		hasStatusCode(matcher)
+	}
 
-    @org.hamcrest.Factory
-    public static <T extends HttpClientException> Matcher<T> hasStatusCode(final Matcher<Integer> matcher) {
-        return new HttpClientExceptionStatusMatcher<T>(matcher);
-    }
+	@org.hamcrest.Factory
+	public static <T extends HttpClientException> Matcher<T> hasStatusCode(final Matcher<Integer> matcher) {
+		return new HttpClientExceptionStatusMatcher<T>(matcher);
+	}
 
 }

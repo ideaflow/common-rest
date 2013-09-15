@@ -7,11 +7,11 @@ import java.net.URI;
 
 public class ResponseFactory {
 
-    private Class targetResource;
+	private Class targetResource;
 
-    public ResponseFactory(Class targetResource) {
-        this.targetResource = targetResource;
-    }
+	public ResponseFactory(Class targetResource) {
+		this.targetResource = targetResource;
+	}
 
 	private URI getTargetResourceLocation(String pathToEntity) {
 		return UriBuilder.fromResource(targetResource)
@@ -41,17 +41,17 @@ public class ResponseFactory {
 				.build();
 	}
 
-    public Response createAddSuccessResponse(String pathToEntity, Object entity) {
-	    // TODO: we should be able to do use getTargetResourceLocation and do something like this...
-	    // URI location = getTargetResourceLocation(pathToEntity)
-	    // however, jersey seems to double-prepend the resource base when it returns the result to the client;
-	    // oddly enough, this only seems to happen with 201 (CREATED) responses
-	    URI location = UriBuilder.fromPath(pathToEntity).build();
-	    return Response.created(location)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(entity)
-                .build();
-    }
+	public Response createAddSuccessResponse(String pathToEntity, Object entity) {
+		// TODO: we should be able to do use getTargetResourceLocation and do something like this...
+		// URI location = getTargetResourceLocation(pathToEntity)
+		// however, jersey seems to double-prepend the resource base when it returns the result to the client;
+		// oddly enough, this only seems to happen with 201 (CREATED) responses
+		URI location = UriBuilder.fromPath(pathToEntity).build();
+		return Response.created(location)
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.entity(entity)
+				.build();
+	}
 
 	public Response createAddFailedBecauseAlreadyExistsResponse(String pathToEntity, Object existingEntity) {
 		// TODO: for some reason, jersey always converts response code 409 to text/html so I'm not sure how to return the existing entity
@@ -70,14 +70,14 @@ public class ResponseFactory {
 //				.build();
 //	}
 
-    public Response createUpdateSuccessResponse(String pathToEntity, Object entity) {
-        URI location = UriBuilder.fromPath(pathToEntity).build();
-        return Response.ok()
-                .type(MediaType.APPLICATION_JSON_TYPE)
-		        .location(location)
-                .entity(entity)
-                .build();
-    }
+	public Response createUpdateSuccessResponse(String pathToEntity, Object entity) {
+		URI location = UriBuilder.fromPath(pathToEntity).build();
+		return Response.ok()
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.location(location)
+				.entity(entity)
+				.build();
+	}
 
 	public Response createDeleteResponse(String pathToEntity, Object deletedEntity) {
 		if (deletedEntity != null) {

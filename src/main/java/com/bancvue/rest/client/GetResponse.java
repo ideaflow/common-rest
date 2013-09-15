@@ -5,11 +5,11 @@ import com.sun.jersey.api.client.ClientResponse;
 
 public class GetResponse {
 
-    private ClientResponse response;
+	private ClientResponse response;
 
-    public GetResponse(ClientResponse response) {
-        this.response = response;
-    }
+	public GetResponse(ClientResponse response) {
+		this.response = response;
+	}
 
 	public <T> T acquireResponseAsType(Class<T> type) {
 		T typedResponse = getResponseAsType(type);
@@ -17,24 +17,24 @@ public class GetResponse {
 			throw new RuntimeException("No entity found for location=" + response.getLocation());
 		}
 		return typedResponse;
-    }
+	}
 
-    public <T> T getResponseAsType(Class<T> type) {
-        try {
-            return doGetResponseAsType(type);
-        } finally {
-            response.close();
-        }
-    }
+	public <T> T getResponseAsType(Class<T> type) {
+		try {
+			return doGetResponseAsType(type);
+		} finally {
+			response.close();
+		}
+	}
 
-    private <T> T doGetResponseAsType(Class<T> type) {
-        if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) {
-            return response.getEntity(type);
-        } else if (response.getStatus() == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
-            return null;
-        } else {
-            throw HttpClientException.unexpected(response.getStatus());
-        }
-    }
+	private <T> T doGetResponseAsType(Class<T> type) {
+		if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) {
+			return response.getEntity(type);
+		} else if (response.getStatus() == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
+			return null;
+		} else {
+			throw HttpClientException.unexpected(response.getStatus());
+		}
+	}
 
 }

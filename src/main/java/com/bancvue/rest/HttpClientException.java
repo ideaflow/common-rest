@@ -5,9 +5,9 @@ import javax.ws.rs.core.Response;
 
 public class HttpClientException extends WebApplicationException {
 
-    public static HttpClientException unexpected(int statusCode) {
-	    return unexpected(Response.status(statusCode).build());
-    }
+	public static HttpClientException unexpected(int statusCode) {
+		return unexpected(Response.status(statusCode).build());
+	}
 
 	public static HttpClientException unexpected(Response response) {
 		return new HttpClientException("Unexpected status code=" + response.getStatus(), response);
@@ -21,9 +21,9 @@ public class HttpClientException extends WebApplicationException {
 		this.message = message;
 	}
 
-    public HttpClientException(String message, int statusCode) {
-	    this(message, Response.status(statusCode).build());
-    }
+	public HttpClientException(String message, int statusCode) {
+		this(message, Response.status(statusCode).build());
+	}
 
 	public int getStatus() {
 		return getResponse().getStatus();
