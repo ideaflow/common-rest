@@ -21,13 +21,13 @@ class HttpClientExceptionStatusMatcher<T extends HttpClientException> extends
 
 	@Override
 	protected boolean matchesSafely(T item) {
-		return fMatcher.matches(item.getStatusCode())
+		return fMatcher.matches(item.getStatus())
 	}
 
 	@Override
 	protected void describeMismatchSafely(T item, Description description) {
 		description.appendText("message ");
-		fMatcher.describeMismatch(item.getStatusCode(), description);
+		fMatcher.describeMismatch(item.getStatus(), description);
 	}
 
 	public static <T extends HttpClientException> Matcher<T> hasStatusCode(int statusCode) {
