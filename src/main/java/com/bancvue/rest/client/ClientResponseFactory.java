@@ -18,6 +18,7 @@ public class ClientResponseFactory {
 	public CreateResponse create(WebResource resource, Object entity) {
 		ClientResponse response = resource
 				.type(MediaType.APPLICATION_JSON_TYPE)
+				.accept(MediaType.APPLICATION_JSON_TYPE)
 				.entity(entity)
 				.post(ClientResponse.class);
 
@@ -30,6 +31,15 @@ public class ClientResponseFactory {
 				.delete(ClientResponse.class);
 
 		return new DeleteResponse(response);
+	}
+
+	public UpdateResponse update(WebResource resource, Object entity) {
+		ClientResponse response = resource
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.entity(entity)
+				.put(ClientResponse.class);
+
+		return new UpdateResponse(response);
 	}
 
 }

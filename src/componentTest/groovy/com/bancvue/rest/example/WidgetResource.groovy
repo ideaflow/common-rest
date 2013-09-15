@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -53,12 +54,13 @@ class WidgetResource {
 		responseFactory.createAddSuccessResponse(widget.id, widget)
 	}
 
-//	@PUT
-//	@Path("/{id}")
-//	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
-//		evalWidget(update)
-//		responseFactory.createUpdateSuccessResponse()
-//	}
+	@PUT
+	@Path("/{id}")
+	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
+		widgets[id] = update
+		evalWidget(update)
+		responseFactory.createUpdateSuccessResponse(id)
+	}
 
 	@DELETE
 	@Path("/{id}")

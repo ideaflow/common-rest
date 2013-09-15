@@ -62,20 +62,10 @@ public class ResponseFactory {
 				.build();
 	}
 
-//	public Response createUpdateSuccessResponse(String pathToEntity) {
-//		URI location = UriBuilder.fromPath(pathToEntity).build();
-//		return Response.noContent()
-//				.location(location)
-//				.type(MediaType.APPLICATION_JSON_TYPE)
-//				.build();
-//	}
-
-	public Response createUpdateSuccessResponse(String pathToEntity, Object entity) {
-		URI location = UriBuilder.fromPath(pathToEntity).build();
-		return Response.ok()
+	public Response createUpdateSuccessResponse(String pathToEntity) {
+		return Response.noContent()
 				.type(MediaType.APPLICATION_JSON_TYPE)
-				.location(location)
-				.entity(entity)
+				.location(getTargetResourceLocation(pathToEntity))
 				.build();
 	}
 
