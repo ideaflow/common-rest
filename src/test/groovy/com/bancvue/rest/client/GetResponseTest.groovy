@@ -1,5 +1,6 @@
 package com.bancvue.rest.client
 
+import com.bancvue.rest.HttpClientException
 import com.sun.jersey.api.client.ClientResponse
 import spock.lang.Specification
 
@@ -32,7 +33,8 @@ class GetResponseTest extends Specification {
 		getResponse.acquireResponseAsType(Object)
 
 		then:
-		thrown(RuntimeException)
+		HttpClientException ex = thrown(HttpClientException)
+		ex.status == Response.Status.NOT_FOUND.getStatusCode()
 	}
 
 }

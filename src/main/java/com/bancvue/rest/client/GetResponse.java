@@ -14,7 +14,7 @@ public class GetResponse {
 	public <T> T acquireResponseAsType(Class<T> type) {
 		T typedResponse = getResponseAsType(type);
 		if (typedResponse == null) {
-			throw new RuntimeException("No entity found for location=" + response.getLocation());
+			throw new HttpClientException("No entity found for location=" + response.getLocation(), ClientResponse.Status.NOT_FOUND);
 		}
 		return typedResponse;
 	}
