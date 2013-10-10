@@ -2,6 +2,7 @@ package com.bancvue.rest.client;
 
 import com.bancvue.rest.HttpClientException;
 import com.sun.jersey.api.client.ClientResponse;
+import org.apache.http.HttpStatus;
 
 public class GetResponse {
 
@@ -28,9 +29,9 @@ public class GetResponse {
 	}
 
 	private <T> T doGetResponseAsType(Class<T> type) {
-		if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) {
+		if (response.getStatus() == HttpStatus.SC_OK) {
 			return response.getEntity(type);
-		} else if (response.getStatus() == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
+		} else if (response.getStatus() == HttpStatus.SC_NOT_FOUND) {
 			return null;
 		} else {
 			throw HttpClientException.unexpected(response.getStatus());

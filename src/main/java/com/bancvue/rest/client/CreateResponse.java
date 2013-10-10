@@ -2,6 +2,7 @@ package com.bancvue.rest.client;
 
 import com.bancvue.rest.HttpClientException;
 import com.sun.jersey.api.client.ClientResponse;
+import org.apache.http.HttpStatus;
 
 public class CreateResponse {
 
@@ -20,13 +21,12 @@ public class CreateResponse {
 	}
 
 	private <T> T doAssertEntityCreatedAndGet(Class<T> type) {
-		if (response.getStatus() == ClientResponse.Status.CONFLICT.getStatusCode()) {
+		if (response.getStatus() == HttpStatus.SC_CONFLICT) {
 			throw new HttpClientException("Entity already exists", response.getStatus());
-			// TODO: need status enum
-		} else if (response.getStatus() == 422) { // Unprocessable Entity
+		} else if (response.getStatus() == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
 			String message = response.getEntity(String.class);
 			throw new HttpClientException(message, response.getStatus());
-		} else if (response.getStatus() != ClientResponse.Status.CREATED.getStatusCode()) {
+		} else if (response.getStatus() != HttpStatus.SC_CREATED) {
 			// TODO: need to handle 'request failed validation' response
 			throw HttpClientException.unexpected(response.getStatus());
 		}

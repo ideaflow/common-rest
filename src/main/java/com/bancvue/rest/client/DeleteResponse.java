@@ -2,6 +2,7 @@ package com.bancvue.rest.client;
 
 import com.bancvue.rest.HttpClientException;
 import com.sun.jersey.api.client.ClientResponse;
+import org.apache.http.HttpStatus;
 
 public class DeleteResponse {
 
@@ -20,9 +21,9 @@ public class DeleteResponse {
 	}
 
 	private <T> T doAssertEntityDeletedAndGet(Class<T> type) {
-		if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) {
+		if (response.getStatus() == HttpStatus.SC_OK) {
 			return response.getEntity(type);
-		} else if (response.getStatus() == ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+		} else if (response.getStatus() == HttpStatus.SC_NO_CONTENT) {
 			return null;
 		}
 		throw HttpClientException.unexpected(response.getStatus());

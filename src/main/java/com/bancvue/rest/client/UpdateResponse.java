@@ -2,6 +2,7 @@ package com.bancvue.rest.client;
 
 import com.bancvue.rest.HttpClientException;
 import com.sun.jersey.api.client.ClientResponse;
+import org.apache.http.HttpStatus;
 
 public class UpdateResponse {
 
@@ -20,7 +21,7 @@ public class UpdateResponse {
 	}
 
 	private void doAssertResponseSuccess() {
-		if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+		if (response.getStatus() != HttpStatus.SC_NO_CONTENT) {
 			throw HttpClientException.unexpected(response.getStatus());
 		}
 	}
