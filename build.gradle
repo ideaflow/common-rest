@@ -10,9 +10,8 @@ dependencies {
 	compile "com.sun.jersey:jersey-client:1.17.1"
 	compile "org.apache.httpcomponents:httpcore:4.2.2"
 
-	mainTestCompile 'org.codehaus.groovy:groovy-all:2.1.2'
-	mainTestCompile 'junit:junit:4.11'
-
+	testCompile 'org.codehaus.groovy:groovy-all:2.1.2'
+	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'
 	testCompile('org.spockframework:spock-unitils:0.7-groovy-2.0') {
 		exclude group: 'org.codehaus.groovy'
