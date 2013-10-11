@@ -1,15 +1,18 @@
 package com.bancvue.rest.client;
 
 import com.bancvue.rest.exception.HttpClientException;
+import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import org.apache.http.HttpStatus;
 
 public class GetResponse {
 
 	private ClientResponse response;
+	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public GetResponse(ClientResponse response) {
+	public GetResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.response = response;
+		this.exceptionFactory = exceptionFactory;
 	}
 
 	public <T> T acquireResponseAsType(Class<T> type) {
@@ -34,7 +37,7 @@ public class GetResponse {
 		} else if (response.getStatus() == HttpStatus.SC_NOT_FOUND) {
 			return null;
 		} else {
-			throw HttpClientException.unexpected(response.getStatus());
+			throw exceptionFactory.createException(response);
 		}
 	}
 

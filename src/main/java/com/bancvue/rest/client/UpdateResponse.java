@@ -1,15 +1,17 @@
 package com.bancvue.rest.client;
 
-import com.bancvue.rest.exception.HttpClientException;
+import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import org.apache.http.HttpStatus;
 
 public class UpdateResponse {
 
 	private ClientResponse response;
+	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public UpdateResponse(ClientResponse response) {
+	public UpdateResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.response = response;
+		this.exceptionFactory = exceptionFactory;
 	}
 
 	public void assertResponseSuccess() {
@@ -22,7 +24,7 @@ public class UpdateResponse {
 
 	private void doAssertResponseSuccess() {
 		if (response.getStatus() != HttpStatus.SC_NO_CONTENT) {
-			throw HttpClientException.unexpected(response.getStatus());
+			throw exceptionFactory.createException(response);
 		}
 	}
 }

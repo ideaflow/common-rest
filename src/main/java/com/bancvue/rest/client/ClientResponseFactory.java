@@ -1,5 +1,6 @@
 package com.bancvue.rest.client;
 
+import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
@@ -7,12 +8,22 @@ import javax.ws.rs.core.MediaType;
 
 public class ClientResponseFactory {
 
+	private UnexpectedResponseExceptionFactory exceptionFactory;
+
+	public ClientResponseFactory() {
+		this(new UnexpectedResponseExceptionFactory.Default());
+	}
+
+	public ClientResponseFactory(UnexpectedResponseExceptionFactory exceptionFactory) {
+		this.exceptionFactory = exceptionFactory;
+	}
+
 	public GetResponse get(WebResource resource) {
 		ClientResponse response = resource
 				.accept(MediaType.APPLICATION_JSON_TYPE)
 				.get(ClientResponse.class);
 
-		return new GetResponse(response);
+		return new GetResponse(response, exceptionFactory);
 	}
 
 	public CreateResponse create(WebResource resource, Object entity) {
@@ -22,7 +33,7 @@ public class ClientResponseFactory {
 				.entity(entity)
 				.post(ClientResponse.class);
 
-		return new CreateResponse(response);
+		return new CreateResponse(response, exceptionFactory);
 	}
 
 	public DeleteResponse delete(WebResource resource) {
@@ -30,7 +41,7 @@ public class ClientResponseFactory {
 				.accept(MediaType.APPLICATION_JSON_TYPE)
 				.delete(ClientResponse.class);
 
-		return new DeleteResponse(response);
+		return new DeleteResponse(response, exceptionFactory);
 	}
 
 	public UpdateResponse update(WebResource resource, Object entity) {
@@ -39,7 +50,7 @@ public class ClientResponseFactory {
 				.entity(entity)
 				.put(ClientResponse.class);
 
-		return new UpdateResponse(response);
+		return new UpdateResponse(response, exceptionFactory);
 	}
 
 }

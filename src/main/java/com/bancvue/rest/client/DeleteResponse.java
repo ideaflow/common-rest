@@ -1,15 +1,17 @@
 package com.bancvue.rest.client;
 
-import com.bancvue.rest.exception.HttpClientException;
+import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import org.apache.http.HttpStatus;
 
 public class DeleteResponse {
 
 	private ClientResponse response;
+	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public DeleteResponse(ClientResponse response) {
+	public DeleteResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.response = response;
+		this.exceptionFactory = exceptionFactory;
 	}
 
 	public <T> T assertEntityDeletedAndGet(Class<T> type) {
@@ -26,7 +28,7 @@ public class DeleteResponse {
 		} else if (response.getStatus() == HttpStatus.SC_NO_CONTENT) {
 			return null;
 		}
-		throw HttpClientException.unexpected(response.getStatus());
+		throw exceptionFactory.createException(response);
 	}
 
 }

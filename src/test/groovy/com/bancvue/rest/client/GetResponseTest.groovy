@@ -1,6 +1,7 @@
 package com.bancvue.rest.client
 
 import com.bancvue.rest.exception.HttpClientException
+import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
 import com.sun.jersey.api.client.ClientResponse
 import org.apache.http.HttpStatus
 import spock.lang.Specification
@@ -12,7 +13,7 @@ class GetResponseTest extends Specification {
 
 	def "acquireResponseAsType should return entity from response"() {
 		ClientResponse clientResponse = mock(ClientResponse)
-		GetResponse getResponse = new GetResponse(clientResponse)
+		GetResponse getResponse = new GetResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
 		when(clientResponse.getStatus()).thenReturn(HttpStatus.SC_OK);
 		when(clientResponse.getEntity(String)).thenReturn("value")
 
@@ -25,7 +26,7 @@ class GetResponseTest extends Specification {
 
 	def "acquireResponseAsType should throw runtime exception if status not found"() {
 		ClientResponse clientResponse = mock(ClientResponse)
-		GetResponse getResponse = new GetResponse(clientResponse)
+		GetResponse getResponse = new GetResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
 		when(clientResponse.getStatus()).thenReturn(HttpStatus.SC_NOT_FOUND);
 
 		when:

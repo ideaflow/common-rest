@@ -1,15 +1,18 @@
 package com.bancvue.rest.client;
 
 import com.bancvue.rest.exception.HttpClientException;
+import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import org.apache.http.HttpStatus;
 
 public class CreateResponse {
 
 	private ClientResponse response;
+	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public CreateResponse(ClientResponse response) {
+	public CreateResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.response = response;
+		this.exceptionFactory = exceptionFactory;
 	}
 
 	public <T> T assertEntityCreatedAndGet(Class<T> type) {
@@ -23,12 +26,8 @@ public class CreateResponse {
 	private <T> T doAssertEntityCreatedAndGet(Class<T> type) {
 		if (response.getStatus() == HttpStatus.SC_CONFLICT) {
 			throw new HttpClientException("Entity already exists", response.getStatus());
-		} else if (response.getStatus() == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
-			String message = response.getEntity(String.class);
-			throw new HttpClientException(message, response.getStatus());
 		} else if (response.getStatus() != HttpStatus.SC_CREATED) {
-			// TODO: need to handle 'request failed validation' response
-			throw HttpClientException.unexpected(response.getStatus());
+			throw exceptionFactory.createException(response);
 		}
 		return response.getEntity(type);
 	}
