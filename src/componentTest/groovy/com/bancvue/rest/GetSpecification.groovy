@@ -4,6 +4,7 @@ import com.bancvue.rest.client.ClientResponseFactory
 import com.bancvue.rest.client.GetResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetServiceRule
+import com.bancvue.rest.exception.HttpClientException
 import com.sun.jersey.api.client.WebResource
 import org.junit.ClassRule
 import spock.lang.Shared

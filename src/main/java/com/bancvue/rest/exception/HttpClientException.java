@@ -1,4 +1,4 @@
-package com.bancvue.rest;
+package com.bancvue.rest.exception;
 
 import com.sun.jersey.api.client.ClientResponse;
 

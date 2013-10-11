@@ -1,6 +1,6 @@
 package com.bancvue.rest.client
 
-import com.bancvue.rest.HttpClientException
+import com.bancvue.rest.exception.HttpClientException
 import com.sun.jersey.api.client.ClientResponse
 import org.apache.http.HttpStatus
 import spock.lang.Specification
