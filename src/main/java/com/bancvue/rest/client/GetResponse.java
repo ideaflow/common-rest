@@ -3,6 +3,7 @@ package com.bancvue.rest.client;
 import com.bancvue.rest.exception.HttpClientException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
 import org.apache.http.HttpStatus;
 
 public class GetResponse {
@@ -16,7 +17,15 @@ public class GetResponse {
 	}
 
 	public <T> T acquireResponseAsType(Class<T> type) {
-		T typedResponse = getResponseAsType(type);
+		return acquireResponseAsType(type, EntityResolver.CLASS_RESOLVER);
+	}
+
+	public <T> T acquireResponseAsType(GenericType<T> genericType) {
+		return acquireResponseAsType(genericType, EntityResolver.GENERIC_TYPE_RESOLVER);
+	}
+
+	private <T> T acquireResponseAsType(Object typeOrGenericType, EntityResolver resolver) {
+		T typedResponse = getResponseAsType(typeOrGenericType, resolver);
 		if (typedResponse == null) {
 			throw new HttpClientException("No entity found for location=" + response.getLocation(), ClientResponse.Status.NOT_FOUND);
 		}
@@ -24,16 +33,24 @@ public class GetResponse {
 	}
 
 	public <T> T getResponseAsType(Class<T> type) {
+		return getResponseAsType(type, EntityResolver.CLASS_RESOLVER);
+	}
+
+	public <T> T getResponseAsType(GenericType<T> genericType) {
+		return getResponseAsType(genericType, EntityResolver.GENERIC_TYPE_RESOLVER);
+	}
+
+	private <T> T getResponseAsType(Object typeOrGenericType, EntityResolver resolver) {
 		try {
-			return doGetResponseAsType(type);
+			return doGetResponseAsType(typeOrGenericType, resolver);
 		} finally {
 			response.close();
 		}
 	}
 
-	private <T> T doGetResponseAsType(Class<T> type) {
+	private <T> T doGetResponseAsType(Object typeOrGenericType, EntityResolver resolver) {
 		if (response.getStatus() == HttpStatus.SC_OK) {
-			return response.getEntity(type);
+			return resolver.getEntity(response, typeOrGenericType);
 		} else if (response.getStatus() == HttpStatus.SC_NOT_FOUND) {
 			return null;
 		} else {

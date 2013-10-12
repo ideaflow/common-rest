@@ -10,7 +10,6 @@ import org.junit.ClassRule
 import spock.lang.Shared
 import spock.lang.Specification
 
-
 class GetSpecification extends Specification {
 
 	@Shared

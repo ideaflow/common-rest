@@ -2,39 +2,65 @@ package com.bancvue.rest.client
 
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
+import com.sun.jersey.api.client.GenericType
 import com.sun.jersey.api.client.ClientResponse
 import org.apache.http.HttpStatus
 import spock.lang.Specification
 
-import static org.mockito.Mockito.mock
-import static org.mockito.Mockito.when
-
 class GetResponseTest extends Specification {
 
-	def "acquireResponseAsType should return entity from response"() {
-		ClientResponse clientResponse = mock(ClientResponse)
-		GetResponse getResponse = new GetResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
-		when(clientResponse.getStatus()).thenReturn(HttpStatus.SC_OK);
-		when(clientResponse.getEntity(String)).thenReturn("value")
+	ClientResponse clientResponse
+	GetResponse getResponse
+
+	void setup() {
+		clientResponse = Mock()
+		getResponse = new GetResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
+	}
+
+	def "acquireResponseAsType should return entity from response if status ok"() {
+		clientResponse.getStatus() >> HttpStatus.SC_OK
+		clientResponse.getEntity(String) >> "value"
 
 		when:
 		String entity = getResponse.acquireResponseAsType(String)
 
 		then:
-		assert entity == "value"
+		"value" == entity
 	}
 
 	def "acquireResponseAsType should throw runtime exception if status not found"() {
-		ClientResponse clientResponse = mock(ClientResponse)
-		GetResponse getResponse = new GetResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
-		when(clientResponse.getStatus()).thenReturn(HttpStatus.SC_NOT_FOUND);
+		clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
 
 		when:
 		getResponse.acquireResponseAsType(Object)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		ex.status == HttpStatus.SC_NOT_FOUND
+		HttpStatus.SC_NOT_FOUND == ex.status
+	}
+
+	def "getResponseAsType with GenericType should return entity from response if status ok"() {
+		GenericType<String> genericType = new GenericType<String>() {}
+		clientResponse.getStatus() >> HttpStatus.SC_OK
+		clientResponse.getEntity(genericType) >> "value"
+
+		when:
+		String entity = getResponse.getResponseAsType(genericType)
+
+		then:
+		"value" == entity
+	}
+
+	def "acquireResponseAsType with GenericType should return entity fromr esponse if status ok"() {
+		GenericType<String> genericType = new GenericType<String>() {}
+		clientResponse.getStatus() >> HttpStatus.SC_OK
+		clientResponse.getEntity(genericType) >> "value"
+
+		when:
+		String entity = getResponse.acquireResponseAsType(genericType)
+
+		then:
+		"value" == entity
 	}
 
 }
