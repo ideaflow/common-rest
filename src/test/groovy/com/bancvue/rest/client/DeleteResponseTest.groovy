@@ -23,7 +23,7 @@ class DeleteResponseTest extends Specification {
 		clientResponse.getEntity(genericType) >> "value"
 
 		when:
-		String actualResponse = deleteResponse.assertEntityDeletedAndGet(genericType)
+		String actualResponse = deleteResponse.assertEntityDeletedAndGetResponse(genericType)
 
 		then:
 		"value" == actualResponse

@@ -41,7 +41,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
 
 		when:
-		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGet(Widget)
+		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGetResponse(Widget)
 
 		then:
 		widget == deletedWidget
@@ -60,7 +60,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
 
 		when:
-		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGet(Widget)
+		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGetResponse(Widget)
 
 		then:
 		deletedWidget == null
@@ -75,7 +75,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/not-found"
 
 		when:
-		deleteResponse.assertEntityDeletedAndGet(Widget)
+		deleteResponse.assertEntityDeletedAndGetResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -94,7 +94,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		deleteResponse.clientResponse.getLocation() == null
 
 		when:
-		deleteResponse.assertEntityDeletedAndGet(Widget)
+		deleteResponse.assertEntityDeletedAndGetResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)

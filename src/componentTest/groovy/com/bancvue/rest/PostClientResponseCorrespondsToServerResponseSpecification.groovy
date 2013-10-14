@@ -41,7 +41,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/created"
 
 		when:
-		Widget actualWidget = createResponse.assertEntityCreatedAndGet(Widget)
+		Widget actualWidget = createResponse.assertEntityCreatedAndGetResponse(Widget)
 
 		then:
 		widget == actualWidget
@@ -59,7 +59,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/duplicate"
 
 		when:
-		createResponse.assertEntityCreatedAndGet(Widget)
+		createResponse.assertEntityCreatedAndGetResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -79,7 +79,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		createResponse.clientResponse.getLocation() == null
 
 		when:
-		createResponse.assertEntityCreatedAndGet(Widget)
+		createResponse.assertEntityCreatedAndGetResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -100,7 +100,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		createResponse.clientResponse.getLocation() == null
 
 		when:
-		createResponse.assertEntityCreatedAndGet(Widget)
+		createResponse.assertEntityCreatedAndGetResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)

@@ -23,7 +23,7 @@ class PutResponseTest extends Specification {
 		clientResponse.getEntity(genericType) >> "value"
 
 		when:
-		String actualResponse = putResponse.assertEntityUpdatedAndGetEntity(genericType)
+		String actualResponse = putResponse.assertEntityUpdatedAndGetResponse(genericType)
 
 		then:
 		"value" == actualResponse

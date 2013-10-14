@@ -15,23 +15,23 @@ public class DeleteResponse {
 		this.exceptionFactory = exceptionFactory;
 	}
 
-	public <T> T assertEntityDeletedAndGet(Class<T> type) {
-		return assertEntityDeletedAndGet(type, EntityResolver.CLASS_RESOLVER);
+	public <T> T assertEntityDeletedAndGetResponse(Class<T> type) {
+		return assertEntityDeletedAndGetResponse(type, EntityResolver.CLASS_RESOLVER);
 	}
 
-	public <T> T assertEntityDeletedAndGet(GenericType<T> type) {
-		return assertEntityDeletedAndGet(type, EntityResolver.GENERIC_TYPE_RESOLVER);
+	public <T> T assertEntityDeletedAndGetResponse(GenericType<T> type) {
+		return assertEntityDeletedAndGetResponse(type, EntityResolver.GENERIC_TYPE_RESOLVER);
 	}
 
-	private <T> T assertEntityDeletedAndGet(Object typeOrGenericType, EntityResolver resolver) {
+	private <T> T assertEntityDeletedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
 		try {
-			return doAssertEntityDeletedAndGet(typeOrGenericType, resolver);
+			return doAssertEntityDeletedAndGetResponse(typeOrGenericType, resolver);
 		} finally {
 			clientResponse.close();
 		}
 	}
 
-	private <T> T doAssertEntityDeletedAndGet(Object typeOrGenericType, EntityResolver resolver) {
+	private <T> T doAssertEntityDeletedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
 		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
 			return resolver.getEntity(clientResponse, typeOrGenericType);
 		} else if (clientResponse.getStatus() == HttpStatus.SC_NO_CONTENT) {

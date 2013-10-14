@@ -23,7 +23,7 @@ class PostResponseTest extends Specification {
 		clientResponse.getEntity(genericType) >> "value"
 
 		when:
-		String actualResponse = postResponse.assertEntityCreatedAndGet(genericType)
+		String actualResponse = postResponse.assertEntityCreatedAndGetResponse(genericType)
 
 		then:
 		"value" == actualResponse

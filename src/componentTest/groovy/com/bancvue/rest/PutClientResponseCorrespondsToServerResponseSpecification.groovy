@@ -41,7 +41,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		updateResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/updated"
 
 		when:
-		Widget actualResponse = updateResponse.assertEntityUpdatedAndGetEntity(Widget)
+		Widget actualResponse = updateResponse.assertEntityUpdatedAndGetResponse(Widget)
 
 		then:
 		update == actualResponse
@@ -63,7 +63,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		updateResponse.clientResponse.getLocation() == null
 
 		when:
-		updateResponse.assertEntityUpdatedAndGetEntity(Widget)
+		updateResponse.assertEntityUpdatedAndGetResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
