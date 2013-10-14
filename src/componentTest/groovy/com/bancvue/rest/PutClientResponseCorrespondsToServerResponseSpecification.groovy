@@ -37,8 +37,8 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		PutResponse updateResponse = clientResponseFactory.put(widgetResource.path(update.id), update)
 
 		then:
-		assert updateResponse.clientResponse.getStatus() == 200
-		assert updateResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/updated"
+		updateResponse.clientResponse.getStatus() == 200
+		updateResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/updated"
 
 		when:
 		Widget actualResponse = updateResponse.assertEntityUpdatedAndGetEntity(Widget)
@@ -59,15 +59,15 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		PutResponse updateResponse = clientResponseFactory.put(widgetResource.path(widget.id), widget)
 
 		then:
-		assert updateResponse.clientResponse.getStatus() == 500
-		assert updateResponse.clientResponse.getLocation() == null
+		updateResponse.clientResponse.getStatus() == 500
+		updateResponse.clientResponse.getLocation() == null
 
 		when:
 		updateResponse.assertEntityUpdatedAndGetEntity(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		assert ex.status == 500
+		ex.status == 500
 	}
 
 }

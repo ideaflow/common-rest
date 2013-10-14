@@ -37,15 +37,15 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path(widget.id))
 
 		then:
-		assert deleteResponse.clientResponse.getStatus() == 200
-		assert deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
+		deleteResponse.clientResponse.getStatus() == 200
+		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
 
 		when:
 		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGet(Widget)
 
 		then:
-		assert widget == deletedWidget
-		assert !widget.is(deletedWidget)
+		widget == deletedWidget
+		!widget.is(deletedWidget)
 	}
 
 	def "success with no returned entity should return status code 204 and location, client response should return null"() {
@@ -56,14 +56,14 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path(widget.id))
 
 		then:
-		assert deleteResponse.clientResponse.getStatus() == 204
-		assert deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
+		deleteResponse.clientResponse.getStatus() == 204
+		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
 
 		when:
 		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGet(Widget)
 
 		then:
-		assert deletedWidget == null
+		deletedWidget == null
 	}
 
 	def "object not found should return status code 404 and location, client response should throw exception"() {
@@ -71,15 +71,15 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path("not-found"))
 
 		then:
-		assert deleteResponse.clientResponse.getStatus() == 404
-		assert deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/not-found"
+		deleteResponse.clientResponse.getStatus() == 404
+		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/not-found"
 
 		when:
 		deleteResponse.assertEntityDeletedAndGet(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		assert ex.status == 404
+		ex.status == 404
 	}
 
 	def "application error should return status code 500, client response should convert to http exception"() {
@@ -90,14 +90,14 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends Speci
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path("app-error"))
 
 		then:
-		assert deleteResponse.clientResponse.getStatus() == 500
-		assert deleteResponse.clientResponse.getLocation() == null
+		deleteResponse.clientResponse.getStatus() == 500
+		deleteResponse.clientResponse.getLocation() == null
 
 		when:
 		deleteResponse.assertEntityDeletedAndGet(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		assert ex.getStatus() == 500
+		ex.getStatus() == 500
 	}
 }

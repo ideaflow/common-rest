@@ -37,15 +37,15 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
 		then:
-		assert getResponse.clientResponse.getStatus() == 200
-		assert getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
+		getResponse.clientResponse.getStatus() == 200
+		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
 		Widget actualWidget = getResponse.getResponseAsType(Widget)
 
 		then:
-		assert expectedWidget == actualWidget
-		assert !expectedWidget.is(actualWidget)
+		expectedWidget == actualWidget
+		!expectedWidget.is(actualWidget)
 	}
 
 	def "not found should return status code 404 and location, client response should convert to null"() {
@@ -53,14 +53,14 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
 		then:
-		assert getResponse.clientResponse.getStatus() == 404
-		assert getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
+		getResponse.clientResponse.getStatus() == 404
+		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
 		Widget actualWidget = getResponse.getResponseAsType(Widget)
 
 		then:
-		assert actualWidget == null
+		actualWidget == null
 	}
 
 	def "application error should return status code 500, client response should convert to http exception"() {
@@ -71,15 +71,15 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
 		then:
-		assert getResponse.clientResponse.getStatus() == 500
-		assert getResponse.clientResponse.getLocation() == null
+		getResponse.clientResponse.getStatus() == 500
+		getResponse.clientResponse.getLocation() == null
 
 		when:
 		getResponse.getResponseAsType(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		assert ex.getStatus() == 500
+		ex.getStatus() == 500
 	}
 
 }

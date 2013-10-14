@@ -37,15 +37,15 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
 
 		then:
-		assert createResponse.clientResponse.getStatus() == 201
-		assert createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/created"
+		createResponse.clientResponse.getStatus() == 201
+		createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/created"
 
 		when:
 		Widget actualWidget = createResponse.assertEntityCreatedAndGet(Widget)
 
 		then:
-		assert widget == actualWidget
-		assert !widget.is(actualWidget)
+		widget == actualWidget
+		!widget.is(actualWidget)
 	}
 
 	def "object already exists should return status code 409 and location, client response should convert to exception"() {
@@ -55,15 +55,15 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
 
 		then:
-		assert createResponse.clientResponse.getStatus() == 409
-		assert createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/duplicate"
+		createResponse.clientResponse.getStatus() == 409
+		createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/duplicate"
 
 		when:
 		createResponse.assertEntityCreatedAndGet(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		assert ex.getStatus() == 409
+		ex.getStatus() == 409
 
 		// TODO: how to return the existing entity in the body of the result?
 	}
@@ -75,15 +75,15 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		PostResponse createResponse = clientResponseFactory.post(widgetResource, invalid)
 
 		then:
-		assert createResponse.clientResponse.getStatus() == 422
-		assert createResponse.clientResponse.getLocation() == null
+		createResponse.clientResponse.getStatus() == 422
+		createResponse.clientResponse.getLocation() == null
 
 		when:
 		createResponse.assertEntityCreatedAndGet(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		assert ex.getStatus() == 422
+		ex.getStatus() == 422
 
 		// TODO: what about the body?  can we standardize on reporting invalid objects?
 	}
@@ -96,14 +96,14 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
 
 		then:
-		assert createResponse.clientResponse.getStatus() == 500
-		assert createResponse.clientResponse.getLocation() == null
+		createResponse.clientResponse.getStatus() == 500
+		createResponse.clientResponse.getLocation() == null
 
 		when:
 		createResponse.assertEntityCreatedAndGet(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		assert ex.getStatus() == 500
+		ex.getStatus() == 500
 	}
 }
