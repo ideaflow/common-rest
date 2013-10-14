@@ -22,7 +22,7 @@ class GetResponseTest extends Specification {
 		clientResponse.getEntity(String) >> "value"
 
 		when:
-		String entity = getResponse.acquireResponseAsType(String)
+		String entity = getResponse.getResponseAsType(String)
 
 		then:
 		"value" == entity
@@ -32,7 +32,7 @@ class GetResponseTest extends Specification {
 		clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
 
 		when:
-		getResponse.acquireResponseAsType(Object)
+		getResponse.getResponseAsType(Object)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -45,7 +45,7 @@ class GetResponseTest extends Specification {
 		clientResponse.getEntity(genericType) >> "value"
 
 		when:
-		String entity = getResponse.getResponseAsType(genericType)
+		String entity = getResponse.getResponseAsTypeOrNull(genericType)
 
 		then:
 		"value" == entity
@@ -57,7 +57,7 @@ class GetResponseTest extends Specification {
 		clientResponse.getEntity(genericType) >> "value"
 
 		when:
-		String entity = getResponse.acquireResponseAsType(genericType)
+		String entity = getResponse.getResponseAsType(genericType)
 
 		then:
 		"value" == entity

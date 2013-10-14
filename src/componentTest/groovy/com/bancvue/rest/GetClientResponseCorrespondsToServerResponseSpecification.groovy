@@ -41,7 +41,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
-		Widget actualWidget = getResponse.getResponseAsType(Widget)
+		Widget actualWidget = getResponse.getResponseAsTypeOrNull(Widget)
 
 		then:
 		expectedWidget == actualWidget
@@ -57,7 +57,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
-		Widget actualWidget = getResponse.getResponseAsType(Widget)
+		Widget actualWidget = getResponse.getResponseAsTypeOrNull(Widget)
 
 		then:
 		actualWidget == null
@@ -75,7 +75,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		getResponse.clientResponse.getLocation() == null
 
 		when:
-		getResponse.getResponseAsType(Widget)
+		getResponse.getResponseAsTypeOrNull(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
