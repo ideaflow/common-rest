@@ -59,7 +59,7 @@ class WidgetResource {
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
 		widgets[id] = update
 		evalWidget(update)
-		responseFactory.createPutSuccessResponse(id)
+		responseFactory.createPutSuccessResponse(id, update)
 	}
 
 	@DELETE

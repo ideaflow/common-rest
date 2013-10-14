@@ -30,21 +30,22 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		widget
 	}
 
-	def "success should return status code 204 and location"() {
+	def "success should return status code 200 and location, client response should convert and return entity"() {
 		Widget update = addWidget("updated")
 
 		when:
 		PutResponse updateResponse = clientResponseFactory.put(widgetResource.path(update.id), update)
 
 		then:
-		assert updateResponse.clientResponse.getStatus() == 204
+		assert updateResponse.clientResponse.getStatus() == 200
 		assert updateResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/updated"
 
 		when:
-		updateResponse.assertResponseSuccess()
+		Widget actualResponse = updateResponse.assertEntityUpdatedAndGetEntity(Widget)
 
 		then:
-		notThrown(Throwable)
+		update == actualResponse
+		!update.is(actualResponse)
 	}
 
 	// TODO: what behavior do we want around PUT?
@@ -62,7 +63,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		assert updateResponse.clientResponse.getLocation() == null
 
 		when:
-		updateResponse.assertResponseSuccess()
+		updateResponse.assertEntityUpdatedAndGetEntity(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)

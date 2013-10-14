@@ -62,10 +62,11 @@ public class ResponseFactory {
 				.build();
 	}
 
-	public Response createPutSuccessResponse(String pathToEntity) {
-		return Response.noContent()
+	public Response createPutSuccessResponse(String pathToEntity, Object updatedEntity) {
+		return Response.ok()
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.location(getTargetResourceLocation(pathToEntity))
+				.entity(updatedEntity)
 				.build();
 	}
 
