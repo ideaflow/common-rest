@@ -6,13 +6,13 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import org.apache.http.HttpStatus;
 
-public class CreateResponse {
+public class PostResponse {
 
-	private ClientResponse response;
+	private ClientResponse clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public CreateResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
-		this.response = response;
+	public PostResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}
 
@@ -28,17 +28,17 @@ public class CreateResponse {
 		try {
 			return doAssertEntityCreatedAndGet(typeOrGenericType, resolver);
 		} finally {
-			response.close();
+			clientResponse.close();
 		}
 	}
 
 	private <T> T doAssertEntityCreatedAndGet(Object typeOrGenericType, EntityResolver resolver) {
-		if (response.getStatus() == HttpStatus.SC_CONFLICT) {
-			throw new HttpClientException("Entity already exists", response.getStatus());
-		} else if (response.getStatus() != HttpStatus.SC_CREATED) {
-			throw exceptionFactory.createException(response);
+		if (clientResponse.getStatus() == HttpStatus.SC_CONFLICT) {
+			throw new HttpClientException("Entity already exists", clientResponse.getStatus());
+		} else if (clientResponse.getStatus() != HttpStatus.SC_CREATED) {
+			throw exceptionFactory.createException(clientResponse);
 		}
-		return resolver.getEntity(response, typeOrGenericType);
+		return resolver.getEntity(clientResponse, typeOrGenericType);
 	}
 
 }

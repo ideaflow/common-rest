@@ -10,7 +10,7 @@ import org.junit.ClassRule
 import spock.lang.Shared
 import spock.lang.Specification
 
-class GetSpecification extends Specification {
+class GetClientResponseCorrespondsToServerResponseSpecification extends Specification {
 
 	@Shared
 	@ClassRule
@@ -37,8 +37,8 @@ class GetSpecification extends Specification {
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
 		then:
-		assert getResponse.response.getStatus() == 200
-		assert getResponse.response.getLocation() as String == "http://localhost:8080/widgets/wid"
+		assert getResponse.clientResponse.getStatus() == 200
+		assert getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
 		Widget actualWidget = getResponse.getResponseAsType(Widget)
@@ -53,8 +53,8 @@ class GetSpecification extends Specification {
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
 		then:
-		assert getResponse.response.getStatus() == 404
-		assert getResponse.response.getLocation() as String == "http://localhost:8080/widgets/wid"
+		assert getResponse.clientResponse.getStatus() == 404
+		assert getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
 		Widget actualWidget = getResponse.getResponseAsType(Widget)
@@ -71,8 +71,8 @@ class GetSpecification extends Specification {
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
 		then:
-		assert getResponse.response.getStatus() == 500
-		assert getResponse.response.getLocation() == null
+		assert getResponse.clientResponse.getStatus() == 500
+		assert getResponse.clientResponse.getLocation() == null
 
 		when:
 		getResponse.getResponseAsType(Widget)

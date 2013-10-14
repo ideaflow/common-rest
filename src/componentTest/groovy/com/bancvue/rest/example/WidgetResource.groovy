@@ -48,10 +48,10 @@ class WidgetResource {
 		Widget existingWidget = widgets[widget.id]
 		evalWidget(existingWidget)
 		if (existingWidget) {
-			return responseFactory.createAddFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
+			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
 		}
 		evalWidget(widget)
-		responseFactory.createAddSuccessResponse(widget.id, widget)
+		responseFactory.createPostSuccessResponse(widget.id, widget)
 	}
 
 	@PUT
@@ -59,7 +59,7 @@ class WidgetResource {
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
 		widgets[id] = update
 		evalWidget(update)
-		responseFactory.createUpdateSuccessResponse(id)
+		responseFactory.createPutSuccessResponse(id)
 	}
 
 	@DELETE

@@ -7,14 +7,14 @@ import org.apache.http.HttpStatus
 import spock.lang.Specification
 
 
-class CreateResponseTest extends Specification {
+class PostResponseTest extends Specification {
 
 	ClientResponse clientResponse
-	CreateResponse createResponse
+	PostResponse postResponse
 
 	void setup() {
 		clientResponse = Mock()
-		createResponse = new CreateResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
+		postResponse = new PostResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
 	}
 
 	def "assertEntityCreatedAndGet with GenericType convert and return entity if status created"() {
@@ -23,7 +23,7 @@ class CreateResponseTest extends Specification {
 		clientResponse.getEntity(genericType) >> "value"
 
 		when:
-		String actualResponse = createResponse.assertEntityCreatedAndGet(genericType)
+		String actualResponse = postResponse.assertEntityCreatedAndGet(genericType)
 
 		then:
 		"value" == actualResponse

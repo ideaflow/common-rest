@@ -1,7 +1,7 @@
 package com.bancvue.rest
 
 import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.UpdateResponse
+import com.bancvue.rest.client.PutResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
@@ -10,7 +10,7 @@ import org.junit.ClassRule
 import spock.lang.Shared
 import spock.lang.Specification
 
-class UpdateSpecification extends Specification {
+class PutClientResponseCorrespondsToServerResponseSpecification extends Specification {
 
 	@Shared
 	@ClassRule
@@ -34,11 +34,11 @@ class UpdateSpecification extends Specification {
 		Widget update = addWidget("updated")
 
 		when:
-		UpdateResponse updateResponse = clientResponseFactory.update(widgetResource.path(update.id), update)
+		PutResponse updateResponse = clientResponseFactory.put(widgetResource.path(update.id), update)
 
 		then:
-		assert updateResponse.response.getStatus() == 204
-		assert updateResponse.response.getLocation() as String == "http://localhost:8080/widgets/updated"
+		assert updateResponse.clientResponse.getStatus() == 204
+		assert updateResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/updated"
 
 		when:
 		updateResponse.assertResponseSuccess()
@@ -55,11 +55,11 @@ class UpdateSpecification extends Specification {
 		widget.initApplicationError()
 
 		when:
-		UpdateResponse updateResponse = clientResponseFactory.update(widgetResource.path(widget.id), widget)
+		PutResponse updateResponse = clientResponseFactory.put(widgetResource.path(widget.id), widget)
 
 		then:
-		assert updateResponse.response.getStatus() == 500
-		assert updateResponse.response.getLocation() == null
+		assert updateResponse.clientResponse.getStatus() == 500
+		assert updateResponse.clientResponse.getLocation() == null
 
 		when:
 		updateResponse.assertResponseSuccess()

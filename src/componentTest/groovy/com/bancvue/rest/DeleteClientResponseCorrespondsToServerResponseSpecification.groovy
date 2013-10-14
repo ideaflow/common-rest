@@ -5,13 +5,12 @@ import com.bancvue.rest.client.DeleteResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource
 import org.junit.ClassRule
 import spock.lang.Shared
 import spock.lang.Specification
 
-class DeleteSpecification extends Specification {
+class DeleteClientResponseCorrespondsToServerResponseSpecification extends Specification {
 
 	@Shared
 	@ClassRule
@@ -38,8 +37,8 @@ class DeleteSpecification extends Specification {
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path(widget.id))
 
 		then:
-		assert deleteResponse.response.getStatus() == 200
-		assert deleteResponse.response.getLocation() as String == "http://localhost:8080/widgets/to-delete"
+		assert deleteResponse.clientResponse.getStatus() == 200
+		assert deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
 
 		when:
 		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGet(Widget)
@@ -57,8 +56,8 @@ class DeleteSpecification extends Specification {
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path(widget.id))
 
 		then:
-		assert deleteResponse.response.getStatus() == 204
-		assert deleteResponse.response.getLocation() as String == "http://localhost:8080/widgets/to-delete"
+		assert deleteResponse.clientResponse.getStatus() == 204
+		assert deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
 
 		when:
 		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGet(Widget)
@@ -72,8 +71,8 @@ class DeleteSpecification extends Specification {
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path("not-found"))
 
 		then:
-		assert deleteResponse.response.getStatus() == 404
-		assert deleteResponse.response.getLocation() as String == "http://localhost:8080/widgets/not-found"
+		assert deleteResponse.clientResponse.getStatus() == 404
+		assert deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/not-found"
 
 		when:
 		deleteResponse.assertEntityDeletedAndGet(Widget)
@@ -91,8 +90,8 @@ class DeleteSpecification extends Specification {
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path("app-error"))
 
 		then:
-		assert deleteResponse.response.getStatus() == 500
-		assert deleteResponse.response.getLocation() == null
+		assert deleteResponse.clientResponse.getStatus() == 500
+		assert deleteResponse.clientResponse.getLocation() == null
 
 		when:
 		deleteResponse.assertEntityDeletedAndGet(Widget)

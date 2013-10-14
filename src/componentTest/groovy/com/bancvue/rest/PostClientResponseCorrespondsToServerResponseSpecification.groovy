@@ -1,17 +1,16 @@
 package com.bancvue.rest
 
 import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.CreateResponse
+import com.bancvue.rest.client.PostResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource
 import org.junit.ClassRule
 import spock.lang.Shared
 import spock.lang.Specification
 
-class CreateSpecification extends Specification {
+class PostClientResponseCorrespondsToServerResponseSpecification extends Specification {
 
 	@Shared
 	@ClassRule
@@ -35,11 +34,11 @@ class CreateSpecification extends Specification {
 		Widget widget = new Widget(id: "created")
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.create(widgetResource, widget)
+		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
 
 		then:
-		assert createResponse.response.getStatus() == 201
-		assert createResponse.response.getLocation() as String == "http://localhost:8080/widgets/created"
+		assert createResponse.clientResponse.getStatus() == 201
+		assert createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/created"
 
 		when:
 		Widget actualWidget = createResponse.assertEntityCreatedAndGet(Widget)
@@ -53,11 +52,11 @@ class CreateSpecification extends Specification {
 		Widget widget = addWidget("duplicate")
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.create(widgetResource, widget)
+		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
 
 		then:
-		assert createResponse.response.getStatus() == 409
-		assert createResponse.response.getLocation() as String == "http://localhost:8080/widgets/duplicate"
+		assert createResponse.clientResponse.getStatus() == 409
+		assert createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/duplicate"
 
 		when:
 		createResponse.assertEntityCreatedAndGet(Widget)
@@ -73,11 +72,11 @@ class CreateSpecification extends Specification {
 		Widget invalid = new Widget()
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.create(widgetResource, invalid)
+		PostResponse createResponse = clientResponseFactory.post(widgetResource, invalid)
 
 		then:
-		assert createResponse.response.getStatus() == 422
-		assert createResponse.response.getLocation() == null
+		assert createResponse.clientResponse.getStatus() == 422
+		assert createResponse.clientResponse.getLocation() == null
 
 		when:
 		createResponse.assertEntityCreatedAndGet(Widget)
@@ -94,11 +93,11 @@ class CreateSpecification extends Specification {
 		widget.initApplicationError()
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.create(widgetResource, widget)
+		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
 
 		then:
-		assert createResponse.response.getStatus() == 500
-		assert createResponse.response.getLocation() == null
+		assert createResponse.clientResponse.getStatus() == 500
+		assert createResponse.clientResponse.getLocation() == null
 
 		when:
 		createResponse.assertEntityCreatedAndGet(Widget)

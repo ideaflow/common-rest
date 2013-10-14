@@ -4,13 +4,13 @@ import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import org.apache.http.HttpStatus;
 
-public class UpdateResponse {
+public class PutResponse {
 
-	private ClientResponse response;
+	private ClientResponse clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public UpdateResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
-		this.response = response;
+	public PutResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}
 
@@ -18,13 +18,13 @@ public class UpdateResponse {
 		try {
 			doAssertResponseSuccess();
 		} finally {
-			response.close();
+			clientResponse.close();
 		}
 	}
 
 	private void doAssertResponseSuccess() {
-		if (response.getStatus() != HttpStatus.SC_NO_CONTENT) {
-			throw exceptionFactory.createException(response);
+		if (clientResponse.getStatus() != HttpStatus.SC_NO_CONTENT) {
+			throw exceptionFactory.createException(clientResponse);
 		}
 	}
 }

@@ -8,11 +8,11 @@ import org.apache.http.HttpStatus;
 
 public class GetResponse {
 
-	private ClientResponse response;
+	private ClientResponse clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public GetResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
-		this.response = response;
+	public GetResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}
 
@@ -27,7 +27,7 @@ public class GetResponse {
 	private <T> T acquireResponseAsType(Object typeOrGenericType, EntityResolver resolver) {
 		T typedResponse = getResponseAsType(typeOrGenericType, resolver);
 		if (typedResponse == null) {
-			throw new HttpClientException("No entity found for location=" + response.getLocation(), ClientResponse.Status.NOT_FOUND);
+			throw new HttpClientException("No entity found for location=" + clientResponse.getLocation(), ClientResponse.Status.NOT_FOUND);
 		}
 		return typedResponse;
 	}
@@ -44,17 +44,17 @@ public class GetResponse {
 		try {
 			return doGetResponseAsType(typeOrGenericType, resolver);
 		} finally {
-			response.close();
+			clientResponse.close();
 		}
 	}
 
 	private <T> T doGetResponseAsType(Object typeOrGenericType, EntityResolver resolver) {
-		if (response.getStatus() == HttpStatus.SC_OK) {
-			return resolver.getEntity(response, typeOrGenericType);
-		} else if (response.getStatus() == HttpStatus.SC_NOT_FOUND) {
+		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
+			return resolver.getEntity(clientResponse, typeOrGenericType);
+		} else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
 			return null;
 		} else {
-			throw exceptionFactory.createException(response);
+			throw exceptionFactory.createException(clientResponse);
 		}
 	}
 

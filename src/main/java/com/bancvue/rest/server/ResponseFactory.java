@@ -23,11 +23,11 @@ public class ResponseFactory {
 		if (entity != null) {
 			return createGetSuccessResponse(pathToEntity, entity);
 		} else {
-			return createGetFailedResponse(pathToEntity);
+			return createGetNotFoundResponse(pathToEntity);
 		}
 	}
 
-	public Response createGetFailedResponse(String pathToEntity) {
+	public Response createGetNotFoundResponse(String pathToEntity) {
 		return Response.status(Response.Status.NOT_FOUND)
 				.location(getTargetResourceLocation(pathToEntity))
 				.build();
@@ -41,7 +41,7 @@ public class ResponseFactory {
 				.build();
 	}
 
-	public Response createAddSuccessResponse(String pathToEntity, Object entity) {
+	public Response createPostSuccessResponse(String pathToEntity, Object entity) {
 		// TODO: we should be able to do use getTargetResourceLocation and do something like this...
 		// URI location = getTargetResourceLocation(pathToEntity)
 		// however, jersey seems to double-prepend the resource base when it returns the result to the client;
@@ -53,7 +53,7 @@ public class ResponseFactory {
 				.build();
 	}
 
-	public Response createAddFailedBecauseAlreadyExistsResponse(String pathToEntity, Object existingEntity) {
+	public Response createPostFailedBecauseAlreadyExistsResponse(String pathToEntity, Object existingEntity) {
 		// TODO: for some reason, jersey always converts response code 409 to text/html so I'm not sure how to return the existing entity
 		return Response.status(Response.Status.CONFLICT)
 				.location(getTargetResourceLocation(pathToEntity))
@@ -62,7 +62,7 @@ public class ResponseFactory {
 				.build();
 	}
 
-	public Response createUpdateSuccessResponse(String pathToEntity) {
+	public Response createPutSuccessResponse(String pathToEntity) {
 		return Response.noContent()
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.location(getTargetResourceLocation(pathToEntity))

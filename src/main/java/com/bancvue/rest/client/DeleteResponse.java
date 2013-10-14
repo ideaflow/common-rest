@@ -7,11 +7,11 @@ import org.apache.http.HttpStatus;
 
 public class DeleteResponse {
 
-	private ClientResponse response;
+	private ClientResponse clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public DeleteResponse(ClientResponse response, UnexpectedResponseExceptionFactory exceptionFactory) {
-		this.response = response;
+	public DeleteResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}
 
@@ -27,17 +27,17 @@ public class DeleteResponse {
 		try {
 			return doAssertEntityDeletedAndGet(typeOrGenericType, resolver);
 		} finally {
-			response.close();
+			clientResponse.close();
 		}
 	}
 
 	private <T> T doAssertEntityDeletedAndGet(Object typeOrGenericType, EntityResolver resolver) {
-		if (response.getStatus() == HttpStatus.SC_OK) {
-			return resolver.getEntity(response, typeOrGenericType);
-		} else if (response.getStatus() == HttpStatus.SC_NO_CONTENT) {
+		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
+			return resolver.getEntity(clientResponse, typeOrGenericType);
+		} else if (clientResponse.getStatus() == HttpStatus.SC_NO_CONTENT) {
 			return null;
 		}
-		throw exceptionFactory.createException(response);
+		throw exceptionFactory.createException(clientResponse);
 	}
 
 }
