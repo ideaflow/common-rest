@@ -19,18 +19,18 @@ public class ResponseFactory {
 				.build();
 	}
 
+	public Response createNotFoundResponse(String pathToEntity) {
+		return Response.status(Response.Status.NOT_FOUND)
+				.location(getTargetResourceLocation(pathToEntity))
+				.build();
+	}
+
 	public Response createGetResponse(String pathToEntity, Object entity) {
 		if (entity != null) {
 			return createGetSuccessResponse(pathToEntity, entity);
 		} else {
-			return createGetNotFoundResponse(pathToEntity);
+			return createNotFoundResponse(pathToEntity);
 		}
-	}
-
-	public Response createGetNotFoundResponse(String pathToEntity) {
-		return Response.status(Response.Status.NOT_FOUND)
-				.location(getTargetResourceLocation(pathToEntity))
-				.build();
 	}
 
 	public Response createGetSuccessResponse(String pathToEntity, Object entity) {

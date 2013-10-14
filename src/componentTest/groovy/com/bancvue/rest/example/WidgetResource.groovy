@@ -57,6 +57,9 @@ class WidgetResource {
 	@PUT
 	@Path("/{id}")
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
+		if (!widgets[id]) {
+			return responseFactory.createNotFoundResponse(id)
+		}
 		widgets[id] = update
 		evalWidget(update)
 		responseFactory.createPutSuccessResponse(id, update)

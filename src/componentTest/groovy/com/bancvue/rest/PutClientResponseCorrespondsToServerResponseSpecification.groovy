@@ -51,6 +51,24 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 	// TODO: what behavior do we want around PUT?
 	// do we allow create?
 
+	def "not found should return status code 404 and location, client response should convert to http exception"() {
+		Widget widget = new Widget(id: "wid")
+
+		when:
+		PutResponse putResponse = clientResponseFactory.put(widgetResource.path("wid"), widget)
+
+		then:
+		putResponse.clientResponse.getStatus() == 404
+		putResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
+
+		when:
+		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+
+		then:
+		HttpClientException ex = thrown(HttpClientException)
+		ex.status == 404
+	}
+
 	def "application error should return status code 500, client response should convert to http exception"() {
 		Widget widget = addWidget("updated")
 		widget.initApplicationError()
