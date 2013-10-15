@@ -1,8 +1,8 @@
 buildscript {
-	dependencies { classpath 'com.bancvue:gradle-core:0.1' }
+	dependencies { classpath 'com.bancvue:gradle-internal:0.1' }
 }
 
-apply plugin: 'bancvue'
+apply plugin: 'bancvue-internal'
 
 
 dependencies {
