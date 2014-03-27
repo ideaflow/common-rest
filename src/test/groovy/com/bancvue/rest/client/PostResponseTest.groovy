@@ -10,11 +10,11 @@ import spock.lang.Specification
 class PostResponseTest extends Specification {
 
 	ClientResponse clientResponse
-	PostResponse postResponse
+	CreateResponse postResponse
 
 	void setup() {
 		clientResponse = Mock()
-		postResponse = new PostResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
+		postResponse = new CreateResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
 	}
 
 	def "assertEntityCreatedAndGet with GenericType convert and return entity if status created"() {

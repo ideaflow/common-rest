@@ -1,7 +1,7 @@
 package com.bancvue.rest
 
 import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.PutResponse
+import com.bancvue.rest.client.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
@@ -34,7 +34,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		Widget update = addWidget("updated")
 
 		when:
-		PutResponse updateResponse = clientResponseFactory.put(widgetResource.path(update.id), update)
+		UpdateResponse updateResponse = clientResponseFactory.updateWithPut(widgetResource.path(update.id), update)
 
 		then:
 		updateResponse.clientResponse.getStatus() == 200
@@ -55,7 +55,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		Widget widget = new Widget(id: "wid")
 
 		when:
-		PutResponse putResponse = clientResponseFactory.put(widgetResource.path("wid"), widget)
+		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path("wid"), widget)
 
 		then:
 		putResponse.clientResponse.getStatus() == 404
@@ -74,7 +74,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends Specific
 		widget.initApplicationError()
 
 		when:
-		PutResponse updateResponse = clientResponseFactory.put(widgetResource.path(widget.id), widget)
+		UpdateResponse updateResponse = clientResponseFactory.updateWithPut(widgetResource.path(widget.id), widget)
 
 		then:
 		updateResponse.clientResponse.getStatus() == 500

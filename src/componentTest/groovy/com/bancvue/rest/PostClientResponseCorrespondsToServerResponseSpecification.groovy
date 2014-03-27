@@ -1,7 +1,7 @@
 package com.bancvue.rest
 
 import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.PostResponse
+import com.bancvue.rest.client.CreateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
@@ -34,7 +34,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		Widget widget = new Widget(id: "created")
 
 		when:
-		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
+		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 201
@@ -52,7 +52,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		Widget widget = addWidget("duplicate")
 
 		when:
-		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
+		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 409
@@ -72,7 +72,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		Widget invalid = new Widget()
 
 		when:
-		PostResponse createResponse = clientResponseFactory.post(widgetResource, invalid)
+		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, invalid)
 
 		then:
 		createResponse.clientResponse.getStatus() == 422
@@ -93,7 +93,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends Specifi
 		widget.initApplicationError()
 
 		when:
-		PostResponse createResponse = clientResponseFactory.post(widgetResource, widget)
+		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 500
