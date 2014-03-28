@@ -10,11 +10,11 @@ import spock.lang.Specification
 class PutResponseTest extends Specification {
 	
 	ClientResponse clientResponse
-	PutResponse putResponse
+	UpdateResponse putResponse
 
 	void setup() {
 		clientResponse = Mock()
-		putResponse = new PutResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
+		putResponse = new UpdateResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
 	}
 
 	def "assertEntityUpdatedAndGetEntity with GenericType should convert and return entity if status ok"() {

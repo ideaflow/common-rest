@@ -1,6 +1,6 @@
 package com.bancvue.rest.example
 
-import com.bancvue.rest.server.ResponseFactory
+import com.bancvue.rest.resource.ResourceResponseFactory
 import groovy.util.logging.Slf4j
 
 import javax.validation.Valid
@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response
 class WidgetResource {
 
 	Map<String, Widget> widgets = [:]
-	private ResponseFactory responseFactory = new ResponseFactory(WidgetResource)
+	private ResourceResponseFactory responseFactory = new ResourceResponseFactory(WidgetResource)
 
 	@GET
 	public List<Widget> listWidgets() {
@@ -75,5 +75,4 @@ class WidgetResource {
 		}
 		responseFactory.createDeleteResponse(id, deletedWidget)
 	}
-
 }

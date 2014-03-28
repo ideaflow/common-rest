@@ -5,12 +5,12 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import org.apache.http.HttpStatus;
 
-public class PutResponse {
+public class UpdateResponse {
 
 	private ClientResponse clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public PutResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+	public UpdateResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}

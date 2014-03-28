@@ -26,14 +26,14 @@ public class ClientResponseFactory {
 		return new GetResponse(response, exceptionFactory);
 	}
 
-	public PostResponse post(WebResource resource, Object entity) {
+	public CreateResponse createWithPost(WebResource resource, Object entity) {
 		ClientResponse response = resource
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.accept(MediaType.APPLICATION_JSON_TYPE)
 				.entity(entity)
 				.post(ClientResponse.class);
 
-		return new PostResponse(response, exceptionFactory);
+		return new CreateResponse(response, exceptionFactory);
 	}
 
 	public DeleteResponse delete(WebResource resource) {
@@ -44,13 +44,13 @@ public class ClientResponseFactory {
 		return new DeleteResponse(response, exceptionFactory);
 	}
 
-	public PutResponse put(WebResource resource, Object entity) {
+	public UpdateResponse updateWithPut(WebResource resource, Object entity) {
 		ClientResponse response = resource
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.entity(entity)
 				.put(ClientResponse.class);
 
-		return new PutResponse(response, exceptionFactory);
+		return new UpdateResponse(response, exceptionFactory);
 	}
 
 }
