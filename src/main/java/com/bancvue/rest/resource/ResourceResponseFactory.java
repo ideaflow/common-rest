@@ -28,13 +28,6 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
-	public <T> Response createNotFoundResponse(String pathToEntity, Envelope<T> envelope) {
-		return Response.status(Response.Status.NOT_FOUND)
-				.location(getTargetResourceLocation(pathToEntity))
-				.entity(envelope)
-				.build();
-	}
-
 	public <T> Response createGetResponse(String pathToEntity, T entity) {
 		if (entity != null) {
 			return createGetSuccessResponse(pathToEntity, entity);
@@ -47,7 +40,7 @@ public class ResourceResponseFactory {
 		if (envelope.getData() != null) {
 			return createGetSuccessResponse(pathToEntity, envelope);
 		} else {
-			return createNotFoundResponse(pathToEntity, envelope);
+			return createNotFoundResponse(pathToEntity);
 		}
 	}
 
