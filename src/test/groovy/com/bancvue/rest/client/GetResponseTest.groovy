@@ -40,19 +40,9 @@ class GetResponseTest extends Specification {
 	}
 
 	def "getResponseAsType with GenericType should return entity from response if status ok"() {
-		GenericType<String> genericType = new GenericType<String>() {}
-		clientResponse.getStatus() >> HttpStatus.SC_OK
-		clientResponse.getEntity(genericType) >> "value"
+		GenericType<String> genericType = new GenericType<String>() {
 
-		when:
-		String entity = getResponse.getResponseAsTypeOrNull(genericType)
-
-		then:
-		"value" == entity
-	}
-
-	def "acquireResponseAsType with GenericType should return entity fromr esponse if status ok"() {
-		GenericType<String> genericType = new GenericType<String>() {}
+				}
 		clientResponse.getStatus() >> HttpStatus.SC_OK
 		clientResponse.getEntity(genericType) >> "value"
 
@@ -63,4 +53,17 @@ class GetResponseTest extends Specification {
 		"value" == entity
 	}
 
+	def "acquireResponseAsType with GenericType should return entity fromr esponse if status ok"() {
+		GenericType<String> genericType = new GenericType<String>() {
+
+				}
+		clientResponse.getStatus() >> HttpStatus.SC_OK
+		clientResponse.getEntity(genericType) >> "value"
+
+		when:
+		String entity = getResponse.getResponseAsType(genericType)
+
+		then:
+		"value" == entity
+	}
 }
