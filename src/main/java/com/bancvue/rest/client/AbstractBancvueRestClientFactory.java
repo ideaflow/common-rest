@@ -22,7 +22,7 @@ public abstract class AbstractBancvueRestClientFactory<T> implements BancvueRest
 		return host;
 	}
 
-	public WebResource createWebResource() {
+	protected WebResource createWebResource() {
 		URI uri = UriBuilder.fromUri(host).build();
 
 		ClientConfig clientConfig = new DefaultClientConfig();
