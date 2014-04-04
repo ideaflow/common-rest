@@ -28,6 +28,13 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
+	public Response createSeeOtherResponse(String pathToEntity) {
+		URI uri = getTargetResourceLocation(pathToEntity);
+		return Response.seeOther(uri)
+				.location(uri)
+				.build();
+	}
+
 	public <T> Response createGetResponse(String pathToEntity, T entity) {
 		if (entity != null) {
 			return createGetSuccessResponse(pathToEntity, entity);

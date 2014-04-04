@@ -1,13 +1,14 @@
 package com.bancvue.rest.client;
 
-import com.bancvue.rest.Envelope;
-import com.bancvue.rest.exception.HttpClientException;
+import javax.ws.rs.core.MultivaluedMap;
+
+import org.apache.http.HttpStatus;
+
 import com.bancvue.rest.exception.NotFoundException;
+import com.bancvue.rest.exception.SeeOtherException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
-
-import org.apache.http.HttpStatus;
 
 public class GetResponse {
 
@@ -30,6 +31,10 @@ public class GetResponse {
 	private <T> T getResponseAsType(Object typeOrGenericType, EntityResolver resolver) {
 		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
 			return resolver.getEntity(clientResponse, typeOrGenericType);
+		} else if (clientResponse.getStatus() == HttpStatus.SC_SEE_OTHER) {
+			MultivaluedMap<String, String> headers = clientResponse.getHeaders();
+			String otherLocation = headers.containsKey("Location") ? headers.get("Location").get(0) : "";
+			throw new SeeOtherException(otherLocation);
 		} else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
 			throw new NotFoundException(clientResponse.getEntity(String.class));
 		} else {
