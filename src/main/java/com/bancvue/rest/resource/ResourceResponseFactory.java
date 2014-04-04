@@ -3,6 +3,9 @@ package com.bancvue.rest.resource;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+
+import com.bancvue.rest.Envelope;
+
 import java.net.URI;
 
 public class ResourceResponseFactory {
@@ -25,18 +28,26 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
-	/*
-	 * example of use in a Resource what we want EnvelopeBuilder env =
-	 * EnvelopeBuilder.envolope(foo).pagination().build() return
-	 * responseFacotory.createGetRespone("/", env);
-	 * 
-	 * where we are at return responseFactory.createGetResponse("/", foo);
-	 */
+	public <T> Response createNotFoundResponse(String pathToEntity, Envelope<T> envelope) {
+		return Response.status(Response.Status.NOT_FOUND)
+				.location(getTargetResourceLocation(pathToEntity))
+				.entity(envelope)
+				.build();
+	}
+
 	public <T> Response createGetResponse(String pathToEntity, T entity) {
 		if (entity != null) {
 			return createGetSuccessResponse(pathToEntity, entity);
 		} else {
 			return createNotFoundResponse(pathToEntity);
+		}
+	}
+
+	public <T> Response createGetResponse(String pathToEntity, Envelope<T> envelope) {
+		if (envelope.getData() != null) {
+			return createGetSuccessResponse(pathToEntity, envelope);
+		} else {
+			return createNotFoundResponse(pathToEntity, envelope);
 		}
 	}
 
