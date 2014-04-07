@@ -5,8 +5,11 @@ import com.bancvue.rest.client.GetResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
+import com.bancvue.rest.exception.NotFoundException;
 import com.sun.jersey.api.client.WebResource
+
 import org.junit.ClassRule
+
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -41,14 +44,14 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
-		Widget actualWidget = getResponse.getResponseAsTypeOrNull(Widget)
+		Widget actualWidget = getResponse.getResponseAsType(Widget)
 
 		then:
 		expectedWidget == actualWidget
 		!expectedWidget.is(actualWidget)
 	}
 
-	def "not found should return status code 404 and location, client response should convert to null"() {
+	def "should throw not found expect when return status code 404"() {
 		when:
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
@@ -57,10 +60,10 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
-		Widget actualWidget = getResponse.getResponseAsTypeOrNull(Widget)
+		getResponse.getResponseAsType(Widget)
 
 		then:
-		actualWidget == null
+		thrown NotFoundException
 	}
 
 	def "application error should return status code 500, client response should convert to http exception"() {
@@ -75,11 +78,10 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends Specific
 		getResponse.clientResponse.getLocation() == null
 
 		when:
-		getResponse.getResponseAsTypeOrNull(Widget)
+		getResponse.getResponseAsType(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
 		ex.getStatus() == 500
 	}
-
 }
