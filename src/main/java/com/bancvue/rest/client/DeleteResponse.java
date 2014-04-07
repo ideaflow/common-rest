@@ -39,9 +39,9 @@ public class DeleteResponse {
 		} else if (clientResponse.getStatus() == HttpStatus.SC_NO_CONTENT) {
 			return null;
 
-        } else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
-            throw new NotFoundException(clientResponse.getEntity(String.class));
-        }
+		} else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
+			throw new NotFoundException(clientResponse.getEntity(String.class));
+		}
 
 		throw exceptionFactory.createException(clientResponse);
 	}
