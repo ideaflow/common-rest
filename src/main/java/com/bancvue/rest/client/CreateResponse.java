@@ -1,5 +1,6 @@
 package com.bancvue.rest.client;
 
+import com.bancvue.rest.exception.ConflictException;
 import com.bancvue.rest.exception.HttpClientException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
@@ -34,7 +35,7 @@ public class CreateResponse {
 
 	private <T> T doAssertEntityCreatedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
 		if (clientResponse.getStatus() == HttpStatus.SC_CONFLICT) {
-			throw new HttpClientException("Entity already exists", clientResponse.getStatus());
+			throw new ConflictException("Entity already exists");
 		} else if (clientResponse.getStatus() != HttpStatus.SC_CREATED) {
 			throw exceptionFactory.createException(clientResponse);
 		}
