@@ -34,7 +34,7 @@ class DeleteResponseTest extends Specification {
         clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
 
         when:
-        String actualResponse = deleteResponse.assertEntityDeletedAndGetResponse(String.class)
+        deleteResponse.assertEntityDeletedAndGetResponse(String.class)
 
         then:
         thrown NotFoundException
