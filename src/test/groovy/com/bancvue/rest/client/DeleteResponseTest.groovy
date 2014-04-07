@@ -30,14 +30,14 @@ class DeleteResponseTest extends Specification {
 		"value" == actualResponse
 	}
 
-    def "Should throw NotFoundException if status is 404"() {
-        clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
+	def "Should throw NotFoundException if status is 404"() {
+		clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
 
-        when:
-        deleteResponse.assertEntityDeletedAndGetResponse(String.class)
+		when:
+		deleteResponse.assertEntityDeletedAndGetResponse(String.class)
 
-        then:
-        thrown NotFoundException
-    }
+		then:
+		thrown NotFoundException
+	}
 
 }
