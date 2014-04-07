@@ -28,6 +28,12 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
+    public Response createConflictResponse(String pathToEntity) {
+        return Response.status(Response.Status.CONFLICT)
+                .location(getTargetResourceLocation(pathToEntity))
+                .build();
+    }
+
 	public Response createSeeOtherResponse(String pathToEntity) {
 		URI uri = getTargetResourceLocation(pathToEntity);
 		return Response.seeOther(uri)
