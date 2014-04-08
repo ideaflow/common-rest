@@ -1,5 +1,6 @@
 package com.bancvue.rest.client
 
+import com.bancvue.rest.exception.NotFoundException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
 import com.sun.jersey.api.client.ClientResponse
 import com.sun.jersey.api.client.GenericType
@@ -27,6 +28,16 @@ class DeleteResponseTest extends Specification {
 
 		then:
 		"value" == actualResponse
+	}
+
+	def "Should throw NotFoundException if status is 404"() {
+		clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
+
+		when:
+		deleteResponse.assertEntityDeletedAndGetResponse(String.class)
+
+		then:
+		thrown NotFoundException
 	}
 
 }

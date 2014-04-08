@@ -1,5 +1,6 @@
 package com.bancvue.rest.client;
 
+import com.bancvue.rest.exception.NotFoundException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
@@ -34,9 +35,14 @@ public class DeleteResponse {
 	private <T> T doAssertEntityDeletedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
 		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
 			return resolver.getEntity(clientResponse, typeOrGenericType);
+
 		} else if (clientResponse.getStatus() == HttpStatus.SC_NO_CONTENT) {
 			return null;
+
+		} else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
+			throw new NotFoundException(clientResponse.getEntity(String.class));
 		}
+
 		throw exceptionFactory.createException(clientResponse);
 	}
 
