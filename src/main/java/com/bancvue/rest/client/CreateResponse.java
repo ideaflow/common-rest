@@ -3,8 +3,10 @@ package com.bancvue.rest.client;
 import com.bancvue.rest.exception.ConflictException;
 import com.bancvue.rest.exception.HttpClientException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
+import com.bancvue.rest.exception.ValidationException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
+
 import org.apache.http.HttpStatus;
 
 public class CreateResponse {
@@ -34,12 +36,14 @@ public class CreateResponse {
 	}
 
 	private <T> T doAssertEntityCreatedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		if (clientResponse.getStatus() == HttpStatus.SC_CONFLICT) {
+		if (clientResponse.getStatus() == HttpStatus.SC_BAD_REQUEST) {
+			String msg = EntityResolver.CLASS_RESOLVER.getEntity(clientResponse, String.class);
+			throw new ValidationException(msg);
+		} else if (clientResponse.getStatus() == HttpStatus.SC_CONFLICT) {
 			throw new ConflictException("Entity already exists");
 		} else if (clientResponse.getStatus() != HttpStatus.SC_CREATED) {
 			throw exceptionFactory.createException(clientResponse);
 		}
 		return resolver.getEntity(clientResponse, typeOrGenericType);
 	}
-
 }

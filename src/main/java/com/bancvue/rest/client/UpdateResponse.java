@@ -1,8 +1,10 @@
 package com.bancvue.rest.client;
 
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
+import com.bancvue.rest.exception.ValidationException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
+
 import org.apache.http.HttpStatus;
 
 public class UpdateResponse {
@@ -32,10 +34,12 @@ public class UpdateResponse {
 	}
 
 	private <T> T doAssertEntityUpdatedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
+		if (clientResponse.getStatus() == HttpStatus.SC_BAD_REQUEST) {
+			String msg = EntityResolver.CLASS_RESOLVER.getEntity(clientResponse, String.class);
+			throw new ValidationException(msg);
+		} else if (clientResponse.getStatus() == HttpStatus.SC_OK) {
 			return resolver.getEntity(clientResponse, typeOrGenericType);
 		}
 		throw exceptionFactory.createException(clientResponse);
 	}
-
 }
