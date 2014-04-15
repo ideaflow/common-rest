@@ -1,7 +1,5 @@
 package com.bancvue.rest.exception;
 
-import com.sun.jersey.api.client.ClientResponse;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -23,7 +21,7 @@ public class HttpClientException extends WebApplicationException {
 		this.message = message;
 	}
 
-	public HttpClientException(String message, ClientResponse.Status status) {
+	public HttpClientException(String message, Response.Status status) {
 		this(message, status.getStatusCode());
 	}
 

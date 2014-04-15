@@ -1,6 +1,6 @@
 package com.bancvue.rest.exception;
 
-import com.sun.jersey.api.client.ClientResponse;
+import javax.ws.rs.core.Response;
 
 public class SeeOtherException extends HttpClientException {
 
@@ -8,7 +8,7 @@ public class SeeOtherException extends HttpClientException {
 	private String otherLocation;
 
 	public SeeOtherException(String otherLocation) {
-		super(otherLocation, ClientResponse.Status.SEE_OTHER);
+		super(otherLocation, Response.Status.SEE_OTHER);
 		this.otherLocation = otherLocation;
 	}
 

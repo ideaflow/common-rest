@@ -1,10 +1,11 @@
 package com.bancvue.rest.client;
 
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 public class ClientResponseFactory {
 
@@ -18,37 +19,36 @@ public class ClientResponseFactory {
 		this.exceptionFactory = exceptionFactory;
 	}
 
-	public GetResponse get(WebResource resource) {
-		ClientResponse response = resource
-				.accept(MediaType.APPLICATION_JSON_TYPE)
-				.get(ClientResponse.class);
+	public GetResponse get(WebTarget resource) {
+		Response response = resource
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.get(Response.class);
 
 		return new GetResponse(response, exceptionFactory);
 	}
 
-	public CreateResponse createWithPost(WebResource resource, Object entity) {
-		ClientResponse response = resource
-				.type(MediaType.APPLICATION_JSON_TYPE)
+	public CreateResponse createWithPost(WebTarget resource, Object entity) {
+		Response response = resource
+				.request(MediaType.APPLICATION_JSON_TYPE)
 				.accept(MediaType.APPLICATION_JSON_TYPE)
-				.entity(entity)
-				.post(ClientResponse.class);
+				.post(Entity.entity(entity, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		return new CreateResponse(response, exceptionFactory);
 	}
 
-	public DeleteResponse delete(WebResource resource) {
-		ClientResponse response = resource
+	public DeleteResponse delete(WebTarget resource) {
+		Response response = resource
+				.request()
 				.accept(MediaType.APPLICATION_JSON_TYPE)
-				.delete(ClientResponse.class);
+				.delete(Response.class);
 
 		return new DeleteResponse(response, exceptionFactory);
 	}
 
-	public UpdateResponse updateWithPut(WebResource resource, Object entity) {
-		ClientResponse response = resource
-				.type(MediaType.APPLICATION_JSON_TYPE)
-				.entity(entity)
-				.put(ClientResponse.class);
+	public UpdateResponse updateWithPut(WebTarget resource, Object entity) {
+		Response response = resource
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(entity, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
 		return new UpdateResponse(response, exceptionFactory);
 	}

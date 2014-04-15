@@ -1,20 +1,19 @@
 package com.bancvue.rest.client;
 
 import com.bancvue.rest.exception.ConflictException;
-import com.bancvue.rest.exception.HttpClientException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.bancvue.rest.exception.ValidationException;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-
 import org.apache.http.HttpStatus;
+
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 
 public class CreateResponse {
 
-	private ClientResponse clientResponse;
+	private Response clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public CreateResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+	public CreateResponse(Response clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}

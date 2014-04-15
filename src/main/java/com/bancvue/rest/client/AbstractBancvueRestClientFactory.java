@@ -1,14 +1,14 @@
 package com.bancvue.rest.client;
 
-import java.net.URI;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
+import java.net.URI;
 
 public abstract class AbstractBancvueRestClientFactory<T> implements BancvueRestClientFactory<T> {
 
@@ -22,16 +22,15 @@ public abstract class AbstractBancvueRestClientFactory<T> implements BancvueRest
 		return host;
 	}
 
-	protected WebResource createWebResource() {
+	protected WebTarget createWebResource() {
 		URI uri = UriBuilder.fromUri(host).build();
 
-		ClientConfig clientConfig = new DefaultClientConfig();
-		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-		Client client = Client.create(clientConfig);
+		Client client = ClientBuilder.newClient(new ClientConfig()
+						.register(JacksonFeature.class)
+						.property(ClientProperties.FOLLOW_REDIRECTS, false)
+		);
 
-		client.setFollowRedirects(false);
-
-		return client.resource(uri);
+		return client.target(uri);
 	}
 
 	public abstract T createClient();

@@ -1,21 +1,20 @@
 package com.bancvue.rest.client;
 
-import javax.ws.rs.core.MultivaluedMap;
-
-import org.apache.http.HttpStatus;
-
 import com.bancvue.rest.exception.NotFoundException;
 import com.bancvue.rest.exception.SeeOtherException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
+import org.apache.http.HttpStatus;
+
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 public class GetResponse {
 
-	private ClientResponse clientResponse;
+	private Response clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public GetResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+	public GetResponse(Response clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}
@@ -32,11 +31,11 @@ public class GetResponse {
 		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
 			return resolver.getEntity(clientResponse, typeOrGenericType);
 		} else if (clientResponse.getStatus() == HttpStatus.SC_SEE_OTHER) {
-			MultivaluedMap<String, String> headers = clientResponse.getHeaders();
-			String otherLocation = headers.containsKey("Location") ? headers.get("Location").get(0) : "";
+			MultivaluedMap<String, Object> headers = clientResponse.getHeaders();
+			String otherLocation = headers.containsKey("Location") ? headers.get("Location").get(0).toString() : "";
 			throw new SeeOtherException(otherLocation);
 		} else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
-			throw new NotFoundException(clientResponse.getEntity(String.class));
+			throw new NotFoundException(clientResponse.readEntity(String.class));
 		} else {
 			throw exceptionFactory.createException(clientResponse);
 		}
