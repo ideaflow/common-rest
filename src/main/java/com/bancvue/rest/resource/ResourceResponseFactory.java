@@ -1,11 +1,10 @@
 package com.bancvue.rest.resource;
 
+import com.bancvue.rest.Envelope;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-
-import com.bancvue.rest.Envelope;
-
 import java.net.URI;
 
 public class ResourceResponseFactory {
@@ -66,14 +65,7 @@ public class ResourceResponseFactory {
 	}
 
 	public Response createPostSuccessResponse(String pathToEntity, Object entity) {
-		// TODO: we should be able to do use getTargetResourceLocation and do
-		// something like this...
-		// URI location = getTargetResourceLocation(pathToEntity)
-		// however, jersey seems to double-prepend the resource base when it
-		// returns the result to the client;
-		// oddly enough, this only seems to happen with 201 (CREATED) responses
-		URI location = UriBuilder.fromPath(pathToEntity).build();
-		return Response.created(location)
+		return Response.created(getTargetResourceLocation(pathToEntity))
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.entity(entity)
 				.build();

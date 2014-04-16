@@ -1,32 +1,27 @@
 package com.bancvue.rest
-
 import com.bancvue.rest.client.ClientResponseFactory
 import com.bancvue.rest.client.UpdateResponse
 import com.bancvue.rest.example.Widget
-import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
-import com.sun.jersey.api.client.WebResource
-import org.junit.ClassRule
 import spock.lang.Shared
-import spock.lang.Specification
 
-class PutClientResponseCorrespondsToServerResponseSpecification extends Specification {
+import javax.ws.rs.client.WebTarget
+
+class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
 
 	@Shared
-	@ClassRule
-	WidgetServiceRule widgetRule = WidgetServiceRule.create()
-	private WebResource widgetResource
+	private WebTarget widgetResource
 	private ClientResponseFactory clientResponseFactory
 
 	void setup() {
-		widgetResource = widgetRule.baseServiceResource.path("widgets")
+		widgetResource = baseServiceResource.path("widgets")
 		clientResponseFactory = new ClientResponseFactory()
-		widgetRule.widgets.clear()
+		widgetRepository.widgets.clear()
 	}
 
 	private Widget addWidget(String id) {
 		Widget widget = new Widget(id: id)
-		widgetRule.widgets.put(id, widget)
+		widgetRepository.widgets.put(id, widget)
 		widget
 	}
 

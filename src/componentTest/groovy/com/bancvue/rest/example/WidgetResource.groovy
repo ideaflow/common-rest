@@ -2,16 +2,10 @@ package com.bancvue.rest.example
 
 import com.bancvue.rest.resource.ResourceResponseFactory
 import groovy.util.logging.Slf4j
+import org.springframework.beans.factory.annotation.Autowired
 
 import javax.validation.Valid
-import javax.ws.rs.Consumes
-import javax.ws.rs.DELETE
-import javax.ws.rs.GET
-import javax.ws.rs.POST
-import javax.ws.rs.PUT
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
@@ -21,12 +15,14 @@ import javax.ws.rs.core.Response
 @Consumes(MediaType.APPLICATION_JSON)
 class WidgetResource {
 
-	Map<String, Widget> widgets = [:]
+	@Autowired
+	WidgetRepository widgetRepository;
+
 	private ResourceResponseFactory responseFactory = new ResourceResponseFactory(WidgetResource)
 
 	@GET
 	public List<Widget> listWidgets() {
-		widgets.values() as List
+		widgetRepository.widgets.values() as List
 	}
 
 	private void evalWidget(Widget widget) {
@@ -38,14 +34,14 @@ class WidgetResource {
 	@GET
 	@Path("/{id}")
 	public Response getWidget(@PathParam("id") String id) {
-		Widget widget = widgets[id]
+		Widget widget = widgetRepository.widgets[id]
 		evalWidget(widget)
 		responseFactory.createGetResponse(id, widget)
 	}
 
 	@POST
 	public Response createWidget(@Valid Widget widget) {
-		Widget existingWidget = widgets[widget.id]
+		Widget existingWidget = widgetRepository.widgets[widget.id]
 		evalWidget(existingWidget)
 		if (existingWidget) {
 			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
@@ -57,10 +53,10 @@ class WidgetResource {
 	@PUT
 	@Path("/{id}")
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
-		if (!widgets[id]) {
+		if (!widgetRepository.widgets[id]) {
 			return responseFactory.createNotFoundResponse(id)
 		}
-		widgets[id] = update
+		widgetRepository.widgets[id] = update
 		evalWidget(update)
 		responseFactory.createPutSuccessResponse(id, update)
 	}
@@ -68,7 +64,7 @@ class WidgetResource {
 	@DELETE
 	@Path("/{id}")
 	public Response deleteWidget(@PathParam("id") String id) {
-		Widget deletedWidget = widgets.remove(id)
+		Widget deletedWidget = widgetRepository.widgets.remove(id)
 		evalWidget(deletedWidget)
 		if (deletedWidget && deletedWidget.deletedItemNotIncludedInResultBody) {
 			return responseFactory.createDeleteSuccessResponse(id)
