@@ -62,14 +62,14 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		// TODO: how to return the existing entity in the body of the result?
 	}
 
-	def "invalid object should return status code 400, client response should convert to exception"() {
+	def "invalid object should return status code 422, client response should convert to exception"() {
 		Widget invalid = new Widget()
 
 		when:
 		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, invalid)
 
 		then:
-		createResponse.clientResponse.getStatus() == 400
+		createResponse.clientResponse.getStatus() == 422
 		createResponse.clientResponse.getLocation() == null
 
 		when:
@@ -77,7 +77,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
-		ex.getStatus() == 400
+		ex.getStatus() == 422
 
 		// TODO: what about the body?  can we standardize on reporting invalid objects?
 	}

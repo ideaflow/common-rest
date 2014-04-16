@@ -1,6 +1,7 @@
-package com.bancvue.rest.exception;
+package com.bancvue.rest.exception.mapper;
 
 import com.bancvue.rest.Envelope;
+import com.bancvue.rest.jaxrs.UnprocessableEntityStatusType;
 import org.glassfish.jersey.server.validation.ValidationError;
 import org.glassfish.jersey.server.validation.internal.ValidationHelper;
 
@@ -17,6 +18,6 @@ public class InvalidEntityExceptionMapper implements ExceptionMapper<ConstraintV
 	public Response toResponse(ConstraintViolationException exception) {
 		Envelope<List<ValidationError>> envelope =
 				new Envelope.Builder<>(ValidationHelper.constraintViolationToValidationErrors(exception)).build();
-		return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(envelope).build();
+		return Response.status(new UnprocessableEntityStatusType()).type(MediaType.APPLICATION_JSON_TYPE).entity(envelope).build();
 	}
 }
