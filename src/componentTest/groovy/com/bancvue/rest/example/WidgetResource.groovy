@@ -4,10 +4,13 @@ import com.bancvue.rest.resource.ResourceResponseFactory
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 
+import javax.annotation.PostConstruct
 import javax.validation.Valid
 import javax.ws.rs.*
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriInfo
 
 @Slf4j
 @Path("/widgets")
@@ -16,9 +19,17 @@ import javax.ws.rs.core.Response
 class WidgetResource {
 
 	@Autowired
-	WidgetRepository widgetRepository;
+	WidgetRepository widgetRepository
 
-	private ResourceResponseFactory responseFactory = new ResourceResponseFactory(WidgetResource)
+	@Context
+	UriInfo uriInfo
+
+	private ResourceResponseFactory responseFactory
+
+	@PostConstruct
+	private initializeResponseFactory() {
+		responseFactory = new ResourceResponseFactory(WidgetResource, uriInfo)
+	}
 
 	@GET
 	public List<Widget> listWidgets() {

@@ -58,8 +58,6 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		then:
 		HttpClientException ex = thrown(HttpClientException)
 		ex.getStatus() == 409
-
-		// TODO: how to return the existing entity in the body of the result?
 	}
 
 	def "invalid object should return status code 422, client response should convert to exception"() {
