@@ -33,7 +33,7 @@ class WidgetResource {
 
 	@GET
 	public List<Widget> listWidgets() {
-		widgetRepository.widgets.values() as List
+		widgetRepository.values() as List
 	}
 
 	private void evalWidget(Widget widget) {
@@ -45,14 +45,14 @@ class WidgetResource {
 	@GET
 	@Path("/{id}")
 	public Response getWidget(@PathParam("id") String id) {
-		Widget widget = widgetRepository.widgets[id]
+		Widget widget = widgetRepository.get(id)
 		evalWidget(widget)
 		responseFactory.createGetResponse(id, widget)
 	}
 
 	@POST
 	public Response createWidget(@Valid Widget widget) {
-		Widget existingWidget = widgetRepository.widgets[widget.id]
+		Widget existingWidget = widgetRepository.get(widget.id)
 		evalWidget(existingWidget)
 		if (existingWidget) {
 			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
@@ -64,10 +64,10 @@ class WidgetResource {
 	@PUT
 	@Path("/{id}")
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
-		if (!widgetRepository.widgets[id]) {
+		if (!widgetRepository.get(id)) {
 			return responseFactory.createNotFoundResponse(id)
 		}
-		widgetRepository.widgets[id] = update
+		widgetRepository.put(id, update)
 		evalWidget(update)
 		responseFactory.createPutSuccessResponse(id, update)
 	}
@@ -75,7 +75,7 @@ class WidgetResource {
 	@DELETE
 	@Path("/{id}")
 	public Response deleteWidget(@PathParam("id") String id) {
-		Widget deletedWidget = widgetRepository.widgets.remove(id)
+		Widget deletedWidget = widgetRepository.remove(id)
 		evalWidget(deletedWidget)
 		if (deletedWidget && deletedWidget.deletedItemNotIncludedInResultBody) {
 			return responseFactory.createDeleteSuccessResponse(id)

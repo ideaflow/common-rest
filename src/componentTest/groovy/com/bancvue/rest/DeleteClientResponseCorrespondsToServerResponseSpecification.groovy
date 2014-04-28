@@ -17,12 +17,12 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 	void setup() {
 		widgetResource = baseServiceResource.path("widgets")
 		clientResponseFactory = new ClientResponseFactory()
-		widgetRepository.widgets.clear()
+		widgetRepository.clear()
 	}
 
 	private Widget addWidget(String id) {
 		Widget widget = new Widget(id: id)
-		widgetRepository.widgets.put(id, widget)
+		widgetRepository.put(id, widget)
 		widget
 	}
 
