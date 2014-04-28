@@ -4,7 +4,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/** Borrowed from DropWizard **/
+/**
+ * Borrowed from DropWizard
+ *
+ * https://github.com/dropwizard/dropwizard/blob/master/LICENSE
+**/
 
 /**
  * An abstract base class from which to build Jersey parameter classes.

@@ -1,6 +1,10 @@
 package com.bancvue.rest.params;
 
-/** Borrowed from DropWizard **/
+/**
+ * Borrowed from DropWizard
+ *
+ * https://github.com/dropwizard/dropwizard/blob/master/LICENSE
+**/
 
 /**
  * A parameter encapsulating integer values. All non-decimal values will return a
