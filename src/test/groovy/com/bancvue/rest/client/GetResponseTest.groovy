@@ -1,21 +1,19 @@
 package com.bancvue.rest.client
 
-import javax.ws.rs.core.MultivaluedMap;
-
 import com.bancvue.rest.exception.HttpClientException
-import com.bancvue.rest.exception.SeeOtherException;
+import com.bancvue.rest.exception.SeeOtherException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
-import com.sun.jersey.api.client.GenericType
-import com.sun.jersey.api.client.ClientResponse
-import com.sun.jersey.core.util.MultivaluedMapImpl;
-
 import org.apache.http.HttpStatus
-
 import spock.lang.Specification
+
+import javax.ws.rs.core.GenericType
+import javax.ws.rs.core.MultivaluedHashMap
+import javax.ws.rs.core.MultivaluedMap
+import javax.ws.rs.core.Response
 
 class GetResponseTest extends Specification {
 
-	ClientResponse clientResponse
+	Response clientResponse
 	GetResponse getResponse
 
 	void setup() {
@@ -25,7 +23,7 @@ class GetResponseTest extends Specification {
 
 	def "acquireResponseAsType should return entity from response if status ok"() {
 		clientResponse.getStatus() >> HttpStatus.SC_OK
-		clientResponse.getEntity(String) >> "value"
+		clientResponse.readEntity(String) >> "value"
 
 		when:
 		String entity = getResponse.getResponseAsType(String)
@@ -47,7 +45,7 @@ class GetResponseTest extends Specification {
 
 	def "acquireResponseAsType should throw SeeOther exception if status is 303"() {
 		clientResponse.getStatus() >> HttpStatus.SC_SEE_OTHER
-		MultivaluedMap<String, List<String>> map = new MultivaluedMapImpl<String, List<String>>();
+		MultivaluedMap<String, List<String>> map = new MultivaluedHashMap<String, List<String>>();
 		map.put("Location", ["/see/other"])
 		clientResponse.getHeaders() >> map
 
@@ -64,7 +62,7 @@ class GetResponseTest extends Specification {
 		GenericType<String> genericType = new GenericType<String>() {
 				}
 		clientResponse.getStatus() >> HttpStatus.SC_OK
-		clientResponse.getEntity(genericType) >> "value"
+		clientResponse.readEntity(genericType) >> "value"
 
 		when:
 		String entity = getResponse.getResponseAsType(genericType)
@@ -77,7 +75,7 @@ class GetResponseTest extends Specification {
 		GenericType<String> genericType = new GenericType<String>() {
 				}
 		clientResponse.getStatus() >> HttpStatus.SC_OK
-		clientResponse.getEntity(genericType) >> "value"
+		clientResponse.readEntity(genericType) >> "value"
 
 		when:
 		String entity = getResponse.getResponseAsType(genericType)
@@ -88,7 +86,7 @@ class GetResponseTest extends Specification {
 
 	def "getResponseAsType should throw SeeOther exception if status is 303"() {
 		clientResponse.getStatus() >> HttpStatus.SC_SEE_OTHER
-		MultivaluedMap<String, List<String>> map = new MultivaluedMapImpl<String, List<String>>();
+		MultivaluedMap<String, List<String>> map = new MultivaluedHashMap<String, List<String>>();
 		map.put("Location", ["/see/other"])
 		clientResponse.getHeaders() >> map
 

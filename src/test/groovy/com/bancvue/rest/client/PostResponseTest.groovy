@@ -1,15 +1,16 @@
 package com.bancvue.rest.client
 
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
-import com.sun.jersey.api.client.ClientResponse
-import com.sun.jersey.api.client.GenericType
 import org.apache.http.HttpStatus
+
 import spock.lang.Specification
 
+import javax.ws.rs.core.GenericType
+import javax.ws.rs.core.Response
 
 class PostResponseTest extends Specification {
 
-	ClientResponse clientResponse
+	Response clientResponse
 	CreateResponse postResponse
 
 	void setup() {
@@ -20,7 +21,7 @@ class PostResponseTest extends Specification {
 	def "assertEntityCreatedAndGet with GenericType convert and return entity if status created"() {
 		GenericType<String> genericType = new GenericType<String>() {}
 		clientResponse.getStatus() >> HttpStatus.SC_CREATED
-		clientResponse.getEntity(genericType) >> "value"
+		clientResponse.readEntity(genericType) >> "value"
 
 		when:
 		String actualResponse = postResponse.assertEntityCreatedAndGetResponse(genericType)

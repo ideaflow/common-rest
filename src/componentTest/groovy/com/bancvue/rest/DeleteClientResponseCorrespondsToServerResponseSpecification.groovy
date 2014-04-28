@@ -1,32 +1,28 @@
 package com.bancvue.rest
-
 import com.bancvue.rest.client.ClientResponseFactory
 import com.bancvue.rest.client.DeleteResponse
 import com.bancvue.rest.example.Widget
-import com.bancvue.rest.example.WidgetServiceRule
 import com.bancvue.rest.exception.HttpClientException
-import com.sun.jersey.api.client.WebResource
-import org.junit.ClassRule
 import spock.lang.Shared
-import spock.lang.Specification
 
-class DeleteClientResponseCorrespondsToServerResponseSpecification extends Specification {
+import javax.ws.rs.client.WebTarget
+
+class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
 
 	@Shared
-	@ClassRule
-	WidgetServiceRule widgetRule = WidgetServiceRule.create()
-	private WebResource widgetResource
+	private WebTarget widgetResource
+
 	private ClientResponseFactory clientResponseFactory
 
 	void setup() {
-		widgetResource = widgetRule.baseServiceResource.path("widgets")
+		widgetResource = baseServiceResource.path("widgets")
 		clientResponseFactory = new ClientResponseFactory()
-		widgetRule.widgets.clear()
+		widgetRepository.clear()
 	}
 
 	private Widget addWidget(String id) {
 		Widget widget = new Widget(id: id)
-		widgetRule.widgets.put(id, widget)
+		widgetRepository.put(id, widget)
 		widget
 	}
 

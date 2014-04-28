@@ -2,17 +2,17 @@ package com.bancvue.rest.client;
 
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.bancvue.rest.exception.ValidationException;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-
 import org.apache.http.HttpStatus;
+
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 
 public class UpdateResponse {
 
-	private ClientResponse clientResponse;
+	private Response clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public UpdateResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+	public UpdateResponse(Response clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}

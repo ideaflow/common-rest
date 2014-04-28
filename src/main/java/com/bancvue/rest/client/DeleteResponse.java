@@ -2,16 +2,17 @@ package com.bancvue.rest.client;
 
 import com.bancvue.rest.exception.NotFoundException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
 import org.apache.http.HttpStatus;
+
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 
 public class DeleteResponse {
 
-	private ClientResponse clientResponse;
+	private Response clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public DeleteResponse(ClientResponse clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+	public DeleteResponse(Response clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}
@@ -40,7 +41,7 @@ public class DeleteResponse {
 			return null;
 
 		} else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
-			throw new NotFoundException(clientResponse.getEntity(String.class));
+			throw new NotFoundException(clientResponse.readEntity(String.class));
 		}
 
 		throw exceptionFactory.createException(clientResponse);

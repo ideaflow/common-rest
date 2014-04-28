@@ -1,11 +1,11 @@
 package com.bancvue.rest.exception;
 
-import com.sun.jersey.api.client.ClientResponse;
+import javax.ws.rs.core.Response;
 
 public class ConflictException extends HttpClientException {
 
     public ConflictException(String message) {
-        super(message, ClientResponse.Status.CONFLICT);
+        super(message, Response.Status.CONFLICT);
     }
 
 }
