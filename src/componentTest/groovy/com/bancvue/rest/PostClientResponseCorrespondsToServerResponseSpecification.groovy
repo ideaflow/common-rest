@@ -3,12 +3,11 @@ import com.bancvue.rest.client.ClientResponseFactory
 import com.bancvue.rest.client.CreateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.HttpClientException
-
+import com.bancvue.rest.exception.ValidationException
 import javax.ws.rs.client.WebTarget
 
 class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
 
-//	@Shared
 	private WebTarget widgetResource
 	private ClientResponseFactory clientResponseFactory
 
@@ -74,7 +73,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.assertEntityCreatedAndGetResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
+		ValidationException ex = thrown()
 		ex.getStatus() == 422
 
 		// TODO: what about the body?  can we standardize on reporting invalid objects?

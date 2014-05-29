@@ -1,17 +1,17 @@
 package com.bancvue.rest.exception;
 
-import javax.ws.rs.core.Response;
+import org.apache.http.HttpStatus;
 
 public class ValidationException extends HttpClientException {
 
 	private static final long serialVersionUID = -4362834942840542989L;
 
 	public ValidationException() {
-		super("Validation Error", Response.Status.BAD_REQUEST);
+		this("Validation Error");
 	}
 
 	public ValidationException(String message) {
-		super(message, Response.Status.BAD_REQUEST);
+		super(message, HttpStatus.SC_UNPROCESSABLE_ENTITY);
 	}
 
 }
