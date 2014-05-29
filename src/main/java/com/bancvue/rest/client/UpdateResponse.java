@@ -34,7 +34,7 @@ public class UpdateResponse {
 	}
 
 	private <T> T doAssertEntityUpdatedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		if (clientResponse.getStatus() == HttpStatus.SC_BAD_REQUEST) {
+		if (clientResponse.getStatus() == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
 			String msg = EntityResolver.CLASS_RESOLVER.getEntity(clientResponse, String.class);
 			throw new ValidationException(msg);
 		} else if (clientResponse.getStatus() == HttpStatus.SC_OK) {
