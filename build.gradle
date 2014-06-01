@@ -1,5 +1,5 @@
 buildscript {
-    dependencies { classpath 'com.bancvue:gradle-internal:1.33' }
+    dependencies { classpath 'com.bancvue:gradle-internal:1.+' }
 }
 
 apply plugin: 'bancvue-internal'
@@ -12,15 +12,11 @@ configurations {
 dependencies {
 	compile "org.glassfish.jersey.core:jersey-server:2.7"
 	compile 'org.glassfish.jersey.core:jersey-client:2.7'
-
+	compile "org.glassfish.jersey.ext:jersey-bean-validation:2.7"
 	compile 'com.fasterxml.jackson.core:jackson-core:2.3.2'
 	compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.2'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
 	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.2'
-
-	compile "org.glassfish.jersey.ext:jersey-bean-validation:2.7"
-
-
 	compile "org.apache.httpcomponents:httpcore:4.2.2"
 	compile 'org.projectlombok:lombok:1.12.2'
 
