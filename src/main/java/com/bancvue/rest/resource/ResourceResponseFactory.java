@@ -13,6 +13,16 @@ public class ResourceResponseFactory {
 	private Class targetResource;
 	private UriInfoHolder uriInfoHolder;
 
+	// TODO: temporary, remove this constructor once downstream projects have been updated
+	public ResourceResponseFactory(Class targetResource, final UriInfo uriInfo) {
+		this (targetResource, new UriInfoHolder() {
+			@Override
+			public UriInfo getUriInfo() {
+				return uriInfo;
+			}
+		});
+	}
+
 	public ResourceResponseFactory(Class targetResource, UriInfoHolder uriInfoHolder) {
 		this.targetResource = targetResource;
 		this.uriInfoHolder = uriInfoHolder;
