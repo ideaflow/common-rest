@@ -2,6 +2,7 @@ package com.bancvue.rest.resource;
 
 import com.bancvue.rest.Envelope;
 
+import com.bancvue.rest.jaxrs.UriInfoHolder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -10,15 +11,19 @@ import java.net.URI;
 public class ResourceResponseFactory {
 
 	private Class targetResource;
-	private UriInfo uriInfo;
+	private UriInfoHolder uriInfoHolder;
 
-	public ResourceResponseFactory(Class targetResource, UriInfo uriInfo) {
+	public ResourceResponseFactory(Class targetResource, UriInfoHolder uriInfoHolder) {
 		this.targetResource = targetResource;
-		this.uriInfo = uriInfo;
+		this.uriInfoHolder = uriInfoHolder;
+	}
+
+	private UriInfo getUriInfo() {
+		return uriInfoHolder.getUriInfo();
 	}
 
 	private URI getTargetResourceLocation(String pathToEntity) {
-		return uriInfo.getBaseUriBuilder()
+		return getUriInfo().getBaseUriBuilder()
 				.path(targetResource)
 				.path(pathToEntity)
 				.build();
