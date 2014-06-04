@@ -1,5 +1,6 @@
 package com.bancvue.rest.example
 
+import com.bancvue.rest.jaxrs.UriInfoHolder
 import com.bancvue.rest.resource.ResourceResponseFactory
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,6 +22,11 @@ class WidgetResource {
 	@Autowired
 	WidgetRepository widgetRepository
 
+	/**
+	 * NOTE: Jersey will set this on every request is fine in the context of a serial test but should not be taken
+	 * as an example since it is extremely unsafe.  Rather than being injected into the resource, this would normally
+	 * be injected into a request-scoped implementation of UriInfoHolder.  See AbstractResource in common-spring-boot.
+	 */
 	@Context
 	UriInfo uriInfo
 
@@ -28,7 +34,12 @@ class WidgetResource {
 
 	@PostConstruct
 	private initializeResponseFactory() {
-		responseFactory = new ResourceResponseFactory(WidgetResource, uriInfo)
+		responseFactory = new ResourceResponseFactory(WidgetResource, new UriInfoHolder() {
+			@Override
+			UriInfo getUriInfo() {
+				return WidgetResource.this.uriInfo;
+			}
+		});
 	}
 
 	@GET
