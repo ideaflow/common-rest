@@ -39,6 +39,12 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
+	private URI getTargetResourceLocation() {
+		return getUriInfo().getBaseUriBuilder()
+				.path(targetResource)
+				.build();
+	}
+
 	public Response createNotFoundResponse(String pathToEntity) {
 		return Response.status(Response.Status.NOT_FOUND)
 				.location(getTargetResourceLocation(pathToEntity))
@@ -55,6 +61,22 @@ public class ResourceResponseFactory {
 		URI uri = getTargetResourceLocation(pathToEntity);
 		return Response.seeOther(uri)
 				.location(uri)
+				.build();
+	}
+
+	public <T> Response createGetManyResponse(Iterable<T> entities) {
+		return createGetManySuccessResponse(entities);
+	}
+
+	public <T> Response createGetManyResponse(Envelope<T> envelope) {
+		return createGetManySuccessResponse(envelope);
+	}
+
+	public Response createGetManySuccessResponse(Object entity) {
+		return Response.ok()
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.location(getTargetResourceLocation())
+				.entity(entity)
 				.build();
 	}
 
