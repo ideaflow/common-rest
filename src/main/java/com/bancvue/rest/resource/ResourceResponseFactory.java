@@ -64,35 +64,27 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
-	public <T> Response createGetManyResponse(Iterable<T> entities) {
-		return createGetManySuccessResponse(entities);
-	}
-
-	public <T> Response createGetManyResponse(Envelope<T> envelope) {
-		return createGetManySuccessResponse(envelope);
-	}
-
-	public Response createGetManySuccessResponse(Object entity) {
+	public Response createGetManyResponse(Object entities) {
 		return Response.ok()
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.location(getTargetResourceLocation())
-				.entity(entity)
+				.entity(entities)
 				.build();
 	}
 
-	public <T> Response createGetResponse(String pathToEntity, T entity) {
-		if (entity != null) {
+	public Response createGetResponse(String pathToEntity, Object entity) {
+		if (isEntityNotNull(entity)) {
 			return createGetSuccessResponse(pathToEntity, entity);
 		} else {
 			return createNotFoundResponse(pathToEntity);
 		}
 	}
 
-	public <T> Response createGetResponse(String pathToEntity, Envelope<T> envelope) {
-		if (envelope.getData() != null) {
-			return createGetSuccessResponse(pathToEntity, envelope);
+	private boolean isEntityNotNull(Object entity) {
+		if (entity instanceof Envelope) {
+			return ((Envelope) entity).getData() != null;
 		} else {
-			return createNotFoundResponse(pathToEntity);
+			return entity != null;
 		}
 	}
 
@@ -127,8 +119,9 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
+
 	public Response createDeleteResponse(String pathToEntity, Object deletedEntity) {
-		if (deletedEntity != null) {
+		if (isEntityNotNull(deletedEntity)) {
 			return createDeleteSuccessResponse(pathToEntity, deletedEntity);
 		} else {
 			return createDeleteFailedBecauseObjectNotFoundResponse(pathToEntity);
