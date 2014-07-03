@@ -3,8 +3,10 @@ package com.bancvue.rest.resource;
 import com.bancvue.rest.Envelope;
 
 import com.bancvue.rest.jaxrs.UriInfoHolder;
+import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
@@ -12,16 +14,6 @@ public class ResourceResponseFactory {
 
 	private Class targetResource;
 	private UriInfoHolder uriInfoHolder;
-
-	// TODO: temporary, remove this constructor once downstream projects have been updated
-	public ResourceResponseFactory(Class targetResource, final UriInfo uriInfo) {
-		this (targetResource, new UriInfoHolder() {
-			@Override
-			public UriInfo getUriInfo() {
-				return uriInfo;
-			}
-		});
-	}
 
 	public ResourceResponseFactory(Class targetResource, UriInfoHolder uriInfoHolder) {
 		this.targetResource = targetResource;
@@ -32,33 +24,50 @@ public class ResourceResponseFactory {
 		return uriInfoHolder.getUriInfo();
 	}
 
-	private URI getTargetResourceLocation(String pathToEntity) {
-		return getUriInfo().getBaseUriBuilder()
-				.path(targetResource)
+	public URI getTargetResourceLocation(String pathToEntity) {
+		return getTargetResourceBuilder()
 				.path(pathToEntity)
 				.build();
 	}
 
-	private URI getTargetResourceLocation() {
+	public URI getTargetResourceLocation(String pathToEntity, Map<String, Object> templateValues) {
+		return getTargetResourceBuilder()
+				.path(pathToEntity)
+				.resolveTemplates(templateValues)
+				.build();
+	}
+
+	public UriBuilder getTargetResourceBuilder() {
 		return getUriInfo().getBaseUriBuilder()
-				.path(targetResource)
-				.build();
+				.path(targetResource);
 	}
 
+	@Deprecated
 	public Response createNotFoundResponse(String pathToEntity) {
+		return createNotFoundResponse();
+	}
+
+	public Response createNotFoundResponse() {
 		return Response.status(Response.Status.NOT_FOUND)
-				.location(getTargetResourceLocation(pathToEntity))
 				.build();
 	}
 
-    public Response createConflictResponse(String pathToEntity) {
+	@Deprecated
+	public Response createConflictResponse(String pathToEntity) {
+		return createConflictResponse();
+	}
+
+    public Response createConflictResponse() {
         return Response.status(Response.Status.CONFLICT)
-                .location(getTargetResourceLocation(pathToEntity))
                 .build();
     }
 
 	public Response createSeeOtherResponse(String pathToEntity) {
 		URI uri = getTargetResourceLocation(pathToEntity);
+		return createSeeOtherResponse(uri);
+	}
+
+	public Response createSeeOtherResponse(URI uri) {
 		return Response.seeOther(uri)
 				.location(uri)
 				.build();
@@ -67,16 +76,20 @@ public class ResourceResponseFactory {
 	public Response createGetManyResponse(Object entities) {
 		return Response.ok()
 				.type(MediaType.APPLICATION_JSON_TYPE)
-				.location(getTargetResourceLocation())
 				.entity(entities)
 				.build();
 	}
 
+	@Deprecated
 	public Response createGetResponse(String pathToEntity, Object entity) {
+		return createGetResponse(entity);
+	}
+
+	public Response createGetResponse(Object entity) {
 		if (isEntityNotNull(entity)) {
-			return createGetSuccessResponse(pathToEntity, entity);
+			return createGetSuccessResponse(entity);
 		} else {
-			return createNotFoundResponse(pathToEntity);
+			return createNotFoundResponse();
 		}
 	}
 
@@ -88,62 +101,70 @@ public class ResourceResponseFactory {
 		}
 	}
 
-	public Response createGetSuccessResponse(String pathToEntity, Object entity) {
+	private Response createGetSuccessResponse(Object entity) {
 		return Response.ok()
 				.type(MediaType.APPLICATION_JSON_TYPE)
-				.location(getTargetResourceLocation(pathToEntity))
 				.entity(entity)
 				.build();
 	}
 
 	public Response createPostSuccessResponse(String pathToEntity, Object entity) {
-		return Response.created(getTargetResourceLocation(pathToEntity))
+		URI location = getTargetResourceLocation(pathToEntity);
+		return createPostSuccessResponse(location, entity);
+	}
+
+	public Response createPostSuccessResponse(URI location, Object entity) {
+		return Response.created(location)
+				.location(location)
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.entity(entity)
 				.build();
 	}
 
+	@Deprecated
 	public Response createPostFailedBecauseAlreadyExistsResponse(String pathToEntity, Object existingEntity) {
+		return createPostFailedBecauseAlreadyExistsResponse(existingEntity);
+	}
+
+	public Response createPostFailedBecauseAlreadyExistsResponse(Object existingEntity) {
 		return Response.status(Response.Status.CONFLICT)
-				.location(getTargetResourceLocation(pathToEntity))
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.entity(existingEntity)
 				.build();
 	}
 
+	@Deprecated
 	public Response createPutSuccessResponse(String pathToEntity, Object updatedEntity) {
+		return createPutSuccessResponse(updatedEntity);
+	}
+
+	public Response createPutSuccessResponse(Object updatedEntity) {
 		return Response.ok()
 				.type(MediaType.APPLICATION_JSON_TYPE)
-				.location(getTargetResourceLocation(pathToEntity))
 				.entity(updatedEntity)
 				.build();
 	}
 
-
+	@Deprecated
 	public Response createDeleteResponse(String pathToEntity, Object deletedEntity) {
+		return createDeleteResponse(deletedEntity);
+	}
+
+	public Response createDeleteResponse(Object deletedEntity) {
 		if (isEntityNotNull(deletedEntity)) {
-			return createDeleteSuccessResponse(pathToEntity, deletedEntity);
+			return createDeleteSuccessResponse();
 		} else {
-			return createDeleteFailedBecauseObjectNotFoundResponse(pathToEntity);
+			return createDeleteFailedBecauseObjectNotFoundResponse();
 		}
 	}
 
-	public Response createDeleteSuccessResponse(String pathToEntity) {
+	private Response createDeleteSuccessResponse() {
 		return Response.noContent()
-				.location(getTargetResourceLocation(pathToEntity))
 				.build();
 	}
 
-	public Response createDeleteSuccessResponse(String pathToEntity, Object deletedEntity) {
-		return Response.ok(deletedEntity)
-				.location(getTargetResourceLocation(pathToEntity))
-				.type(MediaType.APPLICATION_JSON_TYPE)
-				.build();
-	}
-
-	public Response createDeleteFailedBecauseObjectNotFoundResponse(String pathToEntity) {
+	private Response createDeleteFailedBecauseObjectNotFoundResponse() {
 		return Response.status(Response.Status.NOT_FOUND)
-				.location(getTargetResourceLocation(pathToEntity))
 				.build();
 	}
 

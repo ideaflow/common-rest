@@ -19,16 +19,8 @@ class Widget {
 	@JsonProperty
 	String codeToEval
 
-	@JsonProperty
-	boolean deletedItemNotIncludedInResultBody
-
 	void initApplicationError() {
 		codeToEval = "throw new RuntimeException('failure!')"
-	}
-
-	@JsonIgnore
-	boolean getDeletedItemNotIncludedInResultBody() {
-		return deletedItemNotIncludedInResultBody
 	}
 
 }

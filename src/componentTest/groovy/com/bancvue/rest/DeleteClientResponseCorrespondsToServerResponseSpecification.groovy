@@ -26,34 +26,14 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		widget
 	}
 
-	def "success should return status code 200 and location, client response should convert and return deleted entity"() {
+	def "success should return status code 204, client response should return null"() {
 		Widget widget = addWidget("to-delete")
-
-		when:
-		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path(widget.id))
-
-		then:
-		deleteResponse.clientResponse.getStatus() == 200
-		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
-
-		when:
-		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGetResponse(Widget)
-
-		then:
-		widget == deletedWidget
-		!widget.is(deletedWidget)
-	}
-
-	def "success with no returned entity should return status code 204 and location, client response should return null"() {
-		Widget widget = addWidget("to-delete")
-		widget.deletedItemNotIncludedInResultBody = true
 
 		when:
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path(widget.id))
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 204
-		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/to-delete"
 
 		when:
 		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGetResponse(Widget)
@@ -62,13 +42,12 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		deletedWidget == null
 	}
 
-	def "object not found should return status code 404 and location, client response should throw exception"() {
+	def "object not found should return status code 404, client response should throw exception"() {
 		when:
 		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path("not-found"))
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 404
-		deleteResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/not-found"
 
 		when:
 		deleteResponse.assertEntityDeletedAndGetResponse(Widget)
@@ -87,7 +66,6 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 500
-		deleteResponse.clientResponse.getLocation() == null
 
 		when:
 		deleteResponse.assertEntityDeletedAndGetResponse(Widget)
