@@ -26,7 +26,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		widget
 	}
 
-	def "success should return status code 200 and location, client response should convert and return entity"() {
+	def "success should return status code 200, client response should convert and return entity"() {
 		Widget expectedWidget = addWidget("wid")
 
 		when:
@@ -34,7 +34,6 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 		then:
 		getResponse.clientResponse.getStatus() == 200
-		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
 		Widget actualWidget = getResponse.getResponseAsType(Widget)
@@ -44,13 +43,12 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		!expectedWidget.is(actualWidget)
 	}
 
-	def "should throw not found expect when return status code 404"() {
+	def "should throw not found exception when return status code 404"() {
 		when:
 		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
 
 		then:
 		getResponse.clientResponse.getStatus() == 404
-		getResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
 		getResponse.getResponseAsType(Widget)
@@ -68,7 +66,6 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 		then:
 		getResponse.clientResponse.getStatus() == 500
-		getResponse.clientResponse.getLocation() == null
 
 		when:
 		getResponse.getResponseAsType(Widget)

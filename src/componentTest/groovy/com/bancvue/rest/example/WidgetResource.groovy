@@ -58,7 +58,7 @@ class WidgetResource {
 	public Response getWidget(@PathParam("id") String id) {
 		Widget widget = widgetRepository.get(id)
 		evalWidget(widget)
-		responseFactory.createGetResponse(id, widget)
+		responseFactory.createGetResponse(widget)
 	}
 
 	@POST
@@ -76,11 +76,11 @@ class WidgetResource {
 	@Path("/{id}")
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
 		if (!widgetRepository.get(id)) {
-			return responseFactory.createNotFoundResponse(id)
+			return responseFactory.createNotFoundResponse()
 		}
 		widgetRepository.put(id, update)
 		evalWidget(update)
-		responseFactory.createPutSuccessResponse(id, update)
+		responseFactory.createPutSuccessResponse(update)
 	}
 
 	@DELETE
@@ -88,9 +88,6 @@ class WidgetResource {
 	public Response deleteWidget(@PathParam("id") String id) {
 		Widget deletedWidget = widgetRepository.remove(id)
 		evalWidget(deletedWidget)
-		if (deletedWidget && deletedWidget.deletedItemNotIncludedInResultBody) {
-			return responseFactory.createDeleteSuccessResponse(id)
-		}
-		responseFactory.createDeleteResponse(id, deletedWidget)
+		responseFactory.createDeleteResponse(deletedWidget)
 	}
 }

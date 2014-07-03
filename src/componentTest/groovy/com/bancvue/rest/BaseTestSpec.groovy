@@ -17,7 +17,7 @@ import javax.ws.rs.client.WebTarget
 @IntegrationTest
 @WebAppConfiguration
 @ContextConfiguration(classes = WidgetService, loader = SpringApplicationContextLoader)
-class BaseTestSpec extends Specification {
+abstract class BaseTestSpec extends Specification {
 
 	@Shared
 	Client jerseyClient

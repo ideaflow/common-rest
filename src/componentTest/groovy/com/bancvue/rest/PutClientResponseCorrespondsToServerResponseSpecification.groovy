@@ -25,7 +25,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		widget
 	}
 
-	def "success should return status code 200 and location, client response should convert and return entity"() {
+	def "success should return status code 200, client response should convert and return entity"() {
 		Widget update = addWidget("updated")
 
 		when:
@@ -33,7 +33,6 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 		then:
 		updateResponse.clientResponse.getStatus() == 200
-		updateResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/updated"
 
 		when:
 		Widget actualResponse = updateResponse.assertEntityUpdatedAndGetResponse(Widget)
@@ -46,7 +45,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 	// TODO: what behavior do we want around PUT?
 	// do we allow create?
 
-	def "not found should return status code 404 and location, client response should convert to http exception"() {
+	def "not found should return status code 404, client response should convert to http exception"() {
 		Widget widget = new Widget(id: "wid")
 
 		when:
@@ -54,7 +53,6 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 		then:
 		putResponse.clientResponse.getStatus() == 404
-		putResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/wid"
 
 		when:
 		putResponse.assertEntityUpdatedAndGetResponse(Widget)
@@ -73,7 +71,6 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 		then:
 		updateResponse.clientResponse.getStatus() == 500
-		updateResponse.clientResponse.getLocation() == null
 
 		when:
 		updateResponse.assertEntityUpdatedAndGetResponse(Widget)

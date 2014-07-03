@@ -41,7 +41,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		!widget.is(actualWidget)
 	}
 
-	def "object already exists should return status code 409 and location, client response should convert to exception"() {
+	def "object already exists should return status code 409, client response should convert to exception"() {
 		Widget widget = addWidget("duplicate")
 
 		when:
@@ -49,7 +49,6 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 
 		then:
 		createResponse.clientResponse.getStatus() == 409
-		createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/duplicate"
 
 		when:
 		createResponse.assertEntityCreatedAndGetResponse(Widget)
@@ -67,7 +66,6 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 
 		then:
 		createResponse.clientResponse.getStatus() == 422
-		createResponse.clientResponse.getLocation() == null
 
 		when:
 		createResponse.assertEntityCreatedAndGetResponse(Widget)
@@ -88,7 +86,6 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 
 		then:
 		createResponse.clientResponse.getStatus() == 500
-		createResponse.clientResponse.getLocation() == null
 
 		when:
 		createResponse.assertEntityCreatedAndGetResponse(Widget)
