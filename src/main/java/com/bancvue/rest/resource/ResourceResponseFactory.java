@@ -1,14 +1,13 @@
 package com.bancvue.rest.resource;
 
 import com.bancvue.rest.Envelope;
-
 import com.bancvue.rest.jaxrs.UriInfoHolder;
+import java.net.URI;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
 public class ResourceResponseFactory {
 
@@ -57,10 +56,18 @@ public class ResourceResponseFactory {
 		return createConflictResponse();
 	}
 
-    public Response createConflictResponse() {
-        return Response.status(Response.Status.CONFLICT)
-                .build();
-    }
+	@Deprecated
+	public Response createConflictResponse() {
+		return Response.status(Response.Status.CONFLICT)
+				.build();
+	}
+
+	public Response createConflictResponse(Object entity) {
+		return Response.status(Response.Status.CONFLICT)
+				.type(MediaType.APPLICATION_JSON_TYPE)
+				.entity(entity)
+				.build();
+	}
 
 	public Response createSeeOtherResponse(String pathToEntity) {
 		URI uri = getTargetResourceLocation(pathToEntity);
@@ -127,10 +134,7 @@ public class ResourceResponseFactory {
 	}
 
 	public Response createPostFailedBecauseAlreadyExistsResponse(Object existingEntity) {
-		return Response.status(Response.Status.CONFLICT)
-				.type(MediaType.APPLICATION_JSON_TYPE)
-				.entity(existingEntity)
-				.build();
+		return createConflictResponse(existingEntity);
 	}
 
 	@Deprecated
