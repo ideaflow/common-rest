@@ -1,7 +1,9 @@
 package com.bancvue.rest
 import com.bancvue.rest.client.ClientResponseFactory
+import com.bancvue.rest.client.CreateResponse
 import com.bancvue.rest.client.UpdateResponse
 import com.bancvue.rest.example.Widget
+import com.bancvue.rest.example.WidgetResource
 import com.bancvue.rest.exception.HttpClientException
 import spock.lang.Shared
 
@@ -61,6 +63,26 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		HttpClientException ex = thrown(HttpClientException)
 		ex.status == 404
 	}
+	
+	
+	def "object already exists should return status code 409, client response should convert to exception"() {
+		Widget widget = new Widget(id: WidgetResource.CONFLICT_ID)
+
+		when:
+		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_ID), widget)
+
+		then:
+		putResponse.clientResponse.getStatus() == 409
+
+		when:
+		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+
+		then:
+		HttpClientException ex = thrown(HttpClientException)
+		ex.getStatus() == 409
+	}
+
+
 
 	def "application error should return status code 500, client response should convert to http exception"() {
 		Widget widget = addWidget("updated")

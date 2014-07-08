@@ -18,6 +18,8 @@ import javax.ws.rs.core.UriInfo
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class WidgetResource {
+	
+	static String CONFLICT_ID = "conflictId";
 
 	@Autowired
 	WidgetRepository widgetRepository
@@ -75,6 +77,9 @@ class WidgetResource {
 	@PUT
 	@Path("/{id}")
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
+		if(CONFLICT_ID.equals(id)){
+			return responseFactory.createConflictResponse(update);
+		}
 		if (!widgetRepository.get(id)) {
 			return responseFactory.createNotFoundResponse()
 		}
