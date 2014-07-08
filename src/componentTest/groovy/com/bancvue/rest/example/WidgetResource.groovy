@@ -78,7 +78,7 @@ class WidgetResource {
 	@Path("/{id}")
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
 		if(CONFLICT_ID.equals(id)){
-			return responseFactory.createConflictResponse(update);
+			return responseFactory.createConflictResponse();
 		}
 		if (!widgetRepository.get(id)) {
 			return responseFactory.createNotFoundResponse()
