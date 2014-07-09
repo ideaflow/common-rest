@@ -68,7 +68,7 @@ class WidgetResource {
 		Widget existingWidget = widgetRepository.get(widget.id)
 		evalWidget(existingWidget)
 		if (existingWidget) {
-			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
+			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget)
 		}
 		evalWidget(widget)
 		responseFactory.createPostSuccessResponse(widget.id, widget)

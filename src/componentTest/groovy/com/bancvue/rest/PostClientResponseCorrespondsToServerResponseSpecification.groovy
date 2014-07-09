@@ -1,7 +1,10 @@
 package com.bancvue.rest
 import com.bancvue.rest.client.ClientResponseFactory
 import com.bancvue.rest.client.CreateResponse
+import com.bancvue.rest.client.UpdateResponse
 import com.bancvue.rest.example.Widget
+import com.bancvue.rest.example.WidgetResource
+import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.ValidationException
 import javax.ws.rs.client.WebTarget
@@ -41,7 +44,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		!widget.is(actualWidget)
 	}
 
-	def "object already exists should return status code 409, client response should convert to exception"() {
+	def "object already exists should return status code 409 with entity, client response should convert to exception"() {
 		Widget widget = addWidget("duplicate")
 
 		when:
@@ -54,8 +57,9 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.assertEntityCreatedAndGetResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
+		ConflictingEntityException ex = thrown(ConflictingEntityException)
 		ex.getStatus() == 409
+		ex.entity == widget
 	}
 
 	def "invalid object should return status code 422, client response should convert to exception"() {
