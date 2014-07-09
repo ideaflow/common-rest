@@ -1,5 +1,6 @@
 package com.bancvue.rest.client
 
+import com.bancvue.rest.Envelope
 import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
 import org.apache.http.HttpStatus
@@ -43,5 +44,17 @@ class UpdateResponseTest extends Specification {
 		then:
 		thrown(ConflictException)
 	}
-	
+
+	def "doAssertEntityUpdatedAndGetResponse should throw ConflictException when server returns 409 with envelope with no entity" (){
+		given:
+		GenericType<String> genericType = new GenericType<String>() {}
+		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT
+		clientResponse.readEntity(genericType) >> new Envelope();
+
+		when:
+		putResponse.assertEntityUpdatedAndGetResponse(genericType)
+
+		then:
+		thrown(ConflictException)
+	}
 }

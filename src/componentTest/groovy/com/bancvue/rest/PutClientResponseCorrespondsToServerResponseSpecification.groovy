@@ -1,9 +1,9 @@
 package com.bancvue.rest
 import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.CreateResponse
 import com.bancvue.rest.client.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetResource
+import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.HttpClientException
 import spock.lang.Shared
@@ -66,11 +66,11 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 	}
 	
 	
-	def "object already exists should return status code 409 with entity, client response should convert to exception"() {
-		Widget widget = new Widget(id: WidgetResource.CONFLICT_ID)
+	def "object already exists should return status code 409 with entity, client response should convert to exception with data"() {
+		Widget widget = new Widget(id: WidgetResource.CONFLICT_WITH_DATA_ID)
 
 		when:
-		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_ID), widget)
+		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_WITH_DATA_ID), widget)
 
 		then:
 		putResponse.clientResponse.getStatus() == 409
@@ -82,6 +82,24 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
 		ex.getStatus() == 409
 		ex.entity == widget
+	}	
+	
+	@Deprecated
+	def "object already exists should return status code 409 with entity, client response should convert to exception with no data"() {
+		Widget widget = new Widget(id: WidgetResource.CONFLICT_WITH_NO_DATA_ID_DEPRECATED)
+
+		when:
+		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_WITH_NO_DATA_ID_DEPRECATED), widget)
+
+		then:
+		putResponse.clientResponse.getStatus() == 409
+
+		when:
+		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+
+		then:
+		ConflictException ex = thrown(ConflictException)
+		ex.getStatus() == 409
 	}
 
 
