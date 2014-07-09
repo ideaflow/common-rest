@@ -68,7 +68,7 @@ class WidgetResource {
 		Widget existingWidget = widgetRepository.get(widget.id)
 		evalWidget(existingWidget)
 		if (existingWidget) {
-			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget.id, existingWidget)
+			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget)
 		}
 		evalWidget(widget)
 		responseFactory.createPostSuccessResponse(widget.id, widget)
@@ -78,7 +78,7 @@ class WidgetResource {
 	@Path("/{id}")
 	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
 		if(CONFLICT_ID.equals(id)){
-			return responseFactory.createConflictResponse();
+			return responseFactory.createConflictResponse(update);
 		}
 		if (!widgetRepository.get(id)) {
 			return responseFactory.createNotFoundResponse()

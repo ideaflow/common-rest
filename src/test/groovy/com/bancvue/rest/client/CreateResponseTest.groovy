@@ -1,5 +1,6 @@
 package com.bancvue.rest.client
 
+import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
 import org.apache.http.HttpStatus
 
@@ -8,7 +9,7 @@ import spock.lang.Specification
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
 
-class PostResponseTest extends Specification {
+class CreateResponseTest extends Specification {
 
 	Response clientResponse
 	CreateResponse postResponse
@@ -28,6 +29,19 @@ class PostResponseTest extends Specification {
 
 		then:
 		"value" == actualResponse
+	}
+
+	def "assertEntityCreatedAndGetResponse should throw ConflictException when server returns 409 with no entity" (){
+		given:
+		GenericType<String> genericType = new GenericType<String>() {}
+		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT
+		clientResponse.readEntity(_) >> null
+
+		when:
+		postResponse.assertEntityCreatedAndGetResponse(genericType)
+
+		then:
+		thrown(ConflictException)
 	}
 
 }

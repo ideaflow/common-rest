@@ -4,6 +4,7 @@ import com.bancvue.rest.client.CreateResponse
 import com.bancvue.rest.client.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetResource
+import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.HttpClientException
 import spock.lang.Shared
 
@@ -65,7 +66,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 	}
 	
 	
-	def "object already exists should return status code 409, client response should convert to exception"() {
+	def "object already exists should return status code 409 with entity, client response should convert to exception"() {
 		Widget widget = new Widget(id: WidgetResource.CONFLICT_ID)
 
 		when:
@@ -78,8 +79,9 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		putResponse.assertEntityUpdatedAndGetResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
+		ConflictingEntityException ex = thrown(ConflictingEntityException)
 		ex.getStatus() == 409
+		ex.entity == widget
 	}
 
 
