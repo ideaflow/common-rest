@@ -1,5 +1,6 @@
 package com.bancvue.rest.client;
 
+import com.bancvue.rest.Envelope;
 import com.bancvue.rest.exception.ConflictException;
 import com.bancvue.rest.exception.ConflictingEntityException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
@@ -11,7 +12,6 @@ import javax.ws.rs.core.Response;
 
 public class CreateResponse {
 
-	public static final String ENTITY_ALREADY_EXISTS = "Entity already exists";
 	private Response clientResponse;
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
@@ -41,11 +41,7 @@ public class CreateResponse {
 			String msg = EntityResolver.CLASS_RESOLVER.getEntity(clientResponse, String.class);
 			throw new ValidationException(msg);
 		} else if (clientResponse.getStatus() == HttpStatus.SC_CONFLICT) {
-			T entity = resolver.getEntity(clientResponse, typeOrGenericType);
-			if(entity != null){
-				throw new ConflictingEntityException(ENTITY_ALREADY_EXISTS, entity);
-			}
-			throw new ConflictException(ENTITY_ALREADY_EXISTS);
+			ResponseHelper.handleSCConflict(clientResponse, resolver, typeOrGenericType);
 		} else if (clientResponse.getStatus() != HttpStatus.SC_CREATED) {
 			throw exceptionFactory.createException(clientResponse);
 		}
