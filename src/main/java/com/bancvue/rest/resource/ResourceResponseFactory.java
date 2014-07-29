@@ -51,8 +51,8 @@ public class ResourceResponseFactory {
 				.build();
 	}
 	
-	public Response createMethodNotAllowedResponse() {
-		return Response.status(Response.Status.METHOD_NOT_ALLOWED)
+	public Response createForbiddenResponse() {
+		return Response.status(Response.Status.FORBIDDEN)
 				.build();
 	}
 
