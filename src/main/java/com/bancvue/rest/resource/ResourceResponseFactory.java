@@ -50,6 +50,11 @@ public class ResourceResponseFactory {
 		return Response.status(Response.Status.NOT_FOUND)
 				.build();
 	}
+	
+	public Response createMethodNotAllowedResponse() {
+		return Response.status(Response.Status.METHOD_NOT_ALLOWED)
+				.build();
+	}
 
 	@Deprecated
 	public Response createConflictResponse(String pathToEntity) {
