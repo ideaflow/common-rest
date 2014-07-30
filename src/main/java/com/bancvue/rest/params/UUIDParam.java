@@ -1,11 +1,5 @@
 package com.bancvue.rest.params;
 
-/**
- * Borrowed from DropWizard
- *
- * https://github.com/dropwizard/dropwizard/blob/master/LICENSE
-**/
-
 import java.util.UUID;
 
 /**
