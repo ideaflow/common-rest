@@ -37,14 +37,19 @@ public class CreateResponse {
 	}
 
 	private <T> T doAssertEntityCreatedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		if (clientResponse.getStatus() == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
-			String msg = EntityResolver.CLASS_RESOLVER.getEntity(clientResponse, String.class);
-			throw new ValidationException(msg);
-		} else if (clientResponse.getStatus() == HttpStatus.SC_CONFLICT) {
-			ResponseHelper.handleSCConflict(clientResponse, resolver, typeOrGenericType);
-		} else if (clientResponse.getStatus() != HttpStatus.SC_CREATED) {
-			throw exceptionFactory.createException(clientResponse);
+		switch (clientResponse.getStatus()) {
+			case HttpStatus.SC_OK:
+			case HttpStatus.SC_CREATED:
+				return resolver.getEntity(clientResponse, typeOrGenericType);
+			case HttpStatus.SC_NO_CONTENT:
+				return null;
+			case HttpStatus.SC_UNPROCESSABLE_ENTITY:
+				String msg = EntityResolver.CLASS_RESOLVER.getEntity(clientResponse, String.class);
+				throw new ValidationException(msg);
+			case HttpStatus.SC_CONFLICT:
+				ResponseHelper.handleSCConflict(clientResponse, resolver, typeOrGenericType);
+			default:
+				throw exceptionFactory.createException(clientResponse);
 		}
-		return resolver.getEntity(clientResponse, typeOrGenericType);
 	}
 }
