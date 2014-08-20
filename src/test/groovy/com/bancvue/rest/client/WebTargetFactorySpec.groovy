@@ -30,7 +30,8 @@ class WebTargetFactorySpec extends Specification {
 	def "should return WebTarget with configuration"() {
 		when:
 		ClientConfig config = new ClientConfig().property(ClientProperties.CONNECT_TIMEOUT, 1000)
-		WebTarget target = factory.config(config).create("http://localhost:8080")
+		WebTargetFactory configuredFactor = new WebTargetFactory(config)
+		WebTarget target = configuredFactor.create("http://localhost:8080")
 
 		then:
 		target.config.state.commonConfig.properties.get(ClientProperties.CONNECT_TIMEOUT) == 1000

@@ -5,9 +5,13 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class WebTargetFactory {
 
 	private ClientConfig clientConfig;
@@ -23,11 +27,6 @@ public class WebTargetFactory {
 		Client client = ClientBuilder.newClient(clientConfig);
 
 		return client.target(uri);
-	}
-
-	public WebTargetFactory config(ClientConfig clientConfig) {
-		this.clientConfig = clientConfig;
-		return this;
 	}
 
 	private URI createUri(String uriString) {
