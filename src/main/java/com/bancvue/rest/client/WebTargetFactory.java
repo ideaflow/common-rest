@@ -10,14 +10,24 @@ import org.glassfish.jersey.client.ClientProperties;
 
 public class WebTargetFactory {
 
+	private ClientConfig clientConfig;
+
 	public WebTarget create(String uriString) {
 		URI uri = createUri(uriString);
 
-		Client client = ClientBuilder.newClient(new ClientConfig()
-						.property(ClientProperties.FOLLOW_REDIRECTS, false)
-		);
+		if (clientConfig == null) {
+			clientConfig =  new ClientConfig()
+					.property(ClientProperties.FOLLOW_REDIRECTS, false);
+		}
+
+		Client client = ClientBuilder.newClient(clientConfig);
 
 		return client.target(uri);
+	}
+
+	public WebTargetFactory config(ClientConfig clientConfig) {
+		this.clientConfig = clientConfig;
+		return this;
 	}
 
 	private URI createUri(String uriString) {
