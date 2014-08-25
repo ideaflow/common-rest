@@ -10,22 +10,23 @@ import lombok.NoArgsConstructor;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
+@Deprecated
 @NoArgsConstructor
 @AllArgsConstructor
 public class WebTargetFactory {
+
+	// TODO: Remove this once all projects have been converted to use the jaxrsClient bean defined in common-spring-boot
+	@Deprecated
+	public static Client createDefaultJaxrsClient() {
+		return ClientBuilder.newClient(new ClientConfig()
+				.property(ClientProperties.FOLLOW_REDIRECTS, false));
+	}
 
 	private ClientConfig clientConfig;
 
 	public WebTarget create(String uriString) {
 		URI uri = createUri(uriString);
-
-		if (clientConfig == null) {
-			clientConfig =  new ClientConfig()
-					.property(ClientProperties.FOLLOW_REDIRECTS, false);
-		}
-
-		Client client = ClientBuilder.newClient(clientConfig);
-
+		Client client = (clientConfig == null) ? createDefaultJaxrsClient() : ClientBuilder.newClient(clientConfig);
 		return client.target(uri);
 	}
 

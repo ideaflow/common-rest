@@ -1,6 +1,6 @@
 package com.bancvue.rest.client;
 
-public interface BancvueRestClientFactory<T> {
+public interface RestClientFactory<T> {
 
 	public T createClient();
 }

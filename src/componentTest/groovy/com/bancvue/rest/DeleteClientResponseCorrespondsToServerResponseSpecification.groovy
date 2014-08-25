@@ -1,5 +1,6 @@
 package com.bancvue.rest
 
+import com.bancvue.rest.client.BasicClientRequestExecutor
 import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.DeleteResponse
 import com.bancvue.rest.example.Widget
@@ -17,7 +18,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 
 	void setup() {
 		widgetResource = baseServiceResource.path("widgets")
-		clientRequestExecutor = new ClientRequestExecutor()
+		clientRequestExecutor = new BasicClientRequestExecutor(widgetResource)
 		widgetRepository.clear()
 	}
 

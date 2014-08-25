@@ -1,5 +1,6 @@
 package com.bancvue.rest
 
+import com.bancvue.rest.client.BasicClientRequestExecutor
 import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.CreateResponse
 import com.bancvue.rest.example.Widget
@@ -15,7 +16,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 
 	void setup() {
 		widgetResource = baseServiceResource.path("widgets")
-		clientRequestExecutor = new ClientRequestExecutor()
+		clientRequestExecutor = new BasicClientRequestExecutor(widgetResource)
 		widgetRepository.clear()
 	}
 
