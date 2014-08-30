@@ -1,6 +1,6 @@
 package com.bancvue.rest
 import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.GetResponse
+import com.bancvue.rest.client.response.GetResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.NotFoundException

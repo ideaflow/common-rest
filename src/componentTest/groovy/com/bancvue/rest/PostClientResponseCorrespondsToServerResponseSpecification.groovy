@@ -1,9 +1,7 @@
 package com.bancvue.rest
 import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.CreateResponse
-import com.bancvue.rest.client.UpdateResponse
+import com.bancvue.rest.client.response.CreateResponse
 import com.bancvue.rest.example.Widget
-import com.bancvue.rest.example.WidgetResource
 import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.ValidationException

@@ -1,5 +1,6 @@
-package com.bancvue.rest.client
+package com.bancvue.rest.client.response
 
+import com.bancvue.rest.client.response.GetResponse
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.SeeOtherException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory

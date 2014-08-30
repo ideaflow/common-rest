@@ -1,6 +1,7 @@
-package com.bancvue.rest.client;
+package com.bancvue.rest.client.response;
 
 import com.bancvue.rest.Envelope;
+import com.bancvue.rest.client.EntityResolver;
 import com.bancvue.rest.exception.ConflictException;
 import com.bancvue.rest.exception.ConflictingEntityException;
 
