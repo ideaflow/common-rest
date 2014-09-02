@@ -1,10 +1,9 @@
 package com.bancvue.rest.client.response;
 
 import com.bancvue.rest.Envelope;
-import com.bancvue.rest.client.EntityResolver;
 import com.bancvue.rest.exception.ConflictException;
 import com.bancvue.rest.exception.ConflictingEntityException;
-
+import com.bancvue.rest.exception.HttpClientException;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
@@ -18,9 +17,20 @@ public class ResponseHelper {
 		}
 		return entity != null;
 	}
-	
-	public static <T> void handleSCConflict(Response clientResponse, EntityResolver resolver, Object typeOrGenericType){
-		T entity = resolver.getEntity(clientResponse, typeOrGenericType);
+
+	@SuppressWarnings("unchecked")
+	public static <T> T readEntity(Response clientResponse, Object responseType) {
+		if (responseType instanceof Class) {
+			return clientResponse.readEntity((Class<T>) responseType);
+		} else if (responseType instanceof GenericType) {
+			return clientResponse.readEntity((GenericType<T>) responseType);
+		} else {
+			throw new IllegalArgumentException("Response type must be either Class or GenericType, was=" + responseType);
+		}
+	}
+
+	public static <T> HttpClientException createConflictException(Response clientResponse, Object typeOrGenericType){
+		T entity = readEntity(clientResponse, typeOrGenericType);
 		if(hasData(entity)) {
 			throw new ConflictingEntityException(ENTITY_ALREADY_EXISTS, entity);
 		}

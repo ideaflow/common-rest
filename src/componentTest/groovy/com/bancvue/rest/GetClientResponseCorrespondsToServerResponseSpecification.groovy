@@ -36,7 +36,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		getResponse.clientResponse.getStatus() == 200
 
 		when:
-		Widget actualWidget = getResponse.getResponseAsType(Widget)
+		Widget actualWidget = getResponse.getValidatedResponse(Widget)
 
 		then:
 		expectedWidget == actualWidget
@@ -51,7 +51,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		getResponse.clientResponse.getStatus() == 404
 
 		when:
-		getResponse.getResponseAsType(Widget)
+		getResponse.getValidatedResponse(Widget)
 
 		then:
 		thrown NotFoundException
@@ -68,7 +68,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		getResponse.clientResponse.getStatus() == 500
 
 		when:
-		getResponse.getResponseAsType(Widget)
+		getResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)

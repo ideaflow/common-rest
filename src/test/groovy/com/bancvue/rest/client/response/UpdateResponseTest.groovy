@@ -1,14 +1,12 @@
 package com.bancvue.rest.client.response
 
 import com.bancvue.rest.Envelope
-import com.bancvue.rest.client.response.UpdateResponse
 import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
-import org.apache.http.HttpStatus
-import spock.lang.Specification
-
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
+import org.apache.http.HttpStatus
+import spock.lang.Specification
 
 class UpdateResponseTest extends Specification {
 	
@@ -27,7 +25,7 @@ class UpdateResponseTest extends Specification {
 		clientResponse.readEntity(genericType) >> "value"
 
 		when:
-		String actualResponse = putResponse.assertEntityUpdatedAndGetResponse(genericType)
+		String actualResponse = putResponse.getValidatedResponse(genericType)
 
 		then:
 		"value" == actualResponse
@@ -40,7 +38,7 @@ class UpdateResponseTest extends Specification {
 		clientResponse.readEntity(_) >> null
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(genericType)
+		putResponse.getValidatedResponse(genericType)
 
 		then:
 		thrown(ConflictException)
@@ -53,7 +51,7 @@ class UpdateResponseTest extends Specification {
 		clientResponse.readEntity(genericType) >> new Envelope();
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(genericType)
+		putResponse.getValidatedResponse(genericType)
 
 		then:
 		thrown(ConflictException)

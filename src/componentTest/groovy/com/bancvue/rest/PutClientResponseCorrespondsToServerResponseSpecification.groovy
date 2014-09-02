@@ -38,7 +38,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		updateResponse.clientResponse.getStatus() == 200
 
 		when:
-		Widget actualResponse = updateResponse.assertEntityUpdatedAndGetResponse(Widget)
+		Widget actualResponse = updateResponse.getValidatedResponse(Widget)
 
 		then:
 		update == actualResponse
@@ -58,7 +58,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		putResponse.clientResponse.getStatus() == 404
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+		putResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -76,7 +76,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		putResponse.clientResponse.getStatus() == 409
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+		putResponse.getValidatedResponse(Widget)
 
 		then:
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
@@ -95,7 +95,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		putResponse.clientResponse.getStatus() == 409
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+		putResponse.getValidatedResponse(Widget)
 
 		then:
 		ConflictException ex = thrown(ConflictException)
@@ -115,7 +115,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		updateResponse.clientResponse.getStatus() == 500
 
 		when:
-		updateResponse.assertEntityUpdatedAndGetResponse(Widget)
+		updateResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)

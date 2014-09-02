@@ -1,51 +1,35 @@
 package com.bancvue.rest.client.response;
 
-import com.bancvue.rest.client.EntityResolver;
 import com.bancvue.rest.exception.NotFoundException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
+import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-
-public class DeleteResponse {
-
-	private Response clientResponse;
-	private UnexpectedResponseExceptionFactory exceptionFactory;
+public class DeleteResponse extends AbstractResponse {
 
 	public DeleteResponse(Response clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
-		this.clientResponse = clientResponse;
-		this.exceptionFactory = exceptionFactory;
+		super(clientResponse, exceptionFactory);
 	}
 
-	public <T> T assertEntityDeletedAndGetResponse(Class<T> type) {
-		return assertEntityDeletedAndGetResponse(type, EntityResolver.CLASS_RESOLVER);
-	}
-
-	public <T> T assertEntityDeletedAndGetResponse(GenericType<T> type) {
-		return assertEntityDeletedAndGetResponse(type, EntityResolver.GENERIC_TYPE_RESOLVER);
-	}
-
-	private <T> T assertEntityDeletedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		try {
-			return doAssertEntityDeletedAndGetResponse(typeOrGenericType, resolver);
-		} finally {
-			clientResponse.close();
+	protected <T> T doGetValidatedResponse(Object responseType) {
+		switch (clientResponse.getStatus()) {
+			case HttpStatus.SC_OK:
+				return readEntity(responseType);
+			case HttpStatus.SC_NO_CONTENT:
+				return null;
+			default:
+				throw createResponseException();
 		}
 	}
 
-	private <T> T doAssertEntityDeletedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
-			return resolver.getEntity(clientResponse, typeOrGenericType);
-
-		} else if (clientResponse.getStatus() == HttpStatus.SC_NO_CONTENT) {
-			return null;
-
-		} else if (clientResponse.getStatus() == HttpStatus.SC_NOT_FOUND) {
-			throw new NotFoundException(clientResponse.readEntity(String.class));
+	private RuntimeException createResponseException() {
+		switch (clientResponse.getStatus()) {
+			case HttpStatus.SC_NOT_FOUND:
+				String msg = clientResponse.readEntity(String.class);
+				return new NotFoundException(msg);
+			default:
+				return exceptionFactory.createException(clientResponse);
 		}
-
-		throw exceptionFactory.createException(clientResponse);
 	}
 
 }

@@ -1,48 +1,34 @@
 package com.bancvue.rest.client.response;
 
-import com.bancvue.rest.client.EntityResolver;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.bancvue.rest.exception.ValidationException;
+import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-
-public class UpdateResponse {
-
-	private Response clientResponse;
-	private UnexpectedResponseExceptionFactory exceptionFactory;
+public class UpdateResponse extends AbstractResponse {
 
 	public UpdateResponse(Response clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
-		this.clientResponse = clientResponse;
-		this.exceptionFactory = exceptionFactory;
+		super(clientResponse, exceptionFactory);
 	}
 
-	public <T> T assertEntityUpdatedAndGetResponse(Class<T> type) {
-		return assertEntityUpdatedAndGetResponse(type, EntityResolver.CLASS_RESOLVER);
-	}
-
-	public <T> T assertEntityUpdatedAndGetResponse(GenericType<T> type) {
-		return assertEntityUpdatedAndGetResponse(type, EntityResolver.GENERIC_TYPE_RESOLVER);
-	}
-
-	private <T> T assertEntityUpdatedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		try {
-			return doAssertEntityUpdatedAndGetResponse(typeOrGenericType, resolver);
-		} finally {
-			clientResponse.close();
+	protected <T> T doGetValidatedResponse(Object responseType) {
+		if (clientResponse.getStatus() == HttpStatus.SC_OK) {
+			return readEntity(responseType);
+		} else {
+			throw createResponseException(responseType);
 		}
 	}
 
-	private <T> T doAssertEntityUpdatedAndGetResponse(Object typeOrGenericType, EntityResolver resolver) {
-		if (clientResponse.getStatus() == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
-			String msg = EntityResolver.CLASS_RESOLVER.getEntity(clientResponse, String.class);
-			throw new ValidationException(msg);
-		} else if (clientResponse.getStatus() == HttpStatus.SC_CONFLICT) {
-			ResponseHelper.handleSCConflict(clientResponse, resolver, typeOrGenericType);
-		} else if (clientResponse.getStatus() == HttpStatus.SC_OK) {
-			return resolver.getEntity(clientResponse, typeOrGenericType);
+	private RuntimeException createResponseException(Object responseType) {
+		switch (clientResponse.getStatus()) {
+			case HttpStatus.SC_UNPROCESSABLE_ENTITY:
+				String msg = clientResponse.readEntity(String.class);
+				return new ValidationException(msg);
+			case HttpStatus.SC_CONFLICT:
+				return ResponseHelper.createConflictException(clientResponse, responseType);
+			default:
+				return exceptionFactory.createException(clientResponse);
 		}
-		throw exceptionFactory.createException(clientResponse);
 	}
+
 }

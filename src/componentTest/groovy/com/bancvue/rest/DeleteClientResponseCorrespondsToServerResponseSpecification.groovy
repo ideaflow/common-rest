@@ -36,7 +36,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		deleteResponse.clientResponse.getStatus() == 204
 
 		when:
-		Widget deletedWidget = deleteResponse.assertEntityDeletedAndGetResponse(Widget)
+		Widget deletedWidget = deleteResponse.getValidatedResponse(Widget)
 
 		then:
 		deletedWidget == null
@@ -50,7 +50,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		deleteResponse.clientResponse.getStatus() == 404
 
 		when:
-		deleteResponse.assertEntityDeletedAndGetResponse(Widget)
+		deleteResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -68,7 +68,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		deleteResponse.clientResponse.getStatus() == 500
 
 		when:
-		deleteResponse.assertEntityDeletedAndGetResponse(Widget)
+		deleteResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)

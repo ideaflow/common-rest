@@ -35,7 +35,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/created"
 
 		when:
-		Widget actualWidget = createResponse.assertEntityCreatedAndGetResponse(Widget)
+		Widget actualWidget = createResponse.getValidatedResponse(Widget)
 
 		then:
 		widget == actualWidget
@@ -52,7 +52,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.clientResponse.getStatus() == 409
 
 		when:
-		createResponse.assertEntityCreatedAndGetResponse(Widget)
+		createResponse.getValidatedResponse(Widget)
 
 		then:
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
@@ -70,7 +70,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.clientResponse.getStatus() == 422
 
 		when:
-		createResponse.assertEntityCreatedAndGetResponse(Widget)
+		createResponse.getValidatedResponse(Widget)
 
 		then:
 		ValidationException ex = thrown()
@@ -90,7 +90,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.clientResponse.getStatus() == 500
 
 		when:
-		createResponse.assertEntityCreatedAndGetResponse(Widget)
+		createResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
