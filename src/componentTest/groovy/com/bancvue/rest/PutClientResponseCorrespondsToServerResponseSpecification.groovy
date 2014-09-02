@@ -5,7 +5,8 @@ import com.bancvue.rest.client.response.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetResource
 import com.bancvue.rest.exception.ConflictingEntityException
-import com.bancvue.rest.exception.HttpClientException
+import com.bancvue.rest.exception.NotFoundException
+import javax.ws.rs.WebApplicationException
 import javax.ws.rs.client.WebTarget
 import spock.lang.Shared
 
@@ -47,7 +48,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 	// TODO: what behavior do we want around PUT?
 	// do we allow create?
 
-	def "not found should return status code 404, client response should convert to http exception"() {
+	def "not found should return status code 404, client response should convert to NotFoundException"() {
 		Widget widget = new Widget(id: "wid")
 
 		when:
@@ -60,8 +61,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		putResponse.getValidatedResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
-		ex.status == 404
+		thrown NotFoundException
 	}
 
 	def "object already exists should return status code 409 with entity, client response should convert to exception with data"() {
@@ -78,11 +78,11 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 		then:
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
-		ex.getStatus() == 409
+		ex.response.status == 409
 		ex.entity == widget
 	}
 
-	def "application error should return status code 500, client response should convert to http exception"() {
+	def "application error should return status code 500, client response should convert to WebApplicationException"() {
 		Widget widget = addWidget("updated")
 		widget.initApplicationError()
 
@@ -96,8 +96,8 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		updateResponse.getValidatedResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
-		ex.status == 500
+		WebApplicationException ex = thrown()
+		ex.response.status == 500
 	}
 
 }

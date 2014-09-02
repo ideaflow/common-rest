@@ -1,10 +1,9 @@
 package com.bancvue.rest.exception;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-public class NotFoundException extends HttpClientException {
-
-	private static final long serialVersionUID = -7025040484134678764L;
+public class NotFoundException extends WebApplicationException {
 
 	public NotFoundException(String msg) {
 		super(msg, Response.Status.NOT_FOUND);

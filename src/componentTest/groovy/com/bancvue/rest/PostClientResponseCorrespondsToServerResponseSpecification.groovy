@@ -4,8 +4,8 @@ import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.CreateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.ConflictingEntityException
-import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.ValidationException
+import javax.ws.rs.WebApplicationException
 import javax.ws.rs.client.WebTarget
 
 class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
@@ -57,7 +57,6 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 
 		then:
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
-		ex.getStatus() == 409
 		ex.entity == widget
 	}
 
@@ -74,8 +73,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.getValidatedResponse(Widget)
 
 		then:
-		ValidationException ex = thrown()
-		ex.getStatus() == 422
+		thrown ValidationException
 
 		// TODO: what about the body?  can we standardize on reporting invalid objects?
 	}
@@ -94,7 +92,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		createResponse.getValidatedResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
-		ex.getStatus() == 500
+		WebApplicationException ex = thrown()
+		ex.response.status == 500
 	}
 }

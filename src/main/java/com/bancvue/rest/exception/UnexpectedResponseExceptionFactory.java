@@ -1,6 +1,7 @@
 package com.bancvue.rest.exception;
 
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 
@@ -13,7 +14,7 @@ public interface UnexpectedResponseExceptionFactory {
 
 		@Override
 		public RuntimeException createException(Response response) {
-			return HttpClientException.unexpected(response.getStatus());
+			return new WebApplicationException(response);
 		}
 
 	}

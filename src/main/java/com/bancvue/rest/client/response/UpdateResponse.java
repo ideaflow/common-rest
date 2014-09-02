@@ -1,5 +1,6 @@
 package com.bancvue.rest.client.response;
 
+import com.bancvue.rest.exception.NotFoundException;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
 import com.bancvue.rest.exception.ValidationException;
 import javax.ws.rs.core.Response;
@@ -22,10 +23,13 @@ public class UpdateResponse extends AbstractResponse {
 	private RuntimeException createResponseException(Object responseType) {
 		switch (clientResponse.getStatus()) {
 			case HttpStatus.SC_UNPROCESSABLE_ENTITY:
-				String msg = clientResponse.readEntity(String.class);
-				return new ValidationException(msg);
+				String validationMsg = clientResponse.readEntity(String.class);
+				return new ValidationException(validationMsg);
 			case HttpStatus.SC_CONFLICT:
 				return ResponseHelper.createConflictException(clientResponse, responseType);
+			case HttpStatus.SC_NOT_FOUND:
+				String notFoundMsg = clientResponse.readEntity(String.class);
+				return new NotFoundException(notFoundMsg);
 			default:
 				return exceptionFactory.createException(clientResponse);
 		}

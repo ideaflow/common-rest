@@ -3,8 +3,8 @@ package com.bancvue.rest
 import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.GetResponse
 import com.bancvue.rest.example.Widget
-import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.NotFoundException
+import javax.ws.rs.WebApplicationException
 import javax.ws.rs.client.WebTarget
 import spock.lang.Shared
 
@@ -71,7 +71,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		getResponse.getValidatedResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
-		ex.getStatus() == 500
+		WebApplicationException ex = thrown()
+		ex.response.status == 500
 	}
 }
