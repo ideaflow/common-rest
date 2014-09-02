@@ -11,15 +11,15 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-public class ClientResponseFactory {
+public class ClientRequestExecutor {
 
 	private UnexpectedResponseExceptionFactory exceptionFactory;
 
-	public ClientResponseFactory() {
+	public ClientRequestExecutor() {
 		this(new UnexpectedResponseExceptionFactory.Default());
 	}
 
-	public ClientResponseFactory(UnexpectedResponseExceptionFactory exceptionFactory) {
+	public ClientRequestExecutor(UnexpectedResponseExceptionFactory exceptionFactory) {
 		this.exceptionFactory = exceptionFactory;
 	}
 

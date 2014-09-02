@@ -1,5 +1,5 @@
 package com.bancvue.rest
-import com.bancvue.rest.client.ClientResponseFactory
+import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.DeleteResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.HttpClientException
@@ -12,11 +12,11 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 	@Shared
 	private WebTarget widgetResource
 
-	private ClientResponseFactory clientResponseFactory
+	private ClientRequestExecutor clientRequestExecutor
 
 	void setup() {
 		widgetResource = baseServiceResource.path("widgets")
-		clientResponseFactory = new ClientResponseFactory()
+		clientRequestExecutor = new ClientRequestExecutor()
 		widgetRepository.clear()
 	}
 
@@ -30,7 +30,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		Widget widget = addWidget("to-delete")
 
 		when:
-		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path(widget.id))
+		DeleteResponse deleteResponse = clientRequestExecutor.delete(widgetResource.path(widget.id))
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 204
@@ -44,7 +44,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 
 	def "object not found should return status code 404, client response should throw exception"() {
 		when:
-		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path("not-found"))
+		DeleteResponse deleteResponse = clientRequestExecutor.delete(widgetResource.path("not-found"))
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 404
@@ -62,7 +62,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		widget.initApplicationError()
 
 		when:
-		DeleteResponse deleteResponse = clientResponseFactory.delete(widgetResource.path("app-error"))
+		DeleteResponse deleteResponse = clientRequestExecutor.delete(widgetResource.path("app-error"))
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 500

@@ -1,5 +1,6 @@
 package com.bancvue.rest
-import com.bancvue.rest.client.ClientResponseFactory
+
+import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.GetResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.HttpClientException
@@ -12,11 +13,11 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 	@Shared
 	private WebTarget widgetResource
-	private ClientResponseFactory clientResponseFactory
+	private ClientRequestExecutor clientRequestExecutor
 
 	void setup() {
 		widgetResource = baseServiceResource.path("widgets")
-		clientResponseFactory = new ClientResponseFactory()
+		clientRequestExecutor = new ClientRequestExecutor()
 		widgetRepository.clear()
 	}
 
@@ -30,7 +31,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget expectedWidget = addWidget("wid")
 
 		when:
-		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
+		GetResponse getResponse = clientRequestExecutor.get(widgetResource.path("wid"))
 
 		then:
 		getResponse.clientResponse.getStatus() == 200
@@ -45,7 +46,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 	def "should throw not found exception when return status code 404"() {
 		when:
-		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
+		GetResponse getResponse = clientRequestExecutor.get(widgetResource.path("wid"))
 
 		then:
 		getResponse.clientResponse.getStatus() == 404
@@ -62,7 +63,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		expectedWidget.initApplicationError()
 
 		when:
-		GetResponse getResponse = clientResponseFactory.get(widgetResource.path("wid"))
+		GetResponse getResponse = clientRequestExecutor.get(widgetResource.path("wid"))
 
 		then:
 		getResponse.clientResponse.getStatus() == 500
