@@ -4,7 +4,7 @@ import com.bancvue.rest.client.response.CreateResponse;
 import com.bancvue.rest.client.response.DeleteResponse;
 import com.bancvue.rest.client.response.GetResponse;
 import com.bancvue.rest.client.response.UpdateResponse;
-import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
+import com.bancvue.rest.exception.WebApplicationExceptionFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -12,13 +12,13 @@ import javax.ws.rs.core.Response;
 
 public class ClientRequestExecutor {
 
-	private UnexpectedResponseExceptionFactory exceptionFactory;
+	private WebApplicationExceptionFactory exceptionFactory;
 
 	public ClientRequestExecutor() {
-		this(new UnexpectedResponseExceptionFactory.Default());
+		this(new WebApplicationExceptionFactory.Default());
 	}
 
-	public ClientRequestExecutor(UnexpectedResponseExceptionFactory exceptionFactory) {
+	public ClientRequestExecutor(WebApplicationExceptionFactory exceptionFactory) {
 		this.exceptionFactory = exceptionFactory;
 	}
 

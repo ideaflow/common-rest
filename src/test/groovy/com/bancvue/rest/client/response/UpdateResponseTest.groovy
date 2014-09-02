@@ -2,7 +2,7 @@ package com.bancvue.rest.client.response
 
 import com.bancvue.rest.Envelope
 import com.bancvue.rest.exception.ConflictException
-import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
+import com.bancvue.rest.exception.WebApplicationExceptionFactory
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
 import org.apache.http.HttpStatus
@@ -15,7 +15,7 @@ class UpdateResponseTest extends Specification {
 
 	void setup() {
 		clientResponse = Mock()
-		putResponse = new UpdateResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
+		putResponse = new UpdateResponse(clientResponse, new WebApplicationExceptionFactory.Default())
 	}
 
 	def "assertEntityUpdatedAndGetEntity with GenericType should convert and return entity if status ok"() {
