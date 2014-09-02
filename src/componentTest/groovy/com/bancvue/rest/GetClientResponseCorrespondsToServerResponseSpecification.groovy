@@ -5,9 +5,8 @@ import com.bancvue.rest.client.response.GetResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.NotFoundException
-import spock.lang.Shared
-
 import javax.ws.rs.client.WebTarget
+import spock.lang.Shared
 
 class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
 

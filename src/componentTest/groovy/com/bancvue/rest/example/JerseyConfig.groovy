@@ -1,10 +1,9 @@
 package com.bancvue.rest.example
 
 import com.bancvue.rest.exception.mapper.InvalidEntityExceptionMapper
+import javax.ws.rs.ApplicationPath
 import org.glassfish.jersey.server.ResourceConfig
 import org.glassfish.jersey.server.ServerProperties
-
-import javax.ws.rs.ApplicationPath
 
 @ApplicationPath("/")
 public class JerseyConfig extends ResourceConfig {

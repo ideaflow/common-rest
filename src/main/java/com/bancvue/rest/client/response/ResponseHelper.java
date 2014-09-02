@@ -10,10 +10,10 @@ import javax.ws.rs.core.Response;
 public class ResponseHelper {
 
 	public static final String ENTITY_ALREADY_EXISTS = "Entity already exists";
-	
-	public static <T> boolean hasData(T entity ){
-		if(entity instanceof Envelope){
-			return ((Envelope)entity).getData() != null;
+
+	public static <T> boolean hasData(T entity) {
+		if (entity instanceof Envelope) {
+			return ((Envelope) entity).getData() != null;
 		}
 		return entity != null;
 	}
@@ -29,13 +29,13 @@ public class ResponseHelper {
 		}
 	}
 
-	public static <T> HttpClientException createConflictException(Response clientResponse, Object typeOrGenericType){
+	public static <T> HttpClientException createConflictException(Response clientResponse, Object typeOrGenericType) {
 		T entity = readEntity(clientResponse, typeOrGenericType);
-		if(hasData(entity)) {
+		if (hasData(entity)) {
 			throw new ConflictingEntityException(ENTITY_ALREADY_EXISTS, entity);
 		}
 		throw new ConflictException(ENTITY_ALREADY_EXISTS);
-	} 
-	
-	
+	}
+
+
 }

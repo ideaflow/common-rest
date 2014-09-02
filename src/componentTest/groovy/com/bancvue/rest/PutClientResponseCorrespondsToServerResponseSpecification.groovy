@@ -1,14 +1,13 @@
 package com.bancvue.rest
+
 import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetResource
-import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.HttpClientException
-import spock.lang.Shared
-
 import javax.ws.rs.client.WebTarget
+import spock.lang.Shared
 
 class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
 
@@ -64,7 +63,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		HttpClientException ex = thrown(HttpClientException)
 		ex.status == 404
 	}
-	
+
 	def "object already exists should return status code 409 with entity, client response should convert to exception with data"() {
 		Widget widget = new Widget(id: WidgetResource.CONFLICT_WITH_DATA_ID)
 
@@ -81,8 +80,8 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
 		ex.getStatus() == 409
 		ex.entity == widget
-	}	
-	
+	}
+
 	def "application error should return status code 500, client response should convert to http exception"() {
 		Widget widget = addWidget("updated")
 		widget.initApplicationError()

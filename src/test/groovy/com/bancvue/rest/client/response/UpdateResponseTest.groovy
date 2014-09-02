@@ -9,7 +9,7 @@ import org.apache.http.HttpStatus
 import spock.lang.Specification
 
 class UpdateResponseTest extends Specification {
-	
+
 	Response clientResponse
 	UpdateResponse putResponse
 
@@ -31,7 +31,7 @@ class UpdateResponseTest extends Specification {
 		"value" == actualResponse
 	}
 
-	def "doAssertEntityUpdatedAndGetResponse should throw ConflictException when server returns 409 with no entity" (){
+	def "doAssertEntityUpdatedAndGetResponse should throw ConflictException when server returns 409 with no entity"() {
 		given:
 		GenericType<String> genericType = new GenericType<String>() {}
 		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT
@@ -44,7 +44,7 @@ class UpdateResponseTest extends Specification {
 		thrown(ConflictException)
 	}
 
-	def "doAssertEntityUpdatedAndGetResponse should throw ConflictException when server returns 409 with envelope with no entity" (){
+	def "doAssertEntityUpdatedAndGetResponse should throw ConflictException when server returns 409 with envelope with no entity"() {
 		given:
 		GenericType<String> genericType = new GenericType<String>() {}
 		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT

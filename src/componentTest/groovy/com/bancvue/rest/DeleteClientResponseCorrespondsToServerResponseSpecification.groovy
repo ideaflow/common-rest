@@ -1,11 +1,11 @@
 package com.bancvue.rest
+
 import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.DeleteResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.HttpClientException
-import spock.lang.Shared
-
 import javax.ws.rs.client.WebTarget
+import spock.lang.Shared
 
 class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
 

@@ -45,7 +45,7 @@ public class ResourceResponseFactory {
 		return Response.status(Response.Status.NOT_FOUND)
 				.build();
 	}
-	
+
 	public Response createForbiddenResponse() {
 		return Response.status(Response.Status.FORBIDDEN)
 				.build();
