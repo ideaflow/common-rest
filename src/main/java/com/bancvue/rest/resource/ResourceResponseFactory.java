@@ -41,11 +41,6 @@ public class ResourceResponseFactory {
 				.path(targetResource);
 	}
 
-	@Deprecated
-	public Response createNotFoundResponse(String pathToEntity) {
-		return createNotFoundResponse();
-	}
-
 	public Response createNotFoundResponse() {
 		return Response.status(Response.Status.NOT_FOUND)
 				.build();
@@ -53,17 +48,6 @@ public class ResourceResponseFactory {
 	
 	public Response createForbiddenResponse() {
 		return Response.status(Response.Status.FORBIDDEN)
-				.build();
-	}
-
-	@Deprecated
-	public Response createConflictResponse(String pathToEntity) {
-		return createConflictResponse();
-	}
-
-	@Deprecated
-	public Response createConflictResponse() {
-		return Response.status(Response.Status.CONFLICT)
 				.build();
 	}
 
@@ -90,11 +74,6 @@ public class ResourceResponseFactory {
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.entity(entities)
 				.build();
-	}
-
-	@Deprecated
-	public Response createGetResponse(String pathToEntity, Object entity) {
-		return createGetResponse(entity);
 	}
 
 	public Response createGetResponse(Object entity) {
@@ -133,18 +112,8 @@ public class ResourceResponseFactory {
 				.build();
 	}
 
-	@Deprecated
-	public Response createPostFailedBecauseAlreadyExistsResponse(String pathToEntity, Object existingEntity) {
-		return createPostFailedBecauseAlreadyExistsResponse(existingEntity);
-	}
-
 	public Response createPostFailedBecauseAlreadyExistsResponse(Object existingEntity) {
 		return createConflictResponse(existingEntity);
-	}
-
-	@Deprecated
-	public Response createPutSuccessResponse(String pathToEntity, Object updatedEntity) {
-		return createPutSuccessResponse(updatedEntity);
 	}
 
 	public Response createPutSuccessResponse(Object updatedEntity) {
@@ -152,11 +121,6 @@ public class ResourceResponseFactory {
 				.type(MediaType.APPLICATION_JSON_TYPE)
 				.entity(updatedEntity)
 				.build();
-	}
-
-	@Deprecated
-	public Response createDeleteResponse(String pathToEntity, Object deletedEntity) {
-		return createDeleteResponse(deletedEntity);
 	}
 
 	public Response createDeleteResponse(Object deletedEntity) {
