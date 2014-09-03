@@ -1,6 +1,6 @@
 package com.bancvue.rest.client.response
 
-import com.bancvue.rest.Envelope
+import com.bancvue.rest.envelope.DefaultEnvelope
 import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory
 import javax.ws.rs.core.GenericType
@@ -54,7 +54,7 @@ class CreateResponseTest extends Specification {
 		given:
 		GenericType<String> genericType = new GenericType<String>() {}
 		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT
-		clientResponse.readEntity(genericType) >> new Envelope();
+		clientResponse.readEntity(genericType) >> new DefaultEnvelope();
 
 		when:
 		postResponse.getValidatedResponse(genericType)

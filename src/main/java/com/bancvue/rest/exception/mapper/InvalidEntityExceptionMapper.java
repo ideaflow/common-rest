@@ -1,6 +1,7 @@
 package com.bancvue.rest.exception.mapper;
 
-import com.bancvue.rest.Envelope;
+import com.bancvue.rest.envelope.DefaultEnvelope;
+import com.bancvue.rest.envelope.Envelope;
 import com.bancvue.rest.jaxrs.UnprocessableEntityStatusType;
 import java.util.List;
 import javax.validation.ConstraintViolationException;
@@ -16,7 +17,7 @@ public class InvalidEntityExceptionMapper implements ExceptionMapper<ConstraintV
 	@Override
 	public Response toResponse(ConstraintViolationException exception) {
 		Envelope<List<ValidationError>> envelope =
-				new Envelope.Builder<>(ValidationHelper.constraintViolationToValidationErrors(exception)).build();
+				new DefaultEnvelope.Builder<>(ValidationHelper.constraintViolationToValidationErrors(exception)).build();
 		return Response.status(new UnprocessableEntityStatusType()).type(MediaType.APPLICATION_JSON_TYPE).entity(envelope).build();
 	}
 }

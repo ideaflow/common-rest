@@ -1,4 +1,4 @@
-package com.bancvue.rest;
+package com.bancvue.rest.envelope;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -7,14 +7,14 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlRootElement
-public class Envelope<T> {
+public class DefaultEnvelope<T> implements Envelope<T> {
 
 	private T data;
 
-	private Envelope() {
+	private DefaultEnvelope() {
 	}
 
-	public Envelope(Envelope<T> env) {
+	public DefaultEnvelope(DefaultEnvelope<T> env) {
 		this.data = env.data;
 	}
 
@@ -23,14 +23,14 @@ public class Envelope<T> {
 	}
 
 	public static class Builder<T> {
-		private Envelope<T> env;
+		private DefaultEnvelope<T> env;
 
 		public Builder() {
 			this(null);
 		}
 
 		public Builder(T data) {
-			env = new Envelope<T>();
+			env = new DefaultEnvelope<>();
 
 			data(data);
 		}
@@ -40,8 +40,8 @@ public class Envelope<T> {
 			return this;
 		}
 
-		public Envelope<T> build() {
-			return new Envelope<T>(env);
+		public DefaultEnvelope<T> build() {
+			return new DefaultEnvelope<>(env);
 		}
 	}
 
