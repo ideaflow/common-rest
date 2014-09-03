@@ -1,14 +1,12 @@
-package com.bancvue.rest.client
+package com.bancvue.rest.client.response
 
 import com.bancvue.rest.Envelope
 import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
-import org.apache.http.HttpStatus
-
-import spock.lang.Specification
-
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
+import org.apache.http.HttpStatus
+import spock.lang.Specification
 import spock.lang.Unroll
 
 class CreateResponseTest extends Specification {
@@ -30,7 +28,7 @@ class CreateResponseTest extends Specification {
 		}
 
 		expect:
-		response == postResponse.assertEntityCreatedAndGetResponse(genericType)
+		response == postResponse.getValidatedResponse(genericType)
 
 		where:
 		statusCode               | response
@@ -46,7 +44,7 @@ class CreateResponseTest extends Specification {
 		clientResponse.readEntity(_) >> null
 
 		when:
-		postResponse.assertEntityCreatedAndGetResponse(genericType)
+		postResponse.getValidatedResponse(genericType)
 
 		then:
 		thrown(ConflictException)
@@ -59,7 +57,7 @@ class CreateResponseTest extends Specification {
 		clientResponse.readEntity(genericType) >> new Envelope();
 
 		when:
-		postResponse.assertEntityCreatedAndGetResponse(genericType)
+		postResponse.getValidatedResponse(genericType)
 
 		then:
 		thrown(ConflictException)

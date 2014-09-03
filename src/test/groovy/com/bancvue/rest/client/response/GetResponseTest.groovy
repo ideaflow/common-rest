@@ -1,15 +1,14 @@
-package com.bancvue.rest.client
+package com.bancvue.rest.client.response
 
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.SeeOtherException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
-import org.apache.http.HttpStatus
-import spock.lang.Specification
-
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MultivaluedHashMap
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.core.Response
+import org.apache.http.HttpStatus
+import spock.lang.Specification
 
 class GetResponseTest extends Specification {
 
@@ -26,7 +25,7 @@ class GetResponseTest extends Specification {
 		clientResponse.readEntity(String) >> "value"
 
 		when:
-		String entity = getResponse.getResponseAsType(String)
+		String entity = getResponse.getValidatedResponse(String)
 
 		then:
 		"value" == entity
@@ -36,7 +35,7 @@ class GetResponseTest extends Specification {
 		clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
 
 		when:
-		getResponse.getResponseAsType(Object)
+		getResponse.getValidatedResponse(Object)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -50,7 +49,7 @@ class GetResponseTest extends Specification {
 		clientResponse.getHeaders() >> map
 
 		when:
-		getResponse.getResponseAsType(Object)
+		getResponse.getValidatedResponse(Object)
 
 		then:
 		SeeOtherException ex = thrown(SeeOtherException)
@@ -65,7 +64,7 @@ class GetResponseTest extends Specification {
 		clientResponse.readEntity(genericType) >> "value"
 
 		when:
-		String entity = getResponse.getResponseAsType(genericType)
+		String entity = getResponse.getValidatedResponse(genericType)
 
 		then:
 		"value" == entity
@@ -78,7 +77,7 @@ class GetResponseTest extends Specification {
 		clientResponse.readEntity(genericType) >> "value"
 
 		when:
-		String entity = getResponse.getResponseAsType(genericType)
+		String entity = getResponse.getValidatedResponse(genericType)
 
 		then:
 		"value" == entity
@@ -95,7 +94,7 @@ class GetResponseTest extends Specification {
 				}
 
 		when:
-		getResponse.getResponseAsType(genericType)
+		getResponse.getValidatedResponse(genericType)
 
 		then:
 		SeeOtherException ex = thrown(SeeOtherException)

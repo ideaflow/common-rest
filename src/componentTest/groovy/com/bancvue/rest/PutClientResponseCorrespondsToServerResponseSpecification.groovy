@@ -1,6 +1,6 @@
 package com.bancvue.rest
-import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.UpdateResponse
+import com.bancvue.rest.client.ClientRequestExecutor
+import com.bancvue.rest.client.response.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetResource
 import com.bancvue.rest.exception.ConflictException
@@ -14,11 +14,11 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 	@Shared
 	private WebTarget widgetResource
-	private ClientResponseFactory clientResponseFactory
+	private ClientRequestExecutor clientRequestExecutor
 
 	void setup() {
 		widgetResource = baseServiceResource.path("widgets")
-		clientResponseFactory = new ClientResponseFactory()
+		clientRequestExecutor = new ClientRequestExecutor()
 		widgetRepository.clear()
 	}
 
@@ -32,13 +32,13 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget update = addWidget("updated")
 
 		when:
-		UpdateResponse updateResponse = clientResponseFactory.updateWithPut(widgetResource.path(update.id), update)
+		UpdateResponse updateResponse = clientRequestExecutor.updateWithPut(widgetResource.path(update.id), update)
 
 		then:
 		updateResponse.clientResponse.getStatus() == 200
 
 		when:
-		Widget actualResponse = updateResponse.assertEntityUpdatedAndGetResponse(Widget)
+		Widget actualResponse = updateResponse.getValidatedResponse(Widget)
 
 		then:
 		update == actualResponse
@@ -52,13 +52,13 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget widget = new Widget(id: "wid")
 
 		when:
-		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path("wid"), widget)
+		UpdateResponse putResponse = clientRequestExecutor.updateWithPut(widgetResource.path("wid"), widget)
 
 		then:
 		putResponse.clientResponse.getStatus() == 404
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+		putResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
@@ -70,13 +70,13 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget widget = new Widget(id: WidgetResource.CONFLICT_WITH_DATA_ID)
 
 		when:
-		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_WITH_DATA_ID), widget)
+		UpdateResponse putResponse = clientRequestExecutor.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_WITH_DATA_ID), widget)
 
 		then:
 		putResponse.clientResponse.getStatus() == 409
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+		putResponse.getValidatedResponse(Widget)
 
 		then:
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
@@ -89,13 +89,13 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget widget = new Widget(id: WidgetResource.CONFLICT_WITH_NO_DATA_ID_DEPRECATED)
 
 		when:
-		UpdateResponse putResponse = clientResponseFactory.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_WITH_NO_DATA_ID_DEPRECATED), widget)
+		UpdateResponse putResponse = clientRequestExecutor.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_WITH_NO_DATA_ID_DEPRECATED), widget)
 
 		then:
 		putResponse.clientResponse.getStatus() == 409
 
 		when:
-		putResponse.assertEntityUpdatedAndGetResponse(Widget)
+		putResponse.getValidatedResponse(Widget)
 
 		then:
 		ConflictException ex = thrown(ConflictException)
@@ -109,13 +109,13 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		widget.initApplicationError()
 
 		when:
-		UpdateResponse updateResponse = clientResponseFactory.updateWithPut(widgetResource.path(widget.id), widget)
+		UpdateResponse updateResponse = clientRequestExecutor.updateWithPut(widgetResource.path(widget.id), widget)
 
 		then:
 		updateResponse.clientResponse.getStatus() == 500
 
 		when:
-		updateResponse.assertEntityUpdatedAndGetResponse(Widget)
+		updateResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)

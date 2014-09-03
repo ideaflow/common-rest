@@ -1,12 +1,11 @@
-package com.bancvue.rest.client
+package com.bancvue.rest.client.response
 
 import com.bancvue.rest.exception.NotFoundException
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
-import org.apache.http.HttpStatus
-import spock.lang.Specification
-
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
+import org.apache.http.HttpStatus
+import spock.lang.Specification
 
 class DeleteResponseTest extends Specification {
 
@@ -24,7 +23,7 @@ class DeleteResponseTest extends Specification {
 		clientResponse.readEntity(genericType) >> "value"
 
 		when:
-		String actualResponse = deleteResponse.assertEntityDeletedAndGetResponse(genericType)
+		String actualResponse = deleteResponse.getValidatedResponse(genericType)
 
 		then:
 		"value" == actualResponse
@@ -34,7 +33,7 @@ class DeleteResponseTest extends Specification {
 		clientResponse.getStatus() >> HttpStatus.SC_NOT_FOUND
 
 		when:
-		deleteResponse.assertEntityDeletedAndGetResponse(String.class)
+		deleteResponse.getValidatedResponse(String.class)
 
 		then:
 		thrown NotFoundException

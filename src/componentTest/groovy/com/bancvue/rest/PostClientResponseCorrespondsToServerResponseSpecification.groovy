@@ -1,9 +1,8 @@
 package com.bancvue.rest
-import com.bancvue.rest.client.ClientResponseFactory
-import com.bancvue.rest.client.CreateResponse
-import com.bancvue.rest.client.UpdateResponse
+
+import com.bancvue.rest.client.ClientRequestExecutor
+import com.bancvue.rest.client.response.CreateResponse
 import com.bancvue.rest.example.Widget
-import com.bancvue.rest.example.WidgetResource
 import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.HttpClientException
 import com.bancvue.rest.exception.ValidationException
@@ -12,11 +11,11 @@ import javax.ws.rs.client.WebTarget
 class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
 
 	private WebTarget widgetResource
-	private ClientResponseFactory clientResponseFactory
+	private ClientRequestExecutor clientRequestExecutor
 
 	void setup() {
 		widgetResource = baseServiceResource.path("widgets")
-		clientResponseFactory = new ClientResponseFactory()
+		clientRequestExecutor = new ClientRequestExecutor()
 		widgetRepository.clear()
 	}
 
@@ -30,14 +29,14 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		Widget widget = new Widget(id: "created")
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, widget)
+		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 201
 		createResponse.clientResponse.getLocation() as String == "http://localhost:8080/widgets/created"
 
 		when:
-		Widget actualWidget = createResponse.assertEntityCreatedAndGetResponse(Widget)
+		Widget actualWidget = createResponse.getValidatedResponse(Widget)
 
 		then:
 		widget == actualWidget
@@ -48,13 +47,13 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		Widget widget = addWidget("duplicate")
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, widget)
+		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 409
 
 		when:
-		createResponse.assertEntityCreatedAndGetResponse(Widget)
+		createResponse.getValidatedResponse(Widget)
 
 		then:
 		ConflictingEntityException ex = thrown(ConflictingEntityException)
@@ -66,13 +65,13 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		Widget invalid = new Widget()
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, invalid)
+		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, invalid)
 
 		then:
 		createResponse.clientResponse.getStatus() == 422
 
 		when:
-		createResponse.assertEntityCreatedAndGetResponse(Widget)
+		createResponse.getValidatedResponse(Widget)
 
 		then:
 		ValidationException ex = thrown()
@@ -86,13 +85,13 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		widget.initApplicationError()
 
 		when:
-		CreateResponse createResponse = clientResponseFactory.createWithPost(widgetResource, widget)
+		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 500
 
 		when:
-		createResponse.assertEntityCreatedAndGetResponse(Widget)
+		createResponse.getValidatedResponse(Widget)
 
 		then:
 		HttpClientException ex = thrown(HttpClientException)
