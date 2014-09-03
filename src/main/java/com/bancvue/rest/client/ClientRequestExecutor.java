@@ -5,7 +5,6 @@ import com.bancvue.rest.client.response.DeleteResponse;
 import com.bancvue.rest.client.response.GetResponse;
 import com.bancvue.rest.client.response.UpdateResponse;
 import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;

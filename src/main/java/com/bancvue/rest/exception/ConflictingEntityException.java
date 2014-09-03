@@ -10,9 +10,9 @@ public class ConflictingEntityException extends HttpClientException {
 		super(message, Response.Status.CONFLICT);
 		this.entity = entity;
 	}
-	
-	public <T> T getEntity(){
-		return (T)entity;
+
+	public <T> T getEntity() {
+		return (T) entity;
 	}
 
 }

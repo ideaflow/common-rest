@@ -37,7 +37,7 @@ class CreateResponseTest extends Specification {
 		HttpStatus.SC_NO_CONTENT | null
 	}
 
-	def "assertEntityCreatedAndGetResponse should throw ConflictException when server returns 409 with no entity" (){
+	def "assertEntityCreatedAndGetResponse should throw ConflictException when server returns 409 with no entity"() {
 		given:
 		GenericType<String> genericType = new GenericType<String>() {}
 		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT
@@ -50,7 +50,7 @@ class CreateResponseTest extends Specification {
 		thrown(ConflictException)
 	}
 
-	def "assertEntityCreatedAndGetResponse should throw ConflictException when server returns 409 with envelope with no entity" (){
+	def "assertEntityCreatedAndGetResponse should throw ConflictException when server returns 409 with envelope with no entity"() {
 		given:
 		GenericType<String> genericType = new GenericType<String>() {}
 		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT
