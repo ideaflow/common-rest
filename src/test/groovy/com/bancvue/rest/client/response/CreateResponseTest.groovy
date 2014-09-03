@@ -2,7 +2,7 @@ package com.bancvue.rest.client.response
 
 import com.bancvue.rest.Envelope
 import com.bancvue.rest.exception.ConflictException
-import com.bancvue.rest.exception.WebApplicationExceptionFactory
+import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
 import org.apache.http.HttpStatus
@@ -16,7 +16,7 @@ class CreateResponseTest extends Specification {
 
 	void setup() {
 		clientResponse = Mock()
-		postResponse = new CreateResponse(clientResponse, new WebApplicationExceptionFactory.Default())
+		postResponse = new CreateResponse(clientResponse, new DefaultWebApplicationExceptionFactory())
 	}
 
 	@Unroll

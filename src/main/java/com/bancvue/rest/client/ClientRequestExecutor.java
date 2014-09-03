@@ -4,6 +4,7 @@ import com.bancvue.rest.client.response.CreateResponse;
 import com.bancvue.rest.client.response.DeleteResponse;
 import com.bancvue.rest.client.response.GetResponse;
 import com.bancvue.rest.client.response.UpdateResponse;
+import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory;
 import com.bancvue.rest.exception.WebApplicationExceptionFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -15,7 +16,7 @@ public class ClientRequestExecutor {
 	private WebApplicationExceptionFactory exceptionFactory;
 
 	public ClientRequestExecutor() {
-		this(new WebApplicationExceptionFactory.Default());
+		this(new DefaultWebApplicationExceptionFactory());
 	}
 
 	public ClientRequestExecutor(WebApplicationExceptionFactory exceptionFactory) {

@@ -1,8 +1,8 @@
 package com.bancvue.rest.client.response
 
+import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory
 import com.bancvue.rest.exception.NotFoundException
 import com.bancvue.rest.exception.SeeOtherException
-import com.bancvue.rest.exception.WebApplicationExceptionFactory
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MultivaluedHashMap
 import javax.ws.rs.core.MultivaluedMap
@@ -17,7 +17,7 @@ class GetResponseTest extends Specification {
 
 	void setup() {
 		clientResponse = Mock()
-		getResponse = new GetResponse(clientResponse, new WebApplicationExceptionFactory.Default())
+		getResponse = new GetResponse(clientResponse, new DefaultWebApplicationExceptionFactory())
 	}
 
 	def "acquireResponseAsType should return entity from response if status ok"() {
