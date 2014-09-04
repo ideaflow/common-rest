@@ -1,7 +1,7 @@
 package com.bancvue.rest.client.response
 
+import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory
 import com.bancvue.rest.exception.NotFoundException
-import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
 import org.apache.http.HttpStatus
@@ -14,7 +14,7 @@ class DeleteResponseTest extends Specification {
 
 	void setup() {
 		clientResponse = Mock()
-		deleteResponse = new DeleteResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
+		deleteResponse = new DeleteResponse(clientResponse, new DefaultWebApplicationExceptionFactory())
 	}
 
 	def "assertEntityDeletedAndGet with GenericType convert and return entity if status ok"() {

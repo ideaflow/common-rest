@@ -1,15 +1,15 @@
 package com.bancvue.rest.client.response;
 
-import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory;
+import com.bancvue.rest.exception.WebApplicationExceptionFactory;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 public abstract class AbstractResponse {
 
 	protected Response clientResponse;
-	protected UnexpectedResponseExceptionFactory exceptionFactory;
+	protected WebApplicationExceptionFactory exceptionFactory;
 
-	public AbstractResponse(Response clientResponse, UnexpectedResponseExceptionFactory exceptionFactory) {
+	public AbstractResponse(Response clientResponse, WebApplicationExceptionFactory exceptionFactory) {
 		this.clientResponse = clientResponse;
 		this.exceptionFactory = exceptionFactory;
 	}

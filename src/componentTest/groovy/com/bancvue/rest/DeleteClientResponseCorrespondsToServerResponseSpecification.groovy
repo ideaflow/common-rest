@@ -3,7 +3,8 @@ package com.bancvue.rest
 import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.DeleteResponse
 import com.bancvue.rest.example.Widget
-import com.bancvue.rest.exception.HttpClientException
+import com.bancvue.rest.exception.NotFoundException
+import javax.ws.rs.WebApplicationException
 import javax.ws.rs.client.WebTarget
 import spock.lang.Shared
 
@@ -53,8 +54,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		deleteResponse.getValidatedResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
-		ex.status == 404
+		thrown NotFoundException
 	}
 
 	def "application error should return status code 500, client response should convert to http exception"() {
@@ -71,7 +71,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		deleteResponse.getValidatedResponse(Widget)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
-		ex.getStatus() == 500
+		WebApplicationException ex = thrown()
+		ex.response.status == 500
 	}
 }

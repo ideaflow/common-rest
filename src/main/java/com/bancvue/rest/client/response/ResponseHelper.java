@@ -1,15 +1,10 @@
 package com.bancvue.rest.client.response;
 
 import com.bancvue.rest.Envelope;
-import com.bancvue.rest.exception.ConflictException;
-import com.bancvue.rest.exception.ConflictingEntityException;
-import com.bancvue.rest.exception.HttpClientException;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 public class ResponseHelper {
-
-	public static final String ENTITY_ALREADY_EXISTS = "Entity already exists";
 
 	public static <T> boolean hasData(T entity) {
 		if (entity instanceof Envelope) {
@@ -28,14 +23,5 @@ public class ResponseHelper {
 			throw new IllegalArgumentException("Response type must be either Class or GenericType, was=" + responseType);
 		}
 	}
-
-	public static <T> HttpClientException createConflictException(Response clientResponse, Object typeOrGenericType) {
-		T entity = readEntity(clientResponse, typeOrGenericType);
-		if (hasData(entity)) {
-			throw new ConflictingEntityException(ENTITY_ALREADY_EXISTS, entity);
-		}
-		throw new ConflictException(ENTITY_ALREADY_EXISTS);
-	}
-
 
 }

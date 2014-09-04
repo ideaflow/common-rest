@@ -1,8 +1,8 @@
 package com.bancvue.rest.client.response
 
-import com.bancvue.rest.exception.HttpClientException
+import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory
+import com.bancvue.rest.exception.NotFoundException
 import com.bancvue.rest.exception.SeeOtherException
-import com.bancvue.rest.exception.UnexpectedResponseExceptionFactory
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.MultivaluedHashMap
 import javax.ws.rs.core.MultivaluedMap
@@ -17,7 +17,7 @@ class GetResponseTest extends Specification {
 
 	void setup() {
 		clientResponse = Mock()
-		getResponse = new GetResponse(clientResponse, new UnexpectedResponseExceptionFactory.Default())
+		getResponse = new GetResponse(clientResponse, new DefaultWebApplicationExceptionFactory())
 	}
 
 	def "acquireResponseAsType should return entity from response if status ok"() {
@@ -38,8 +38,7 @@ class GetResponseTest extends Specification {
 		getResponse.getValidatedResponse(Object)
 
 		then:
-		HttpClientException ex = thrown(HttpClientException)
-		HttpStatus.SC_NOT_FOUND == ex.status
+		thrown NotFoundException
 	}
 
 	def "acquireResponseAsType should throw SeeOther exception if status is 303"() {
@@ -53,7 +52,6 @@ class GetResponseTest extends Specification {
 
 		then:
 		SeeOtherException ex = thrown(SeeOtherException)
-		HttpStatus.SC_SEE_OTHER == ex.status;
 		ex.otherLocation == "/see/other"
 	}
 
@@ -98,7 +96,6 @@ class GetResponseTest extends Specification {
 
 		then:
 		SeeOtherException ex = thrown(SeeOtherException)
-		HttpStatus.SC_SEE_OTHER == ex.status;
 		ex.otherLocation == "/see/other"
 	}
 }

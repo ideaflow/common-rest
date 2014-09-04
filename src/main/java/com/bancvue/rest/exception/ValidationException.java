@@ -1,10 +1,9 @@
 package com.bancvue.rest.exception;
 
+import javax.ws.rs.WebApplicationException;
 import org.apache.http.HttpStatus;
 
-public class ValidationException extends HttpClientException {
-
-	private static final long serialVersionUID = -4362834942840542989L;
+public class ValidationException extends WebApplicationException {
 
 	public ValidationException() {
 		this("Validation Error");
