@@ -1,6 +1,6 @@
 package com.bancvue.rest.resource;
 
-import com.bancvue.rest.Envelope;
+import com.bancvue.rest.client.response.ResponseHelper;
 import com.bancvue.rest.jaxrs.UriInfoHolder;
 import java.net.URI;
 import java.util.Map;
@@ -77,18 +77,10 @@ public class ResourceResponseFactory {
 	}
 
 	public Response createGetResponse(Object entity) {
-		if (isEntityNotNull(entity)) {
+		if (ResponseHelper.isEntityNotNull(entity)) {
 			return createGetSuccessResponse(entity);
 		} else {
 			return createNotFoundResponse();
-		}
-	}
-
-	private boolean isEntityNotNull(Object entity) {
-		if (entity instanceof Envelope) {
-			return ((Envelope) entity).getData() != null;
-		} else {
-			return entity != null;
 		}
 	}
 
@@ -124,7 +116,7 @@ public class ResourceResponseFactory {
 	}
 
 	public Response createDeleteResponse(Object deletedEntity) {
-		if (isEntityNotNull(deletedEntity)) {
+		if (ResponseHelper.isEntityNotNull(deletedEntity)) {
 			return createDeleteSuccessResponse();
 		} else {
 			return createDeleteFailedBecauseObjectNotFoundResponse();

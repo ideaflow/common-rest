@@ -1,12 +1,12 @@
 package com.bancvue.rest.client.response;
 
-import com.bancvue.rest.Envelope;
+import com.bancvue.rest.envelope.Envelope;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 public class ResponseHelper {
 
-	public static <T> boolean hasData(T entity) {
+	public static <T> boolean isEntityNotNull(T entity) {
 		if (entity instanceof Envelope) {
 			return ((Envelope) entity).getData() != null;
 		}

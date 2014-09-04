@@ -1,8 +1,8 @@
 package com.bancvue.rest.client.response
 
-import com.bancvue.rest.Envelope
-import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory
+import com.bancvue.rest.envelope.DefaultEnvelope
 import com.bancvue.rest.exception.ConflictException
+import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory
 import javax.ws.rs.core.GenericType
 import javax.ws.rs.core.Response
 import org.apache.http.HttpStatus
@@ -48,7 +48,7 @@ class UpdateResponseTest extends Specification {
 		given:
 		GenericType<String> genericType = new GenericType<String>() {}
 		clientResponse.getStatus() >> HttpStatus.SC_CONFLICT
-		clientResponse.readEntity(genericType) >> new Envelope();
+		clientResponse.readEntity(genericType) >> new DefaultEnvelope();
 
 		when:
 		putResponse.getValidatedResponse(genericType)

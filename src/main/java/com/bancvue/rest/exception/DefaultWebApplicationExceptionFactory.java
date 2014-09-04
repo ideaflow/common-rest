@@ -32,7 +32,7 @@ public class DefaultWebApplicationExceptionFactory implements WebApplicationExce
 
 	private <T> WebApplicationException createConflictException(Response clientResponse, Object typeOrGenericType) {
 		T entity = ResponseHelper.readEntity(clientResponse, typeOrGenericType);
-		if (ResponseHelper.hasData(entity)) {
+		if (ResponseHelper.isEntityNotNull(entity)) {
 			throw new ConflictingEntityException(ENTITY_ALREADY_EXISTS, entity);
 		}
 		throw new ConflictException(ENTITY_ALREADY_EXISTS);
