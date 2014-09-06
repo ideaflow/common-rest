@@ -4,14 +4,14 @@ import javax.ws.rs.client.Client;
 
 public abstract class DirectRestClientFactory<T> implements RestClientFactory<T> {
 
-	private ClientRequestExecutor clientRequestExecutor;
+	private ClientRequest clientRequest;
 
 	public DirectRestClientFactory(Client client, String host) {
-		this.clientRequestExecutor = new DirectClientRequestExecutor(client, host);
+		this.clientRequest = new DirectClientRequest(client, host);
 	}
 
-	protected ClientRequestExecutor getClientRequestExecutor() {
-		return clientRequestExecutor;
+	protected ClientRequest getClientRequest() {
+		return clientRequest;
 	}
 
 	public abstract T createClient();
