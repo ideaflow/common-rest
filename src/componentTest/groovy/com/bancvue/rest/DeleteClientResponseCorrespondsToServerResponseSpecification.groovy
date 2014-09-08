@@ -1,26 +1,11 @@
 package com.bancvue.rest
 
-import com.bancvue.rest.client.BasicClientRequestExecutor
-import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.DeleteResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.NotFoundException
 import javax.ws.rs.WebApplicationException
-import javax.ws.rs.client.WebTarget
-import spock.lang.Shared
 
 class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
-
-	@Shared
-	private WebTarget widgetResource
-
-	private ClientRequestExecutor clientRequestExecutor
-
-	void setup() {
-		widgetResource = baseServiceResource.path("widgets")
-		clientRequestExecutor = new BasicClientRequestExecutor(widgetResource)
-		widgetRepository.clear()
-	}
 
 	private Widget addWidget(String id) {
 		Widget widget = new Widget(id: id)
@@ -32,7 +17,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		Widget widget = addWidget("to-delete")
 
 		when:
-		DeleteResponse deleteResponse = clientRequestExecutor.delete(widgetResource.path(widget.id))
+		DeleteResponse deleteResponse = clientRequest.path(widget.id).delete()
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 204
@@ -46,7 +31,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 
 	def "object not found should return status code 404, client response should throw exception"() {
 		when:
-		DeleteResponse deleteResponse = clientRequestExecutor.delete(widgetResource.path("not-found"))
+		DeleteResponse deleteResponse = clientRequest.path("not-found").delete()
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 404
@@ -63,7 +48,7 @@ class DeleteClientResponseCorrespondsToServerResponseSpecification extends BaseT
 		widget.initApplicationError()
 
 		when:
-		DeleteResponse deleteResponse = clientRequestExecutor.delete(widgetResource.path("app-error"))
+		DeleteResponse deleteResponse = clientRequest.path("app-error").delete()
 
 		then:
 		deleteResponse.clientResponse.getStatus() == 500

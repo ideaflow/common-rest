@@ -1,25 +1,11 @@
 package com.bancvue.rest
 
-import com.bancvue.rest.client.BasicClientRequestExecutor
-import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.GetResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.NotFoundException
 import javax.ws.rs.WebApplicationException
-import javax.ws.rs.client.WebTarget
-import spock.lang.Shared
 
 class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
-
-	@Shared
-	private WebTarget widgetResource
-	private ClientRequestExecutor clientRequestExecutor
-
-	void setup() {
-		widgetResource = baseServiceResource.path("widgets")
-		clientRequestExecutor = new BasicClientRequestExecutor(widgetResource)
-		widgetRepository.clear()
-	}
 
 	private Widget addWidget(String id) {
 		Widget widget = new Widget(id: id)
@@ -31,7 +17,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget expectedWidget = addWidget("wid")
 
 		when:
-		GetResponse getResponse = clientRequestExecutor.get(widgetResource.path("wid"))
+		GetResponse getResponse = clientRequest.path("wid").get()
 
 		then:
 		getResponse.clientResponse.getStatus() == 200
@@ -46,7 +32,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 
 	def "should throw not found exception when return status code 404"() {
 		when:
-		GetResponse getResponse = clientRequestExecutor.get(widgetResource.path("wid"))
+		GetResponse getResponse = clientRequest.path("wid").get()
 
 		then:
 		getResponse.clientResponse.getStatus() == 404
@@ -63,7 +49,7 @@ class GetClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		expectedWidget.initApplicationError()
 
 		when:
-		GetResponse getResponse = clientRequestExecutor.get(widgetResource.path("wid"))
+		GetResponse getResponse = clientRequest.path("wid").get()
 
 		then:
 		getResponse.clientResponse.getStatus() == 500
