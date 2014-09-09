@@ -1,4 +1,4 @@
-package com.bancvue.rest.client;
+package com.bancvue.rest.client.request;
 
 import com.bancvue.rest.client.response.CreateResponse;
 import com.bancvue.rest.client.response.DeleteResponse;

@@ -1,5 +1,6 @@
-package com.bancvue.rest.client;
+package com.bancvue.rest.client.request;
 
+import com.bancvue.rest.client.ImmutableClient;
 import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory;
 import com.bancvue.rest.exception.WebApplicationExceptionFactory;
 import java.net.URI;

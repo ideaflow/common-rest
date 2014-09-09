@@ -1,7 +1,7 @@
 package com.bancvue.rest
 
-import com.bancvue.rest.client.BasicClientRequest
-import com.bancvue.rest.client.ClientRequest
+import com.bancvue.rest.client.request.BasicClientRequest
+import com.bancvue.rest.client.request.ClientRequest
 import com.bancvue.rest.example.WidgetRepository
 import com.bancvue.rest.example.WidgetService
 import javax.ws.rs.client.Client

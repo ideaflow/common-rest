@@ -1,4 +1,4 @@
-package com.bancvue.rest.client;
+package com.bancvue.rest.client.request;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,5 +1,8 @@
 package com.bancvue.rest.client;
 
+import com.bancvue.rest.client.request.ClientRequest;
+import com.bancvue.rest.client.request.DirectClientRequest;
+
 public abstract class DirectRestClientFactory<T> implements RestClientFactory<T> {
 
 	private ClientRequest clientRequest;

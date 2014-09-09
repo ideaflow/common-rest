@@ -1,8 +1,8 @@
-package com.bancvue.rest.client
+package com.bancvue.rest.client.request
 
+import com.bancvue.rest.client.ImmutableClient
+import com.bancvue.rest.client.request.DirectClientRequest
 import javax.ws.rs.client.WebTarget
-import org.glassfish.jersey.client.ClientConfig
-import org.glassfish.jersey.client.ClientProperties
 import spock.lang.Specification
 
 class DirectClientRequestSpec extends Specification {
