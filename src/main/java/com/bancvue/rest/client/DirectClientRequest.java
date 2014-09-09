@@ -1,32 +1,30 @@
 package com.bancvue.rest.client;
 
+import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory;
+import com.bancvue.rest.exception.WebApplicationExceptionFactory;
 import java.net.URI;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
+import lombok.Delegate;
 
-@Deprecated
-@NoArgsConstructor
-@AllArgsConstructor
-public class WebTargetFactory {
+public class DirectClientRequest implements ClientRequest {
 
-	// TODO: Remove this once all projects have been converted to use the jaxrsClient bean defined in common-spring-boot
-	@Deprecated
-	public static Client createDefaultJaxrsClient() {
-		return ClientBuilder.newClient(new ClientConfig()
-				.property(ClientProperties.FOLLOW_REDIRECTS, false));
+	@Delegate
+	private BasicClientRequest delegate;
+
+	public DirectClientRequest(Client client, String uriString) {
+		this(client, uriString, new DefaultWebApplicationExceptionFactory());
 	}
 
-	private ClientConfig clientConfig;
+	public DirectClientRequest(Client client, String uriString,
+	                           WebApplicationExceptionFactory exceptionFactory) {
+		WebTarget webTarget = createWebTarget(client, uriString);
+		delegate = new BasicClientRequest(webTarget, exceptionFactory);
+	}
 
-	public WebTarget create(String uriString) {
+	private WebTarget createWebTarget(Client client, String uriString) {
 		URI uri = createUri(uriString);
-		Client client = (clientConfig == null) ? createDefaultJaxrsClient() : ClientBuilder.newClient(clientConfig);
 		return client.target(uri);
 	}
 
@@ -38,6 +36,7 @@ public class WebTargetFactory {
 		}
 		return uri;
 	}
+
 
 	public static class MalformedUriException extends RuntimeException {
 		public MalformedUriException(String uriString) {

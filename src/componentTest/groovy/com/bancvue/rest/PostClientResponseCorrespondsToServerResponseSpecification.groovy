@@ -1,23 +1,12 @@
 package com.bancvue.rest
 
-import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.CreateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.ValidationException
 import javax.ws.rs.WebApplicationException
-import javax.ws.rs.client.WebTarget
 
 class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
-
-	private WebTarget widgetResource
-	private ClientRequestExecutor clientRequestExecutor
-
-	void setup() {
-		widgetResource = baseServiceResource.path("widgets")
-		clientRequestExecutor = new ClientRequestExecutor()
-		widgetRepository.clear()
-	}
 
 	private Widget addWidget(String id) {
 		Widget widget = new Widget(id: id)
@@ -29,7 +18,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		Widget widget = new Widget(id: "created")
 
 		when:
-		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, widget)
+		CreateResponse createResponse = clientRequest.createWithPost(widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 201
@@ -47,7 +36,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		Widget widget = addWidget("duplicate")
 
 		when:
-		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, widget)
+		CreateResponse createResponse = clientRequest.createWithPost(widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 409
@@ -64,7 +53,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		Widget invalid = new Widget()
 
 		when:
-		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, invalid)
+		CreateResponse createResponse = clientRequest.createWithPost(invalid)
 
 		then:
 		createResponse.clientResponse.getStatus() == 422
@@ -83,7 +72,7 @@ class PostClientResponseCorrespondsToServerResponseSpecification extends BaseTes
 		widget.initApplicationError()
 
 		when:
-		CreateResponse createResponse = clientRequestExecutor.createWithPost(widgetResource, widget)
+		CreateResponse createResponse = clientRequest.createWithPost(widget)
 
 		then:
 		createResponse.clientResponse.getStatus() == 500

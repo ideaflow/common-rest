@@ -1,5 +1,7 @@
 package com.bancvue.rest
 
+import com.bancvue.rest.client.BasicClientRequest
+import com.bancvue.rest.client.ClientRequest
 import com.bancvue.rest.example.WidgetRepository
 import com.bancvue.rest.example.WidgetService
 import javax.ws.rs.client.Client
@@ -18,18 +20,20 @@ import spock.lang.Specification
 @ContextConfiguration(classes = WidgetService, loader = SpringApplicationContextLoader)
 abstract class BaseTestSpec extends Specification {
 
-	@Shared
-	Client jerseyClient
-
-	@Shared
-	WebTarget baseServiceResource
-
 	@Autowired
 	WidgetRepository widgetRepository
 
+	@Shared
+	ClientRequest clientRequest
 
-	public setupSpec() {
-		jerseyClient = ClientBuilder.newClient()
-		baseServiceResource = jerseyClient.target("http://localhost:8080/")
+	def setupSpec() {
+		Client jerseyClient = ClientBuilder.newClient()
+		WebTarget baseServiceResource = jerseyClient.target("http://localhost:8080/")
+		clientRequest = new BasicClientRequest(baseServiceResource).path("widgets")
 	}
+
+	def setup() {
+		widgetRepository.clear()
+	}
+
 }

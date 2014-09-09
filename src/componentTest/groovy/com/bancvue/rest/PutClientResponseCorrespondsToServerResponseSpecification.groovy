@@ -1,26 +1,13 @@
 package com.bancvue.rest
 
-import com.bancvue.rest.client.ClientRequestExecutor
 import com.bancvue.rest.client.response.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetResource
 import com.bancvue.rest.exception.ConflictingEntityException
 import com.bancvue.rest.exception.NotFoundException
 import javax.ws.rs.WebApplicationException
-import javax.ws.rs.client.WebTarget
-import spock.lang.Shared
 
 class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTestSpec {
-
-	@Shared
-	private WebTarget widgetResource
-	private ClientRequestExecutor clientRequestExecutor
-
-	void setup() {
-		widgetResource = baseServiceResource.path("widgets")
-		clientRequestExecutor = new ClientRequestExecutor()
-		widgetRepository.clear()
-	}
 
 	private Widget addWidget(String id) {
 		Widget widget = new Widget(id: id)
@@ -32,7 +19,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget update = addWidget("updated")
 
 		when:
-		UpdateResponse updateResponse = clientRequestExecutor.updateWithPut(widgetResource.path(update.id), update)
+		UpdateResponse updateResponse = clientRequest.path(update.id).updateWithPut(update)
 
 		then:
 		updateResponse.clientResponse.getStatus() == 200
@@ -52,7 +39,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget widget = new Widget(id: "wid")
 
 		when:
-		UpdateResponse putResponse = clientRequestExecutor.updateWithPut(widgetResource.path("wid"), widget)
+		UpdateResponse putResponse = clientRequest.path("wid").updateWithPut(widget)
 
 		then:
 		putResponse.clientResponse.getStatus() == 404
@@ -68,7 +55,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		Widget widget = new Widget(id: WidgetResource.CONFLICT_WITH_DATA_ID)
 
 		when:
-		UpdateResponse putResponse = clientRequestExecutor.updateWithPut(widgetResource.path(WidgetResource.CONFLICT_WITH_DATA_ID), widget)
+		UpdateResponse putResponse = clientRequest.path(WidgetResource.CONFLICT_WITH_DATA_ID).updateWithPut(widget)
 
 		then:
 		putResponse.clientResponse.getStatus() == 409
@@ -87,7 +74,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		widget.initApplicationError()
 
 		when:
-		UpdateResponse updateResponse = clientRequestExecutor.updateWithPut(widgetResource.path(widget.id), widget)
+		UpdateResponse updateResponse = clientRequest.path(widget.id).updateWithPut(widget)
 
 		then:
 		updateResponse.clientResponse.getStatus() == 500
