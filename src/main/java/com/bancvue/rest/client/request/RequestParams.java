@@ -1,4 +1,4 @@
-package com.bancvue.rest.client;
+package com.bancvue.rest.client.request;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,8 +86,13 @@ public class RequestParams {
 
 	public Invocation.Builder createInvocation(WebTarget webTarget) {
 		Invocation.Builder invocation = webTarget.request(requestTypes)
-				.accept(acceptTypes)
-				.headers(headers);
+				.accept(acceptTypes);
+
+		for (String key : headers.keySet()) {
+			for (Object value : headers.get(key)) {
+				invocation = invocation.header(key, value);
+			}
+		}
 
 		for (Cookie cookie : cookies) {
 			invocation = invocation.cookie(cookie);

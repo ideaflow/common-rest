@@ -1,12 +1,13 @@
 package com.bancvue.rest.client;
 
-import javax.ws.rs.client.Client;
+import com.bancvue.rest.client.request.ClientRequest;
+import com.bancvue.rest.client.request.DirectClientRequest;
 
 public abstract class DirectRestClientFactory<T> implements RestClientFactory<T> {
 
 	private ClientRequest clientRequest;
 
-	public DirectRestClientFactory(Client client, String host) {
+	public DirectRestClientFactory(ImmutableClient client, String host) {
 		this.clientRequest = new DirectClientRequest(client, host);
 	}
 

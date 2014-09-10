@@ -1,9 +1,9 @@
-package com.bancvue.rest.client;
+package com.bancvue.rest.client.request;
 
+import com.bancvue.rest.client.ImmutableClient;
 import com.bancvue.rest.exception.DefaultWebApplicationExceptionFactory;
 import com.bancvue.rest.exception.WebApplicationExceptionFactory;
 import java.net.URI;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.UriBuilder;
 import lombok.Delegate;
@@ -13,17 +13,17 @@ public class DirectClientRequest implements ClientRequest {
 	@Delegate
 	private BasicClientRequest delegate;
 
-	public DirectClientRequest(Client client, String uriString) {
-		this(client, uriString, new DefaultWebApplicationExceptionFactory());
+	public DirectClientRequest(ImmutableClient immutableClient, String uriString) {
+		this(immutableClient, uriString, new DefaultWebApplicationExceptionFactory());
 	}
 
-	public DirectClientRequest(Client client, String uriString,
+	public DirectClientRequest(ImmutableClient client, String uriString,
 	                           WebApplicationExceptionFactory exceptionFactory) {
 		WebTarget webTarget = createWebTarget(client, uriString);
 		delegate = new BasicClientRequest(webTarget, exceptionFactory);
 	}
 
-	private WebTarget createWebTarget(Client client, String uriString) {
+	private WebTarget createWebTarget(ImmutableClient client, String uriString) {
 		URI uri = createUri(uriString);
 		return client.target(uri);
 	}
