@@ -7,6 +7,10 @@ public abstract class DirectRestClientFactory<T> implements RestClientFactory<T>
 
 	private ClientRequest clientRequest;
 
+	public DirectRestClientFactory(String host) {
+		this(ImmutableClient.createDefault(), host);
+	}
+
 	public DirectRestClientFactory(ImmutableClient client, String host) {
 		this.clientRequest = new DirectClientRequest(client, host);
 	}
