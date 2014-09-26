@@ -1,9 +1,19 @@
 buildscript {
-    dependencies { classpath 'com.bancvue:gradle-internal:3.+' }
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "com.bancvue:gradle-core:1.1"
+	}
 }
 
-apply plugin: 'bancvue-internal'
+apply plugin: "com.bancvue.core-oss"
+apply plugin: "com.bancvue.component-test"
 
+
+repositories {
+	mavenCentral()
+}
 
 configurations {
 	all*.exclude group:'org.codehaus.jackson'
@@ -39,4 +49,9 @@ dependencies {
 		exclude group:"junit"
 	}
 
+}
+
+license {
+	ext.name = "BancVue, LTD"
+	skipExistingHeaders true
 }
