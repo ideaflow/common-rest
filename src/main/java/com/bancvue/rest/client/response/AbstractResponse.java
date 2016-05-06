@@ -31,6 +31,10 @@ public abstract class AbstractResponse {
 
 	protected abstract <T> T doGetValidatedResponse(Object responseType);
 
+	public Response getClientResponse() {
+		return clientResponse;
+	}
+
 	public <T> T getValidatedResponse(Class<T> responseType) {
 		return getValidatedResponseAndCloseClientResponse(responseType);
 	}

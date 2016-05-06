@@ -81,7 +81,7 @@ public class RequestParams {
 	}
 
 	public RequestParams header(String name, Object value) {
-		MultivaluedHashMap headersClone = new MultivaluedHashMap<>(headers);
+		MultivaluedHashMap headersClone = new MultivaluedHashMap(headers);
 		headersClone.add(name, value);
 		return new RequestParams(entityType, requestTypes, acceptTypes, headersClone, properties, cookies);
 	}
