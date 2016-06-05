@@ -15,15 +15,14 @@
  */
 package com.bancvue.rest.exception;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-public class ConflictingEntityException extends WebApplicationException {
+public class ConflictingEntityException extends ConflictException {
 
 	private Object entity;
 
 	public ConflictingEntityException(String message, Object entity) {
-		super(message, Response.Status.CONFLICT);
+		super(message, Response.status(Response.Status.CONFLICT).entity(entity).build());
 		this.entity = entity;
 	}
 

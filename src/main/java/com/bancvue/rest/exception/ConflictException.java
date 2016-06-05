@@ -24,4 +24,8 @@ public class ConflictException extends WebApplicationException {
 		super(message, Response.Status.CONFLICT);
 	}
 
+	protected ConflictException(String message, Response response) {
+		super(message, response);
+	}
+
 }
