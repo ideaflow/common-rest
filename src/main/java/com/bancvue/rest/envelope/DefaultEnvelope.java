@@ -45,7 +45,7 @@ public class DefaultEnvelope<T> implements Envelope<T> {
 		}
 
 		public Builder(T data) {
-			env = new DefaultEnvelope<>();
+			env = new DefaultEnvelope<T>();
 
 			data(data);
 		}
@@ -56,7 +56,7 @@ public class DefaultEnvelope<T> implements Envelope<T> {
 		}
 
 		public DefaultEnvelope<T> build() {
-			return new DefaultEnvelope<>(env);
+			return new DefaultEnvelope<T>(env);
 		}
 	}
 

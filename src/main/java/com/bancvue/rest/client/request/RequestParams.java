@@ -45,9 +45,9 @@ public class RequestParams {
 		this.entityType = null;
 		this.requestTypes = new MediaType[0];
 		this.acceptTypes = new MediaType[0];
-		this.headers = new MultivaluedHashMap<>();
-		this.properties = new HashMap<>();
-		this.cookies = new ArrayList<>();
+		this.headers = new MultivaluedHashMap<String, Object>();
+		this.properties = new HashMap<String, Object>();
+		this.cookies = new ArrayList<Cookie>();
 	}
 
 	public RequestParams(MediaType entityType, MediaType[] requestTypes, MediaType[] acceptTypes,
@@ -62,7 +62,7 @@ public class RequestParams {
 	}
 
 	private MediaType[] add(MediaType[] initial, MediaType... added) {
-		ArrayList<MediaType> list = new ArrayList<>();
+		ArrayList<MediaType> list = new ArrayList<MediaType>();
 		Collections.addAll(list, initial);
 		Collections.addAll(list, added);
 		return list.toArray(new MediaType[list.size()]);
@@ -87,13 +87,13 @@ public class RequestParams {
 	}
 
 	public RequestParams property(String name, Object value) {
-		HashMap<String, Object> propertiesClone = new HashMap<>(properties);
+		HashMap<String, Object> propertiesClone = new HashMap<String, Object>(properties);
 		propertiesClone.put(name, value);
 		return new RequestParams(entityType, requestTypes, acceptTypes, headers, propertiesClone, cookies);
 	}
 
 	public RequestParams cookie(Cookie cookie) {
-		ArrayList<Cookie> cookiesClone = new ArrayList<>(cookies);
+		ArrayList<Cookie> cookiesClone = new ArrayList<Cookie>(cookies);
 		cookiesClone.add(cookie);
 		return new RequestParams(entityType, requestTypes, acceptTypes, headers, properties, cookiesClone);
 	}

@@ -32,7 +32,7 @@ public class InvalidEntityExceptionMapper implements ExceptionMapper<ConstraintV
 	@Override
 	public Response toResponse(ConstraintViolationException exception) {
 		Envelope<List<ValidationError>> envelope =
-				new DefaultEnvelope.Builder<>(ValidationHelper.constraintViolationToValidationErrors(exception)).build();
+				new DefaultEnvelope.Builder<List<ValidationError>>(ValidationHelper.constraintViolationToValidationErrors(exception)).build();
 		return Response.status(new UnprocessableEntityStatusType()).type(MediaType.APPLICATION_JSON_TYPE).entity(envelope).build();
 	}
 }
