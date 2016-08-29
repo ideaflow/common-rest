@@ -7,6 +7,10 @@ buildscript {
 	}
 }
 
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
+
 apply plugin: "com.bancvue.core-oss"
 apply plugin: "com.bancvue.maven-ext"
 apply plugin: "com.bancvue.component-test"
@@ -55,4 +59,20 @@ dependencies {
 license {
 	ext.name = "BancVue, LTD"
 	skipExistingHeaders true
+}
+
+bintray {
+	user = project.hasProperty("bintray.user") ? project.getProperty("bintray.user") : ""
+	key = project.hasProperty("bintray.key") ? project.getProperty("bintray.key") : ""
+	configurations = ['archives']
+	pkg {
+		repo = 'maven'
+		userOrg = 'openmastery'
+                name = project.group + ':' + project.ext['artifactId']
+                desc = project.description
+		licenses = ['Apache-2.0']
+		websiteUrl = 'https://github.com/openmastery/common-rest'
+		issueTrackerUrl = 'https://github.com/openmastery/common-rest/issues'
+		vcsUrl = 'https://github.com/openmastery/common-rest.git'
+	}
 }
