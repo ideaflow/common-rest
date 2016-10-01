@@ -1,9 +1,12 @@
 buildscript {
 	repositories {
-		mavenCentral()
+		jcenter()
+		maven {
+			url "https://dl.bintray.com/openmastery/maven"
+		}
 	}
 	dependencies {
-		classpath "com.bancvue:gradle-core:1.1"
+		classpath "com.bancvue:gradle-core:1.4-om.0"
 	}
 }
 
@@ -12,12 +15,12 @@ plugins {
 }
 
 apply plugin: "com.bancvue.core-oss"
-apply plugin: "com.bancvue.maven-ext"
+apply plugin: "com.bancvue.maven-publish-ext"
 apply plugin: "com.bancvue.component-test"
 
 
 repositories {
-	mavenCentral()
+	jcenter()
 }
 
 configurations {
@@ -66,7 +69,7 @@ license {
 bintray {
 	user = project.hasProperty("bintray.user") ? project.getProperty("bintray.user") : ""
 	key = project.hasProperty("bintray.key") ? project.getProperty("bintray.key") : ""
-	configurations = ['archives']
+	publications = ['commonRest']
 	pkg {
 		repo = 'maven'
 		userOrg = 'openmastery'
