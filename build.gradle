@@ -64,6 +64,7 @@ dependencies {
 license {
 	ext.name = "BancVue, LTD"
 	skipExistingHeaders true
+	excludes(["**/*.properties", "**/*.xml", "**/*.yml", "db/**", "licenses/**"])
 }
 
 bintray {
