@@ -61,7 +61,7 @@ public class BasicClientRequest implements ClientRequest {
 	}
 
 	private ClientRequest createExecutor(WebTarget resource) {
-		return new BasicClientRequest(resource, exceptionFactory);
+		return new BasicClientRequest(resource, requestParams, exceptionFactory);
 	}
 
 	public ClientRequest entityType(MediaType entityType) {
