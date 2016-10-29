@@ -24,21 +24,44 @@ repositories {
 }
 
 configurations {
+	client
 	all*.exclude group:'org.codehaus.jackson'
 }
 
+sourceSets {
+    client {
+        java {
+            srcDir "src/main/java"
+            include "com/bancvue/rest/api/**"
+            include "com/bancvue/rest/client/**"
+	        include "com/bancvue/rest/config/**"
+	        include "com/bancvue/rest/envelope/**"
+	        include "com/bancvue/rest/exception/*"
+        }
+    }
+}
+
 dependencies {
-	compile "org.glassfish.jersey.core:jersey-server:2.7"
-	compile 'org.glassfish.jersey.core:jersey-client:2.7'
-	compile "org.glassfish.jersey.ext:jersey-bean-validation:2.7"
+	compile "org.glassfish.jersey.core:jersey-server:2.6"
+	compile 'org.glassfish.jersey.core:jersey-client:2.6'
+	compile "org.glassfish.jersey.ext:jersey-bean-validation:2.6"
 	compile 'com.fasterxml.jackson.core:jackson-core:2.3.2'
 	compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.2'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
 	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.2'
 	compile "org.apache.httpcomponents:httpcore:4.2.2"
-	compile 'org.projectlombok:lombok:1.12.2'
 	compile 'joda-time:joda-time:2.9.4'
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.7.5'
+	compileOnly 'org.projectlombok:lombok:1.12.2'
+
+	clientCompile 'joda-time:joda-time:2.9.4'
+	clientCompile "org.apache.httpcomponents:httpcore:4.2.2"
+	clientCompile 'org.glassfish.jersey.core:jersey-client:2.6'
+	clientCompile "org.glassfish.jersey.ext:jersey-bean-validation:2.6"
+	clientCompile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
+	clientCompile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.7.5'
+	clientCompile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.2'
+	clientCompileOnly 'org.projectlombok:lombok:1.12.2'
 
 	testCompile 'org.codehaus.groovy:groovy-all:2.1.2'
 	testCompile 'junit:junit:4.11'
@@ -61,6 +84,10 @@ dependencies {
 
 }
 
+publishing_ext {
+    publication('client')
+}
+
 license {
 	ext.name = "BancVue, LTD"
 	skipExistingHeaders true
@@ -70,7 +97,7 @@ license {
 bintray {
 	user = project.hasProperty("bintray.user") ? project.getProperty("bintray.user") : ""
 	key = project.hasProperty("bintray.key") ? project.getProperty("bintray.key") : ""
-	publications = ['commonRest']
+	publications = ['commonRest', 'commonRestClient']
 	pkg {
 		repo = 'maven'
 		userOrg = 'openmastery'
