@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 BancVue, LTD
+ * Copyright 2017 BancVue, LTD
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bancvue.rest.exception;
+package com.bancvue.rest.exception.mapper;
+
+import com.bancvue.rest.exception.ErrorResponseFactory;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
-public class NotFoundException extends javax.ws.rs.NotFoundException {
-
-    public NotFoundException(String message) {
-	    super(ErrorResponseFactory.makeErrorResponse(Response.Status.NOT_FOUND, message));
+@Provider
+public class InvalidFormatExceptionMapper implements ExceptionMapper<InvalidFormatException> {
+    public Response toResponse(InvalidFormatException ex) {
+        return ErrorResponseFactory.makeErrorResponse(Response.Status.BAD_REQUEST, ex);
     }
-
 }

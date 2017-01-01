@@ -1,0 +1,45 @@
+/**
+ * Copyright 2017 BancVue, LTD
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.bancvue.rest.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Builder;
+
+import javax.ws.rs.core.Response;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ErrorEntity {
+    private Response.Status statusCode;
+    private String message;
+    private Object[] args;
+
+
+    static ErrorEntity create(Response.Status status, String messageTemplate, Object[] args) {
+        String message = (args != null) && (args.length > 0) ? String.format(messageTemplate, args) : messageTemplate;
+
+        return ErrorEntity.builder()
+                .statusCode(status)
+                .message(message)
+                .args(args)
+                .build();
+    }
+
+}

@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 BancVue, LTD
+ * Copyright 2017 BancVue, LTD
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,23 @@
 package com.bancvue.rest.exception;
 
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
-public class NotFoundException extends javax.ws.rs.NotFoundException {
+public class ErrorResponseFactory {
 
-    public NotFoundException(String message) {
-	    super(ErrorResponseFactory.makeErrorResponse(Response.Status.NOT_FOUND, message));
-    }
+	public static Response makeErrorResponse(Response.Status status, Exception ex) {
+		return makeErrorResponse(status, ex.getMessage());
+	}
+
+	public static Response makeErrorResponse(Response.Status status, String messageTemplate, Object... args) {
+		return buildResponse(status, ErrorEntity.create(status, messageTemplate, args));
+	}
+
+	public static Response buildResponse(Response.Status status, ErrorEntity errorEntity) {
+		return Response.status(status)
+				.entity(errorEntity)
+				.type("application/json")
+				.build();
+	}
 
 }
