@@ -64,6 +64,10 @@ public abstract class CrudClient<API_TYPE, CLIENT_TYPE extends CrudClient> {
 		return crudClient;
 	}
 
+	public CLIENT_TYPE property(String name, String value) {
+		return create(crudClientRequest.property(name, value));
+	}
+
 	public CLIENT_TYPE header(Header header) {
 		return header(header.getName(), header.getValue());
 	}
