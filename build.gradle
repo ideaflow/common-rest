@@ -55,6 +55,7 @@ dependencies {
 	compile "org.slf4j:slf4j-api:1.7.21"
 	compileOnly 'org.projectlombok:lombok:1.12.2'
 
+	clientCompile "org.slf4j:slf4j-api:1.7.21"
 	clientCompile 'joda-time:joda-time:2.9.4'
 	clientCompile "org.apache.httpcomponents:httpcore:4.2.2"
 	clientCompile 'org.glassfish.jersey.core:jersey-client:2.6'

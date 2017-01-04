@@ -20,12 +20,24 @@ import javax.ws.rs.core.Response;
 
 public class ConflictException extends WebApplicationException {
 
+	private Object entity;
+
 	public ConflictException(String message) {
-		super(message, Response.Status.CONFLICT);
+		this(message, null);
 	}
 
-	protected ConflictException(String message, Response response) {
-		super(message, response);
+	public ConflictException(Object entity) {
+		this(null, entity);
+	}
+
+	public ConflictException(String message, Object entity) {
+		super(message, Response.status(Response.Status.CONFLICT).entity(entity).build());
+		this.entity = entity;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getEntity() {
+		return (T) entity;
 	}
 
 }

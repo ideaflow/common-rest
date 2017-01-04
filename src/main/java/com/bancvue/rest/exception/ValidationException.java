@@ -16,16 +16,12 @@
 package com.bancvue.rest.exception;
 
 import javax.ws.rs.WebApplicationException;
-import org.apache.http.HttpStatus;
+import javax.ws.rs.core.Response;
 
 public class ValidationException extends WebApplicationException {
 
-	public ValidationException() {
-		this("Validation Error");
-	}
-
-	public ValidationException(String message) {
-		super(message, HttpStatus.SC_UNPROCESSABLE_ENTITY);
+	public ValidationException(ErrorEntity errorEntity) {
+		super(ErrorResponseFactory.buildResponse(Response.Status.BAD_REQUEST, errorEntity));
 	}
 
 }

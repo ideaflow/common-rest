@@ -18,6 +18,9 @@ package com.bancvue.rest.jaxrs;
 import javax.ws.rs.core.Response;
 
 public class UnprocessableEntityStatusType implements Response.StatusType {
+
+	public static UnprocessableEntityStatusType INSTANCE = new UnprocessableEntityStatusType();
+
 	@Override
 	public int getStatusCode() {
 		return 422;
@@ -32,4 +35,5 @@ public class UnprocessableEntityStatusType implements Response.StatusType {
 	public String getReasonPhrase() {
 		return "Unprocessable Entity";
 	}
+
 }

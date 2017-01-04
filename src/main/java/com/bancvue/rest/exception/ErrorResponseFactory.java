@@ -1,12 +1,12 @@
 /**
  * Copyright 2017 BancVue, LTD
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- * 	http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,20 +15,28 @@
  */
 package com.bancvue.rest.exception;
 
+import org.glassfish.jersey.server.validation.ValidationError;
+
 import javax.ws.rs.core.Response;
-import java.util.Map;
+import java.util.List;
 
 public class ErrorResponseFactory {
 
-	public static Response makeErrorResponse(Response.Status status, Exception ex) {
+	public static Response makeErrorResponse(Response.StatusType status, Exception ex) {
 		return makeErrorResponse(status, ex.getMessage());
 	}
 
-	public static Response makeErrorResponse(Response.Status status, String messageTemplate, Object... args) {
+	public static Response makeErrorResponse(Response.StatusType status, String messageTemplate, Object... args) {
 		return buildResponse(status, ErrorEntity.create(status, messageTemplate, args));
 	}
 
-	public static Response buildResponse(Response.Status status, ErrorEntity errorEntity) {
+	public static Response makeErrorResponse(Response.StatusType status, Exception ex, List<ValidationError> validationErrors) {
+		return buildResponse(status, ErrorEntity.createBuilder(status, ex.getMessage())
+				.validationErrors(validationErrors)
+				.build());
+	}
+
+	public static Response buildResponse(Response.StatusType status, ErrorEntity errorEntity) {
 		return Response.status(status)
 				.entity(errorEntity)
 				.type("application/json")

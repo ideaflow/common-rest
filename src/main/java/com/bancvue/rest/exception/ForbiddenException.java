@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 BancVue, LTD
+ * Copyright 2017 BancVue, LTD
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,14 @@ package com.bancvue.rest.exception;
 
 import javax.ws.rs.core.Response;
 
-public class ConflictingEntityException extends ConflictException {
+public class ForbiddenException extends javax.ws.rs.ForbiddenException {
 
-	private Object entity;
-
-	public ConflictingEntityException(String message, Object entity) {
-		super(message, Response.status(Response.Status.CONFLICT).entity(entity).build());
-		this.entity = entity;
+	public ForbiddenException(String message) {
+		super(ErrorResponseFactory.makeErrorResponse(Response.Status.FORBIDDEN, message));
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T getEntity() {
-		return (T) entity;
+	public ForbiddenException(ErrorEntity errorEntity) {
+		super(ErrorResponseFactory.buildResponse(Response.Status.FORBIDDEN, errorEntity));
 	}
 
 }

@@ -18,7 +18,7 @@ package com.bancvue.rest
 import com.bancvue.rest.client.response.UpdateResponse
 import com.bancvue.rest.example.Widget
 import com.bancvue.rest.example.WidgetResource
-import com.bancvue.rest.exception.ConflictingEntityException
+import com.bancvue.rest.exception.ConflictException
 import com.bancvue.rest.exception.NotFoundException
 import javax.ws.rs.WebApplicationException
 
@@ -79,7 +79,7 @@ class PutClientResponseCorrespondsToServerResponseSpecification extends BaseTest
 		putResponse.getValidatedResponse(Widget)
 
 		then:
-		ConflictingEntityException ex = thrown(ConflictingEntityException)
+		ConflictException ex = thrown(ConflictException)
 		ex.response.status == 409
 		ex.entity == widget
 	}

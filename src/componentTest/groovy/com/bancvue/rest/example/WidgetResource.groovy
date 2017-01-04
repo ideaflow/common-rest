@@ -15,6 +15,8 @@
  */
 package com.bancvue.rest.example
 
+import com.bancvue.rest.exception.ConflictException
+import com.bancvue.rest.exception.NotFoundException
 import com.bancvue.rest.jaxrs.UriInfoHolder
 import com.bancvue.rest.resource.ResourceResponseFactory
 import groovy.util.logging.Slf4j
@@ -78,10 +80,13 @@ class WidgetResource {
 
 	@GET
 	@Path("/{id}")
-	public Response getWidget(@PathParam("id") String id) {
+	public Widget getWidget(@PathParam("id") String id) {
 		Widget widget = widgetRepository.get(id)
+		if (widget == null) {
+			throw new NotFoundException()
+		}
 		evalWidget(widget)
-		responseFactory.createGetResponse(widget)
+		widget
 	}
 
 	@POST
@@ -89,7 +94,7 @@ class WidgetResource {
 		Widget existingWidget = widgetRepository.get(widget.id)
 		evalWidget(existingWidget)
 		if (existingWidget) {
-			return responseFactory.createPostFailedBecauseAlreadyExistsResponse(existingWidget)
+			throw new ConflictException(existingWidget)
 		}
 		evalWidget(widget)
 		responseFactory.createPostSuccessResponse(widget.id, widget)
@@ -97,16 +102,16 @@ class WidgetResource {
 
 	@PUT
 	@Path("/{id}")
-	public Response updateWidget(@PathParam("id") String id, @Valid Widget update) {
+	public Widget updateWidget(@PathParam("id") String id, @Valid Widget update) {
 		if (CONFLICT_WITH_DATA_ID.equals(id)) {
-			return responseFactory.createConflictResponse(update);
+			throw new ConflictException(update)
 		}
 		if (!widgetRepository.get(id)) {
-			return responseFactory.createNotFoundResponse()
+			throw new NotFoundException()
 		}
 		widgetRepository.put(id, update)
 		evalWidget(update)
-		responseFactory.createPutSuccessResponse(update)
+		update
 	}
 
 	@DELETE
