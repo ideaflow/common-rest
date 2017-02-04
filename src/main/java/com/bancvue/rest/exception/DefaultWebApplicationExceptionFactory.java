@@ -16,16 +16,13 @@
 package com.bancvue.rest.exception;
 
 import com.bancvue.rest.client.response.ResponseHelper;
+import org.apache.http.HttpStatus;
+import org.glassfish.jersey.message.internal.MessageBodyProviderNotFoundException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
-import org.glassfish.jersey.message.internal.MessageBodyProviderNotFoundException;
-
-@Slf4j
 public class DefaultWebApplicationExceptionFactory implements WebApplicationExceptionFactory {
 
 	public static final String ENTITY_ALREADY_EXISTS = "Entity already exists";
@@ -35,7 +32,7 @@ public class DefaultWebApplicationExceptionFactory implements WebApplicationExce
 		try {
 			return createWebApplicationException(response, responseType);
 		} catch (FailedToResolveErrorEntityException ex) {
-			return new WebApplicationException(response);
+			return new WebApplicationException(ex, response);
 		}
 	}
 
@@ -63,14 +60,13 @@ public class DefaultWebApplicationExceptionFactory implements WebApplicationExce
 		try {
 			response.bufferEntity();
 		} catch (Exception ex) {
-			log.warn("Failed to buffer entity", ex);
+			throw new FailedToResolveErrorEntityException("Failed to buffer entity", ex);
 		}
 
 		try {
 			return response.readEntity(ErrorEntity.class);
 		} catch (MessageBodyProviderNotFoundException ex) {
-			log.warn("Failed to resolve ErrorEntity from response, content=" + getContentAsString(response), ex);
-			throw new FailedToResolveErrorEntityException();
+			throw new FailedToResolveErrorEntityException("Failed to resolve ErrorEntity from response, content=" + getContentAsString(response), ex);
 		}
 	}
 
@@ -78,8 +74,7 @@ public class DefaultWebApplicationExceptionFactory implements WebApplicationExce
 		try {
 			return response.readEntity(String.class);
 		} catch (Exception ex) {
-			log.warn("Failed to read response content as string", ex);
-			return "";
+			return "Failed to read response content as string";
 		}
 	}
 
@@ -98,6 +93,9 @@ public class DefaultWebApplicationExceptionFactory implements WebApplicationExce
 	}
 
 	private static class FailedToResolveErrorEntityException extends Exception {
+		public FailedToResolveErrorEntityException(String message, Throwable cause) {
+			super(message, cause);
+		}
 	}
 
 }
