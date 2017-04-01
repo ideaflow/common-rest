@@ -54,8 +54,4 @@ class ImmutableClientSpec extends Specification {
 		target.getUri().getPort() == 8080
 	}
 
-def "should fail"() {
-expect:
-false
-}
 }
