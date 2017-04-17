@@ -51,7 +51,7 @@ dependencies {
 	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.2'
 	compile "org.apache.httpcomponents:httpcore:4.2.2"
 	compile 'joda-time:joda-time:2.9.4'
-	compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.7.5'
+	compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.3"
 	compileOnly "org.slf4j:slf4j-api:1.7.21"
 	compileOnly 'org.projectlombok:lombok:1.12.2'
 
@@ -61,7 +61,7 @@ dependencies {
 	clientCompile 'org.glassfish.jersey.core:jersey-client:2.6'
 	clientCompile "org.glassfish.jersey.ext:jersey-bean-validation:2.6"
 	clientCompile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
-	clientCompile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.7.5'
+	clientCompile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.3"
 	clientCompile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.2'
 	clientCompileOnly 'org.projectlombok:lombok:1.12.2'
 
